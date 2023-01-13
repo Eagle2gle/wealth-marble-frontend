@@ -20,6 +20,9 @@ export default function Home() {
             Get started by editing&nbsp;
             <code className={styles.code}>pages/index.tsx</code>
           </p>
+          <h1 className="text-3xl font-bold underline text-red-500">
+            Hello world!
+          </h1>
           <button
             type="button"
             onClick={() => {
