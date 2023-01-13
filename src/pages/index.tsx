@@ -1,9 +1,11 @@
-import Head from "next/head";
-import Image from "next/image";
-import { Inter } from "@next/font/google";
-import styles from "@/styles/Home.module.css";
+import Head from 'next/head';
+import Image from 'next/image';
 
-const inter = Inter({ subsets: ["latin"] });
+import styles from '@/styles/Home.module.css';
+import { Inter } from '@next/font/google';
+import { useEffect, useState } from 'react';
+
+const inter = Inter({ subsets: ['latin'] });
 
 export default function Home() {
   return (
@@ -20,13 +22,11 @@ export default function Home() {
             Get started by editing&nbsp;
             <code className={styles.code}>pages/index.tsx</code>
           </p>
-          <h1 className="text-3xl font-bold underline text-red-500">
-            Hello world!
-          </h1>
+          <h1 className="text-3xl font-bold underline text-red-500">Hello world!</h1>
           <button
             type="button"
             onClick={() => {
-              throw new Error("Sentry Frontend Error");
+              throw new Error('Sentry Frontend Error');
             }}
           >
             Throw error
@@ -37,7 +37,7 @@ export default function Home() {
               target="_blank"
               rel="noopener noreferrer"
             >
-              By{" "}
+              By{' '}
               <Image
                 src="/vercel.svg"
                 alt="Vercel Logo"
@@ -60,13 +60,7 @@ export default function Home() {
             priority
           />
           <div className={styles.thirteen}>
-            <Image
-              src="/thirteen.svg"
-              alt="13"
-              width={40}
-              height={31}
-              priority
-            />
+            <Image src="/thirteen.svg" alt="13" width={40} height={31} priority />
           </div>
         </div>
 
@@ -123,8 +117,7 @@ export default function Home() {
               Deploy <span>-&gt;</span>
             </h2>
             <p className={inter.className}>
-              Instantly deploy your Next.js site to a shareable URL
-              with&nbsp;Vercel.
+              Instantly deploy your Next.js site to a shareable URL with&nbsp;Vercel.
             </p>
           </a>
         </div>

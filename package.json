@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@next/eslint-plugin-next": "^13.1.2",
     "@next/font": "13.1.2",
     "@sentry/nextjs": "^7.30.0",
     "@tanstack/react-query": "^4.22.0",
@@ -23,7 +24,14 @@
     "typescript": "4.9.4"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.48.1",
+    "@typescript-eslint/parser": "^5.48.1",
     "autoprefixer": "^10.4.13",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.4",
+    "eslint-plugin-react": "^7.32.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.3.2",
     "postcss": "^8.4.21",
     "tailwindcss": "^3.2.4"
   }
