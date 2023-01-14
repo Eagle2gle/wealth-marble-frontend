@@ -4,6 +4,7 @@
     "es2021": true
   },
   "extends": [
+    "next",
     "next/core-web-vitals",
     "plugin:import/errors",
     "plugin:import/warnings",
@@ -11,7 +12,8 @@
     "plugin:@typescript-eslint/recommended",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
-    "plugin:react/jsx-runtime"
+    "plugin:react/jsx-runtime",
+    "prettier"
   ],
   "overrides": [],
   "parser": "@typescript-eslint/parser",
@@ -23,11 +25,14 @@
     }
   },
   "settings": {
+    "next": {
+      "rootDir": "src/*/"
+    },
     "react": {
       "version": "detect"
     }
   },
-  "plugins": ["import", "react", "react-refresh", "next", "prettier"],
+  "plugins": ["import", "react", "react-refresh"],
   "rules": {
     "eol-last": [1, "always"],
     "react-refresh/only-export-components": "warn",
