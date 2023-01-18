@@ -10,7 +10,9 @@ function App({ Component, pageProps }: AppProps) {
   return (
     <>
       <Header />
-      <Component {...pageProps} />
+      <div className="py-16 md:py-0 md:pt-16 max-w-3xl mx-auto">
+        <Component {...pageProps} />
+      </div>
       <BottomBar />
     </>
   );
