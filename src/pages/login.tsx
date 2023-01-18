@@ -8,7 +8,7 @@ export default function Login() {
           간편한 소셜 로그인으로 <br />
           <span className="text-main">Marble</span>과 함께 해요
         </h1>
-        <SocialLoginBtn socialType="google" />
+        <SocialLoginBtn socialType="Google" />
       </div>
     </div>
   );
