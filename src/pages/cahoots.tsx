@@ -1,3 +1,4 @@
+import CahootList from '@/components/CahootList';
 import CahootRecap from '@/components/CahootRecap';
 import Layout from '@/components/common/Layout';
 import DeadlineBanner from '@/components/DeadlineBanner';
@@ -10,6 +11,7 @@ const Cahoots = () => {
         <DeadlineBanner />
         <DeadlineCarousel />
         <CahootRecap />
+        <CahootList />
       </div>
     </Layout>
   );
