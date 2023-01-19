@@ -4,7 +4,7 @@ import Icon from './Icons';
 
 const Header = () => {
   return (
-    <div className="fixed bg-base-100 navbar border-b border-grey md:shadow-md md:border-none justify-center">
+    <div className="fixed z-50 bg-base-100 navbar border-b border-grey md:shadow-md md:border-none justify-center">
       <div className="max-w-3xl justify-center w-full">
         <div className="navbar-start flex">
           <Link
