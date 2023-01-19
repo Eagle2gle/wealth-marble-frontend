@@ -1,12 +1,17 @@
+import { useQuery } from '@tanstack/react-query';
+
 import Icon from './common/Icons';
 
-const MOCK_DATA = {
-  title: '하와이 와이키키 근처 게스트 하우스',
-  participationRate: 200,
-};
+interface MockDataType {
+  title: string;
+  participationRate: number;
+}
 
 const DeadlineBanner = () => {
-  const { participationRate, title } = MOCK_DATA;
+  const { data } = useQuery<MockDataType>({
+    queryKey: ['deadlineBannerData'],
+    queryFn: () => fetch('/deadlineBannerData.json').then((res) => res.json()),
+  });
 
   return (
     <div className="w-full max-w-3xl bg-tab flex px-4 items-center text-[8px] md:text-xs font-semibold justify-between cursor-pointer h-12">
@@ -15,8 +20,8 @@ const DeadlineBanner = () => {
         <div className="flex gap-2">
           <span className="text-main">[공모]</span>
           <div>
-            <span>{title}</span>
-            <span className="text-main ml-1">참여율 {participationRate}% 달성</span>
+            <span>{data?.title}</span>
+            <span className="text-main ml-1">참여율 {data?.participationRate}% 달성</span>
           </div>
         </div>
       </div>

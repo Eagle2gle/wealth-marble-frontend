@@ -1,64 +1,28 @@
 import Link from 'next/link';
 
 import classNames from '@/utils/classnames';
+import { useQuery } from '@tanstack/react-query';
 
 import Icon from './common/Icons';
 import Search from './common/Search';
 
-const MOCK_DATA = [
-  {
-    id: 1,
-    title: '따뜻한 봄바람이 불어오는 하와이 호텔 건설에 함께하실 마블 분들을 찾아요',
-    deadline: '2023-01-26T00:00:00.000Z',
-    price: 20000,
-    amount: 1000,
-    competitiveRate: 350,
-    location: '미국',
-    bookmarked: true,
-  },
-  {
-    id: 2,
-    title: '따뜻한 봄바람이 불어오는 하와이 호텔 건설에 함께하실 마블 분들을 찾아요',
-    deadline: '2023-01-26T00:00:00.000Z',
-    price: 20000,
-    amount: 1000,
-    competitiveRate: 350,
-    location: '미국',
-    bookmarked: false,
-  },
-  {
-    id: 3,
-    title: '따뜻한 봄바람이 불어오는 하와이 호텔 건설에 함께하실 마블 분들을 찾아요',
-    deadline: '2023-01-26T00:00:00.000Z',
-    price: 20000,
-    amount: 1000,
-    competitiveRate: 350,
-    location: '미국',
-    bookmarked: true,
-  },
-  {
-    id: 4,
-    title: '따뜻한 봄바람이 불어오는 하와이 호텔 건설에 함께하실 마블 분들을 찾아요',
-    deadline: '2023-01-26T00:00:00.000Z',
-    price: 20000,
-    amount: 1000,
-    competitiveRate: 350,
-    location: '미국',
-    bookmarked: true,
-  },
-  {
-    id: 5,
-    title: '따뜻한 봄바람이 불어오는 하와이 호텔 건설에 함께하실 마블 분들을 찾아요',
-    deadline: '2023-01-26T00:00:00.000Z',
-    price: 20000,
-    amount: 1000,
-    competitiveRate: 350,
-    location: '미국',
-    bookmarked: true,
-  },
-];
+interface MockDataType {
+  id: number;
+  title: string;
+  deadline: string;
+  price: number;
+  amount: number;
+  competitiveRate: number;
+  location: string;
+  bookmarked: boolean;
+}
 
 const CahootList = () => {
+  const { data } = useQuery<MockDataType[]>({
+    queryKey: ['cahootListData'],
+    queryFn: () => fetch('/cahootListData.json').then((res) => res.json()),
+  });
+
   const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
   };
@@ -66,6 +30,7 @@ const CahootList = () => {
     e.preventDefault();
     console.log('submitted');
   };
+
   return (
     <div className="flex flex-col px-4 md:px-0 gap-4">
       <div className="flex justify-between items-center">
@@ -74,7 +39,7 @@ const CahootList = () => {
           <Search />
         </form>
       </div>
-      {MOCK_DATA.map(
+      {data?.map(
         ({ id, amount, bookmarked, competitiveRate, deadline, location, price, title }) => (
           <Link
             href={`/cahoots/detail/${id}`}
