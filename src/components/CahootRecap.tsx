@@ -87,8 +87,8 @@ const MOCK_DATA = [
 
 const CahootRecap = () => {
   return (
-    <div className="flex flex-col gap-2 py-4 bg-main-light">
-      <label className="font-bold px-4">공모 다시보기 어때요</label>
+    <div className="flex flex-col gap-2 p-4 md:py-4 md:p-0 bg-main-light">
+      <label className="font-bold md:px-4">공모 다시보기 어때요</label>
       <Carousel itemCount={MOCK_DATA.length}>
         {MOCK_DATA.map(({ id, title, deadline, amount, competitiveRate, price }) => (
           <Link
