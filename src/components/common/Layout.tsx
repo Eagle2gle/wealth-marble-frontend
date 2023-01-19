@@ -10,7 +10,6 @@ interface LayoutProps {
 }
 
 const Layout = ({ children, hideBottomBar, hideHeader }: LayoutProps) => {
-  console.log(!hideHeader && !hideBottomBar, !hideBottomBar, !hideHeader);
   return (
     <>
       {!hideHeader && <Header />}
