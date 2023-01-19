@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useRef } from 'react';
 
 import Link from 'next/link';
 
@@ -58,37 +58,28 @@ const MOCK_DATA = [
 ];
 
 const DeadlineCarousel = () => {
-  const [current, setCurrent] = useState(0);
+  const carouselRef = useRef<HTMLDivElement>(null);
 
   const onLeftClick = () => {
-    setCurrent((prev) => (prev > MOCK_DATA.length - 1 - 5 ? prev - 5 : prev > 0 ? prev - 1 : prev));
+    if (!carouselRef.current) return;
+    carouselRef.current.scrollLeft -= carouselRef.current.scrollWidth / MOCK_DATA.length;
   };
   const onRightClick = () => {
-    setCurrent((prev) =>
-      prev <= MOCK_DATA.length - 1 - 5 ? prev + 5 : prev < MOCK_DATA.length - 1 ? prev + 1 : prev
-    );
+    if (!carouselRef.current) return;
+    carouselRef.current.scrollLeft += carouselRef.current.scrollWidth / MOCK_DATA.length;
   };
-
-  useEffect(() => {
-    setCurrent(parseInt(location.hash.replace(/[^0-9]/g, '')) || 0);
-  }, []);
 
   return (
     <div className="flex flex-col gap-2 px-3 md:px-0">
       <label className="font-bold">마감 임박 공모</label>
       <div className="flex items-center">
-        <a
-          href={`#item${current}`}
-          onClick={onLeftClick}
-          className="btn btn-circle btn-ghost hidden md:flex"
-        >
+        <button onClick={onLeftClick} className="btn btn-circle btn-ghost hidden md:flex">
           <Icon.Left />
-        </a>
-        <div className="carousel w-full space-x-2 px-4">
-          {MOCK_DATA.map(({ id, title, deadline }, index) => (
+        </button>
+        <div className="carousel w-full space-x-2 px-4" ref={carouselRef}>
+          {MOCK_DATA.map(({ id, title, deadline }) => (
             <Link
-              id={`item${index}`}
-              key={index}
+              key={id}
               href={`/cahoots/detail/${id}`}
               className="carousel-item flex-col items-center font-semibold"
             >
@@ -111,13 +102,9 @@ const DeadlineCarousel = () => {
             </Link>
           ))}
         </div>
-        <a
-          href={`#item${current}`}
-          onClick={onRightClick}
-          className="btn btn-circle btn-ghost hidden md:flex"
-        >
+        <button onClick={onRightClick} className="btn btn-circle btn-ghost hidden md:flex">
           <Icon.Right />
-        </a>
+        </button>
       </div>
     </div>
   );
