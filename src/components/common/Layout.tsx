@@ -1,4 +1,4 @@
-import cls from '@/utils/classnames';
+import classNames from '@/utils/classnames';
 
 import BottomBar from './BottomBar';
 import Header from './Header';
@@ -14,7 +14,7 @@ const Layout = ({ children, hideBottomBar, hideHeader }: LayoutProps) => {
     <>
       {!hideHeader && <Header />}
       <div
-        className={cls(
+        className={classNames(
           !hideHeader && !hideBottomBar ? 'py-16' : 'py-0',
           !hideBottomBar ? 'pb-16 md:pb-0' : 'pb-0',
           !hideHeader ? 'pt-16' : 'pt-0',

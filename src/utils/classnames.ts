@@ -1,3 +1,3 @@
-const cls = (...classnames: string[]) => classnames.join(' ');
+const classNames = (...classnames: string[]) => classnames.join(' ');
 
-export default cls;
+export default classNames;
