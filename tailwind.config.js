@@ -13,6 +13,8 @@ module.exports = {
       buy: '#FDF3F4',
       black: '#000000',
       'dark-grey': '#606060',
+      'main-light': '#E1EEE8',
+      white: '#ffffff',
     },
     extend: {},
   },
