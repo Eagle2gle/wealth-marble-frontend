@@ -1,8 +1,14 @@
-import { configureStore, ThunkAction } from '@reduxjs/toolkit';
-import { Context, createWrapper } from 'next-redux-wrapper';
-import counterReducer from './modules/counter';
+import { createWrapper } from 'next-redux-wrapper';
 import logger from 'redux-logger';
-import { Action } from 'redux';
+
+import { configureStore } from '@reduxjs/toolkit';
+import type { ThunkAction } from '@reduxjs/toolkit';
+
+import type { Context } from 'next-redux-wrapper';
+
+import counterReducer from './modules/counter';
+
+import type { Action } from 'redux';
 
 const makeStore = (context: Context) =>
   configureStore({

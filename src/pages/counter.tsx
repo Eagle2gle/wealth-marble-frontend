@@ -1,6 +1,8 @@
-import { Appstate } from '@/store';
 import { useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
+
+import { Appstate } from '@/store';
+
 import { increment, decrement } from '../store/modules/counter';
 
 export default function Test() {
