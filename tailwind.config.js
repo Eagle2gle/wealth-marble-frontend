@@ -14,6 +14,12 @@ module.exports = {
       black: '#000000',
       'dark-grey': '#606060',
     },
+    textColor: {
+      main: '#91D3C8',
+      white: '#FFFFFF',
+      black: '#000000',
+      red: '#DF6B5A',
+    },
     extend: {},
   },
   daisyui: {
