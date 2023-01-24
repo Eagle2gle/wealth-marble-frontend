@@ -1,7 +1,13 @@
 //store/modules/counter.ts
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { HYDRATE } from 'next-redux-wrapper';
-import { Appstate } from '..';
+
+import { createSlice, createAction } from '@reduxjs/toolkit';
+import type { PayloadAction } from '@reduxjs/toolkit';
+
+import type { Appstate } from '..';
+
+const hydrate = createAction<CounterState>(HYDRATE);
+
 export interface CounterState {
   number: number;
 }
@@ -22,14 +28,15 @@ export const counterSlice = createSlice({
       state.number += action.payload;
     },
   },
-  extraReducers: {
-    [HYDRATE]: (state, action) => {
-      if (!action.payload.counter.number) {
+  extraReducers: (builder) => {
+    builder.addCase(hydrate, (state, action) => {
+      action.payload;
+      if (!action.payload.number) {
         return state;
       }
-      console.log('HYDRATE', action.payload.counter.number);
-      state.number = action.payload.counter.number;
-    },
+      console.log('HYDRATE', action.payload.number);
+      state.number = action.payload.number;
+    });
   },
 });
 export const { increment, decrement, incrementByAmount } = counterSlice.actions;
