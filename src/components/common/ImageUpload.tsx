@@ -69,6 +69,7 @@ const ImageUpload = ({ id, name = 'inputFile' }: PropsType) => {
         return (
           <div key={i} className="flex flex-none relative w-32 h-32 items-center justify-center">
             <button
+              type="button"
               className="absolute top-0 right-0 rounded-lg mt-1 mr-1 bg-black/50 text-white w-8 h-8 flex justify-center items-center"
               onClick={() => handleRemoveImage(i)}
             >
