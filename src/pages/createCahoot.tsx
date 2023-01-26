@@ -1,3 +1,5 @@
+import { useForm, FieldErrors } from 'react-hook-form';
+
 import DateRangeInput from '@/components/common/DateRangeInput';
 import ImageUpload from '@/components/common/ImageUpload';
 import Layout from '@/components/common/Layout';
@@ -5,8 +7,8 @@ import NumberInput from '@/components/common/NumberInput';
 import RadioBtn from '@/components/common/RadioBtn';
 import TextArea from '@/components/common/TextArea';
 import TextInput from '@/components/common/TextInput';
-// import Map from '@/components/Map';
 import PlaceSearchBar from '@/components/PlaceSearchBar';
+// import Map from '@/components/Map';
 
 const positionOption = [
   { value: 'ocean', label: '바다' },
@@ -20,7 +22,34 @@ const typeOption = [
   { value: 'guestHouse', label: '게스트하우스' },
 ];
 
+interface formDataType {
+  title: string;
+  shortDescription: string;
+  images: string[];
+  themeLocation: string;
+  themeBuilding: string;
+  location: string;
+  expectedMonth: string;
+  descritption: string;
+  stockStart: string;
+  stockEnd: string;
+  expectedTotalCost: string;
+  stockPrice: string;
+  stockNum: string;
+}
+
 export default function CreateCahoot() {
+  const { register, handleSubmit, setValue } = useForm<formDataType>();
+
+  const onSubmit = (data: formDataType) => {
+    console.log(data);
+    // TODO: POST form data
+  };
+
+  const onErrors = (errors: FieldErrors) => {
+    console.log(errors);
+  };
+
   return (
     <Layout hideHeaderOnMobile hideBottomBar>
       <section className="flex flex-col gap-2.5 max-md:hidden bg-main text-white px-10 pt-12 pb-6">
@@ -30,16 +59,21 @@ export default function CreateCahoot() {
         </p>
       </section>
       <article className="p-5 w-full">
-        <form className="flex flex-col gap-8">
+        <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit, onErrors)}>
           {/* 휴양지명 */}
           <div>
             <div>
-              <label htmlFor="name" className="block mb-2 text-base font-semibold text-black">
+              <label htmlFor="title" className="block mb-2 text-base font-semibold text-black">
                 <span className="text-red">* </span>
                 <span>휴양지명</span>
               </label>
               <div className="px-2">
-                <TextInput id="name" placeholder="5~20 글자로 작성해주세요." required />
+                <TextInput
+                  id="title"
+                  placeholder="5~20 글자로 작성해주세요."
+                  required={true}
+                  register={register('title')}
+                />
               </div>
             </div>
           </div>
@@ -47,7 +81,7 @@ export default function CreateCahoot() {
           <div>
             <div>
               <label
-                htmlFor="brief-introduction"
+                htmlFor="shortDescription"
                 className="block mb-2 text-base font-semibold text-black"
               >
                 <span className="text-red">* </span>
@@ -55,9 +89,10 @@ export default function CreateCahoot() {
               </label>
               <div className="px-2">
                 <TextArea
-                  id="brief-introduction"
+                  id="shortDescription"
                   placeholder="휴양지에 대한 간단한 소개를 작성해주세요."
                   required={true}
+                  register={register('shortDescription')}
                 />
               </div>
             </div>
@@ -65,15 +100,12 @@ export default function CreateCahoot() {
           {/* 예상 이미지 */}
           <div>
             <div>
-              <label
-                htmlFor="expected-img"
-                className="block mb-2 text-base font-semibold text-black"
-              >
+              <label htmlFor="images" className="block mb-2 text-base font-semibold text-black">
                 <span className="text-red">* </span>
                 <span>예상 이미지</span>
               </label>
               <div className="px-2">
-                <ImageUpload id="expected-img" name="expectedImg" />
+                <ImageUpload id="images" name="images" setValue={setValue} />
               </div>
             </div>
           </div>
@@ -86,21 +118,32 @@ export default function CreateCahoot() {
               </label>
               <div className="px-2">
                 <p className="text-sm font-semibold text-black my-2">위치</p>
-                <RadioBtn id="theme-potision" name="theme-position" option={positionOption} />
+                <RadioBtn
+                  id="themeLocation"
+                  name="themeLocation"
+                  option={positionOption}
+                  register={register('themeLocation')}
+                />
                 <p className="text-sm font-semibold text-black mt-4 mb-2">건물 유형</p>
-                <RadioBtn id="theme-type" name="theme-type" option={typeOption} />
+                <RadioBtn
+                  id="themeBuilding"
+                  name="themeBuilding"
+                  option={typeOption}
+                  register={register('themeBuilding')}
+                />
               </div>
             </div>
           </div>
           {/* 위치 */}
           <div>
             <div>
-              <label htmlFor="position" className="block mb-2 text-base font-semibold text-black">
+              <label htmlFor="location" className="block mb-2 text-base font-semibold text-black">
                 <span className="text-red">* </span>
                 <span>위치</span>
               </label>
               <div className="px-2">
-                <PlaceSearchBar />
+                {/* TODO: Loading 일 때 처리 */}
+                <PlaceSearchBar register={register('location')} />
                 {/* <Map /> */}
               </div>
             </div>
@@ -109,7 +152,7 @@ export default function CreateCahoot() {
           <div>
             <div>
               <label
-                htmlFor="expected-construction-time"
+                htmlFor="expectedMonth"
                 className="block mb-2 text-base font-semibold text-black"
               >
                 <span className="text-red">* </span>
@@ -117,7 +160,7 @@ export default function CreateCahoot() {
               </label>
               <div className="flex gap-4 items-center px-2">
                 <span>공모 완료 후</span>
-                <NumberInput size="small" />
+                <NumberInput size="small" min={0} name="expectedMonth" setValue={setValue} />
                 <span>month</span>
               </div>
             </div>
@@ -125,15 +168,19 @@ export default function CreateCahoot() {
           {/* 아이디어 설명 */}
           <div>
             <div>
-              <label htmlFor="idea" className="block mb-2 text-base font-semibold text-black">
+              <label
+                htmlFor="descritption"
+                className="block mb-2 text-base font-semibold text-black"
+              >
                 <span className="text-red">* </span>
                 <span>아이디어 설명</span>
               </label>
               <div className="px-2">
                 <TextArea
-                  id="idea"
+                  id="descritption"
                   placeholder="최대한 상세히 작성해야 공모에 도움이 됩니다."
                   required={true}
+                  register={register('descritption')}
                 />
               </div>
             </div>
@@ -142,14 +189,18 @@ export default function CreateCahoot() {
           <div>
             <div>
               <label
-                htmlFor="cahoot-duration"
+                htmlFor="stockDurationRange"
                 className="block mb-2 text-base font-semibold text-black"
               >
                 <span className="text-red">* </span>
                 <span>공모 진행 기간</span>
               </label>
               <div className="px-2">
-                <DateRangeInput />
+                <DateRangeInput
+                  startDateName={'stockStart'}
+                  endDateName={'stockEnd'}
+                  setValue={setValue}
+                />
               </div>
             </div>
           </div>
@@ -157,13 +208,13 @@ export default function CreateCahoot() {
           <div>
             <div>
               <label
-                htmlFor="expected-construction-expenditure"
+                htmlFor="expectedTotalCost"
                 className="block mb-2 text-base font-semibold text-black"
               >
                 <span>전체 건설 지출 예상 금액</span>
               </label>
               <div className="flex gap-4 items-center px-2">
-                <NumberInput size="large" />
+                <NumberInput size="large" min={0} name="expectedTotalCost" setValue={setValue} />
                 <span>만원</span>
               </div>
             </div>
@@ -172,7 +223,7 @@ export default function CreateCahoot() {
           <div>
             <div>
               <label
-                htmlFor="issued-stocks"
+                htmlFor="issuedStocks"
                 className="block mb-2 text-base font-semibold text-black"
               >
                 <span className="text-red">* </span>
@@ -182,25 +233,26 @@ export default function CreateCahoot() {
                 <div className="basis-5/12">
                   <p className="text-sm font-semibold text-black my-2">1주 별 가격</p>
                   <div className="flex gap-4 items-center">
-                    <NumberInput size="large" />
+                    <NumberInput size="large" min={0} name="stockPrice" setValue={setValue} />
                     <span>원</span>
                   </div>
                 </div>
                 <div className="basis-5/12">
                   <p className="text-sm font-semibold text-black my-2">발행 주식 수</p>
                   <div className="flex gap-4 items-center">
-                    <NumberInput size="large" />
+                    <NumberInput size="large" min={1} name="stockNum" setValue={setValue} />
                     <span>주</span>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-          <input
+          <button
             type="submit"
-            value="등록하기"
             className="my-16 self-center w-36 btn bg-main border-none hover:bg-red"
-          />
+          >
+            등록하기
+          </button>
         </form>
       </article>
     </Layout>

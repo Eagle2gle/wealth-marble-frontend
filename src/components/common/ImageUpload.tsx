@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import { UseFormSetValue } from 'react-hook-form';
 
 import Image from 'next/image';
 
@@ -6,10 +7,11 @@ import Icon from '@/components/common/Icons';
 
 interface PropsType {
   id: string;
-  name?: string;
+  name: string;
+  setValue: UseFormSetValue<any>;
 }
 
-const ImageUpload = ({ id, name = 'inputFile' }: PropsType) => {
+const ImageUpload = ({ id, name, setValue }: PropsType) => {
   const imgRef = useRef<HTMLInputElement>(null);
   const [imgSrcList, setImgSrcList] = useState<string[]>([]);
   const limit = 5;
@@ -25,7 +27,10 @@ const ImageUpload = ({ id, name = 'inputFile' }: PropsType) => {
     reader.readAsDataURL(files[0]);
     reader.onloadend = (e) => {
       const result = e.target?.result as string;
-      setImgSrcList([...imgSrcList, result]);
+      const newImgSrcList = [...imgSrcList, result];
+
+      setImgSrcList(newImgSrcList);
+      setValue(name, newImgSrcList);
     };
   };
 
@@ -55,12 +60,11 @@ const ImageUpload = ({ id, name = 'inputFile' }: PropsType) => {
           </label>
           <input
             id={id}
-            name={name}
             type="file"
             accept="image/*"
+            className="sr-only"
             ref={imgRef}
             onChange={inputImgFile}
-            className="sr-only"
           />
         </div>
       ) : null}

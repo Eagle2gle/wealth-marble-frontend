@@ -1,25 +1,30 @@
 import React, { useState } from 'react';
+import { UseFormSetValue } from 'react-hook-form';
 
 interface PropsType {
   size: 'small' | 'large';
   min?: number;
   value?: number;
+  name: string;
+  setValue: UseFormSetValue<any>;
 }
 
-// TODO: value -> 기본값 지정 시 필요할 수 있어서 놔둠
-const NumberInput = ({ size, min = 0 }: PropsType) => {
+const NumberInput = ({ size, min = 0, name, setValue }: PropsType) => {
   const [num, setNum] = useState<number>(0);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(e.target.value);
+    
     if (isNaN(inputNum) || inputNum < 0) {
       return;
     }
-    setNum(Number(e.target.value));
+    setNum(inputNum);
+    setValue(name, inputNum);
   };
 
   const onClickPlus = () => {
     setNum(num + 1);
+    setValue(name, num + 1);
   };
 
   const onClickMinus = () => {
@@ -27,6 +32,7 @@ const NumberInput = ({ size, min = 0 }: PropsType) => {
       return;
     }
     setNum(num - 1);
+    setValue(name, num - 1);
   };
 
   return (
