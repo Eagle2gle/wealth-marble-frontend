@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { UseFormSetValue } from 'react-hook-form';
+import { UseFormSetValue, FieldValues } from 'react-hook-form';
 
 interface PropsType {
   size: 'small' | 'large';
   min?: number;
   value?: number;
   name: string;
-  setValue: UseFormSetValue<any>;
+  setValue: UseFormSetValue<FieldValues>;
 }
 
 const NumberInput = ({ size, min = 0, name, setValue }: PropsType) => {
@@ -14,7 +14,7 @@ const NumberInput = ({ size, min = 0, name, setValue }: PropsType) => {
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
     const inputNum = Number(e.target.value);
-    
+
     if (isNaN(inputNum) || inputNum < 0) {
       return;
     }

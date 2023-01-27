@@ -22,7 +22,7 @@ const typeOption = [
   { value: 'guestHouse', label: '게스트하우스' },
 ];
 
-interface formDataType {
+export interface formDataType {
   title: string;
   shortDescription: string;
   images: string[];
