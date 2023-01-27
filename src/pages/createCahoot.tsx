@@ -11,15 +11,15 @@ import PlaceSearchBar from '@/components/PlaceSearchBar';
 // import Map from '@/components/Map';
 
 const positionOption = [
-  { value: 'ocean', label: '바다' },
-  { value: 'mountain', label: '산' },
-  { value: 'city', label: '도심' },
+  { value: 'OCEAN', label: '바다' },
+  { value: 'MOUNTAIN', label: '산' },
+  { value: 'DOWNTOWN', label: '도심' },
 ];
 
 const typeOption = [
-  { value: 'resort', label: '휴양지' },
-  { value: 'hotel', label: '호텔' },
-  { value: 'guestHouse', label: '게스트하우스' },
+  { value: 'RESORT', label: '휴양지' },
+  { value: 'HOTEL', label: '호텔' },
+  { value: 'GUESTHOUSE', label: '게스트하우스' },
 ];
 
 export interface FormDataType {
