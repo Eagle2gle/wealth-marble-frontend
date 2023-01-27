@@ -1,6 +1,7 @@
 import { useForm, FieldErrors } from 'react-hook-form';
 
 import DateRangeInput from '@/components/common/DateRangeInput';
+import FormItem from '@/components/common/FormItem';
 import ImageUpload from '@/components/common/ImageUpload';
 import Layout from '@/components/common/Layout';
 import NumberInput from '@/components/common/NumberInput';
@@ -61,192 +62,115 @@ export default function CreateCahoot() {
       <article className="p-5 w-full">
         <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit, onErrors)}>
           {/* 휴양지명 */}
-          <div>
-            <div>
-              <label htmlFor="title" className="block mb-2 text-base font-semibold text-black">
-                <span className="text-red">* </span>
-                <span>휴양지명</span>
-              </label>
-              <div className="px-2">
-                <TextInput
-                  id="title"
-                  placeholder="5~20 글자로 작성해주세요."
-                  required={true}
-                  register={register('title')}
-                />
-              </div>
+          <FormItem id="title" label="휴양지명" required={true}>
+            <div className="px-2">
+              <TextInput
+                id="title"
+                placeholder="5~20 글자로 작성해주세요."
+                required={true}
+                register={register('title')}
+              />
             </div>
-          </div>
+          </FormItem>
           {/* 간단한 소개 */}
-          <div>
-            <div>
-              <label
-                htmlFor="shortDescription"
-                className="block mb-2 text-base font-semibold text-black"
-              >
-                <span className="text-red">* </span>
-                <span>간단한 소개</span>
-              </label>
-              <div className="px-2">
-                <TextArea
-                  id="shortDescription"
-                  placeholder="휴양지에 대한 간단한 소개를 작성해주세요."
-                  required={true}
-                  register={register('shortDescription')}
-                />
-              </div>
+          <FormItem id="shortDescription" label="간단한 소개" required={true}>
+            <div className="px-2">
+              <TextArea
+                id="shortDescription"
+                placeholder="휴양지에 대한 간단한 소개를 작성해주세요."
+                required={true}
+                register={register('shortDescription')}
+              />
             </div>
-          </div>
+          </FormItem>
           {/* 예상 이미지 */}
-          <div>
-            <div>
-              <label htmlFor="images" className="block mb-2 text-base font-semibold text-black">
-                <span className="text-red">* </span>
-                <span>예상 이미지</span>
-              </label>
-              <div className="px-2">
-                <ImageUpload id="images" name="images" setValue={setValue} />
-              </div>
+          <FormItem id="images" label="예상 이미지" required={true}>
+            <div className="px-2">
+              <ImageUpload id="images" name="images" setValue={setValue} />
             </div>
-          </div>
+          </FormItem>
           {/* 휴양지 테마 */}
-          <div>
-            <div>
-              <label htmlFor="theme" className="block mb-2 text-base font-semibold text-black">
-                <span className="text-red">* </span>
-                <span>휴양지 테마</span>
-              </label>
-              <div className="px-2">
-                <p className="text-sm font-semibold text-black my-2">위치</p>
-                <RadioBtn
-                  id="themeLocation"
-                  name="themeLocation"
-                  option={positionOption}
-                  register={register('themeLocation')}
-                />
-                <p className="text-sm font-semibold text-black mt-4 mb-2">건물 유형</p>
-                <RadioBtn
-                  id="themeBuilding"
-                  name="themeBuilding"
-                  option={typeOption}
-                  register={register('themeBuilding')}
-                />
-              </div>
+          <FormItem id="theme" label="휴양지 테마" required={true}>
+            <div className="px-2">
+              <p className="text-sm font-semibold text-black my-2">위치</p>
+              <RadioBtn
+                id="themeLocation"
+                name="themeLocation"
+                option={positionOption}
+                register={register('themeLocation')}
+              />
+              <p className="text-sm font-semibold text-black mt-4 mb-2">건물 유형</p>
+              <RadioBtn
+                id="themeBuilding"
+                name="themeBuilding"
+                option={typeOption}
+                register={register('themeBuilding')}
+              />
             </div>
-          </div>
+          </FormItem>
           {/* 위치 */}
-          <div>
-            <div>
-              <label htmlFor="location" className="block mb-2 text-base font-semibold text-black">
-                <span className="text-red">* </span>
-                <span>위치</span>
-              </label>
-              <div className="px-2">
-                {/* TODO: Loading 일 때 처리 */}
-                <PlaceSearchBar register={register('location')} />
-                {/* <Map /> */}
-              </div>
+          <FormItem id="location" label="위치" required={true}>
+            <div className="px-2">
+              {/* TODO: Loading 일 때 처리 */}
+              <PlaceSearchBar register={register('location')} />
+              {/* <Map /> */}
             </div>
-          </div>
+          </FormItem>
           {/* 건설 진행 예상 시간 */}
-          <div>
-            <div>
-              <label
-                htmlFor="expectedMonth"
-                className="block mb-2 text-base font-semibold text-black"
-              >
-                <span className="text-red">* </span>
-                <span>건설 진행 예상 시간</span>
-              </label>
-              <div className="flex gap-4 items-center px-2">
-                <span>공모 완료 후</span>
-                <NumberInput size="small" min={0} name="expectedMonth" setValue={setValue} />
-                <span>month</span>
-              </div>
+          <FormItem id="expectedMonth" label="건설 진행 예상 시간" required={true}>
+            <div className="flex gap-4 items-center px-2">
+              <span>공모 완료 후</span>
+              <NumberInput size="small" min={0} name="expectedMonth" setValue={setValue} />
+              <span>month</span>
             </div>
-          </div>
+          </FormItem>
           {/* 아이디어 설명 */}
-          <div>
-            <div>
-              <label
-                htmlFor="descritption"
-                className="block mb-2 text-base font-semibold text-black"
-              >
-                <span className="text-red">* </span>
-                <span>아이디어 설명</span>
-              </label>
-              <div className="px-2">
-                <TextArea
-                  id="descritption"
-                  placeholder="최대한 상세히 작성해야 공모에 도움이 됩니다."
-                  required={true}
-                  register={register('descritption')}
-                />
-              </div>
+          <FormItem id="descritption" label="아이디어 설명" required={true}>
+            <div className="px-2">
+              <TextArea
+                id="descritption"
+                placeholder="최대한 상세히 작성해야 공모에 도움이 됩니다."
+                required={true}
+                register={register('descritption')}
+              />
             </div>
-          </div>
+          </FormItem>
           {/* 공모 진행 기간 */}
-          <div>
-            <div>
-              <label
-                htmlFor="stockDurationRange"
-                className="block mb-2 text-base font-semibold text-black"
-              >
-                <span className="text-red">* </span>
-                <span>공모 진행 기간</span>
-              </label>
-              <div className="px-2">
-                <DateRangeInput
-                  startDateName={'stockStart'}
-                  endDateName={'stockEnd'}
-                  setValue={setValue}
-                />
-              </div>
+          <FormItem id="stockDurationRange" label="공모 진행 기간" required={true}>
+            <div className="px-2">
+              <DateRangeInput
+                startDateName={'stockStart'}
+                endDateName={'stockEnd'}
+                setValue={setValue}
+              />
             </div>
-          </div>
+          </FormItem>
           {/* 전체 건설 지출 예상 금액 */}
-          <div>
-            <div>
-              <label
-                htmlFor="expectedTotalCost"
-                className="block mb-2 text-base font-semibold text-black"
-              >
-                <span>전체 건설 지출 예상 금액</span>
-              </label>
-              <div className="flex gap-4 items-center px-2">
-                <NumberInput size="large" min={0} name="expectedTotalCost" setValue={setValue} />
-                <span>만원</span>
-              </div>
+          <FormItem id="expectedTotalCost" label="전체 건설 지출 예상 금액" required={false}>
+            <div className="flex gap-4 items-center px-2">
+              <NumberInput size="large" min={0} name="expectedTotalCost" setValue={setValue} />
+              <span>만원</span>
             </div>
-          </div>
+          </FormItem>
           {/* 발행 주식 수량 및 가격 */}
-          <div>
-            <div>
-              <label
-                htmlFor="issuedStocks"
-                className="block mb-2 text-base font-semibold text-black"
-              >
-                <span className="text-red">* </span>
-                <span>발행 주식 수량 및 가격</span>
-              </label>
-              <div className="flex flex-wrap gap-10 px-2">
-                <div className="basis-5/12">
-                  <p className="text-sm font-semibold text-black my-2">1주 별 가격</p>
-                  <div className="flex gap-4 items-center">
-                    <NumberInput size="large" min={0} name="stockPrice" setValue={setValue} />
-                    <span>원</span>
-                  </div>
+          <FormItem id="issuedStocks" label="발행 주식 수량 및 가격" required={true}>
+            <div className="flex flex-wrap gap-10 px-2">
+              <div className="basis-5/12">
+                <p className="text-sm font-semibold text-black my-2">1주 별 가격</p>
+                <div className="flex gap-4 items-center">
+                  <NumberInput size="large" min={0} name="stockPrice" setValue={setValue} />
+                  <span>원</span>
                 </div>
-                <div className="basis-5/12">
-                  <p className="text-sm font-semibold text-black my-2">발행 주식 수</p>
-                  <div className="flex gap-4 items-center">
-                    <NumberInput size="large" min={1} name="stockNum" setValue={setValue} />
-                    <span>주</span>
-                  </div>
+              </div>
+              <div className="basis-5/12">
+                <p className="text-sm font-semibold text-black my-2">발행 주식 수</p>
+                <div className="flex gap-4 items-center">
+                  <NumberInput size="large" min={1} name="stockNum" setValue={setValue} />
+                  <span>주</span>
                 </div>
               </div>
             </div>
-          </div>
+          </FormItem>
           <button
             type="submit"
             className="my-16 self-center w-36 btn bg-main border-none hover:bg-red"
