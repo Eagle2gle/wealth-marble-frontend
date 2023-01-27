@@ -2,14 +2,14 @@ import { useState } from 'react';
 import 'react-dates/initialize';
 import 'react-dates/lib/css/_datepicker.css';
 import { DateRangePicker, FocusedInputShape } from 'react-dates';
-import { UseFormSetValue, FieldValues } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 
 import moment from 'moment';
 
 interface PropsType {
   startDateName: string;
   endDateName: string;
-  setValue: UseFormSetValue<FieldValues>;
+  setValue: UseFormSetValue<any>;
 }
 
 const DateRangeInput = ({ startDateName, endDateName, setValue }: PropsType) => {

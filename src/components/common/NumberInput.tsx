@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { UseFormSetValue, FieldValues } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 
 interface PropsType {
   size: 'small' | 'large';
   min?: number;
   value?: number;
   name: string;
-  setValue: UseFormSetValue<FieldValues>;
+  setValue: UseFormSetValue<any>;
 }
 
 const NumberInput = ({ size, min = 0, name, setValue }: PropsType) => {

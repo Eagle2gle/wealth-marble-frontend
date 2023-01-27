@@ -1,5 +1,5 @@
 import { useState, useRef } from 'react';
-import { UseFormSetValue, FieldValues } from 'react-hook-form';
+import { UseFormSetValue } from 'react-hook-form';
 
 import Image from 'next/image';
 
@@ -8,7 +8,7 @@ import Icon from '@/components/common/Icons';
 interface PropsType {
   id: string;
   name: string;
-  setValue: UseFormSetValue<FieldValues>;
+  setValue: UseFormSetValue<any>;
 }
 
 const ImageUpload = ({ id, name, setValue }: PropsType) => {
