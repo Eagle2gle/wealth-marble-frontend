@@ -22,7 +22,7 @@ const typeOption = [
   { value: 'guestHouse', label: '게스트하우스' },
 ];
 
-export interface formDataType {
+export interface FormDataType {
   title: string;
   shortDescription: string;
   images: string[];
@@ -39,9 +39,9 @@ export interface formDataType {
 }
 
 export default function CreateCahoot() {
-  const { register, handleSubmit, setValue } = useForm<formDataType>();
+  const { register, handleSubmit, setValue } = useForm<FormDataType>();
 
-  const onSubmit = (data: formDataType) => {
+  const onSubmit = (data: FormDataType) => {
     console.log(data);
     // TODO: POST form data
   };
