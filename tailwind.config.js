@@ -15,6 +15,7 @@ module.exports = {
       'dark-grey': '#606060',
       'main-light': '#E1EEE8',
       white: '#ffffff',
+      'grey-middle': '#8E949F',
     },
     textColor: {
       main: '#91D3C8',
@@ -30,6 +31,7 @@ module.exports = {
         light: {
           ...require('daisyui/src/colors/themes')['[data-theme=light]'],
           primary: '#91D3C8',
+          secondary: '#FAFAFA',
         },
       },
     ],
