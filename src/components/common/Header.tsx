@@ -10,8 +10,8 @@ const Header = ({ hideOnMobile = false }: HeaderPropsType) => {
   return (
     <div
       className={`${
-        hideOnMobile ? 'md:visible' : 'invisible'
-      } invisible fixed z-50 bg-base-100 navbar border-b border-grey md:shadow-md md:border-none justify-center`}
+        hideOnMobile ? 'md:visible invisible' : 'visible'
+      } fixed z-50 bg-base-100 navbar border-b border-grey md:shadow-md md:border-none justify-center`}
     >
       <div className="max-w-3xl justify-center w-full">
         <div className="navbar-start flex">

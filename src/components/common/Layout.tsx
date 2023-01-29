@@ -13,7 +13,7 @@ interface LayoutProps {
 const Layout = ({ children, hideBottomBar, hideHeader, hideHeaderOnMobile }: LayoutProps) => {
   return (
     <>
-      {!hideHeader && <Header />}
+      {!hideHeader && !hideHeaderOnMobile && <Header />}
       {hideHeaderOnMobile && <Header hideOnMobile={true} />}
       <div
         className={classNames(
