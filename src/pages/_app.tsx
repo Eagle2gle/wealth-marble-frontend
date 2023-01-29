@@ -9,7 +9,9 @@ import { wrapper } from '../store';
 
 import type { AppProps } from 'next/app';
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: { queries: { suspense: true, useErrorBoundary: true } },
+});
 
 function App({ Component, ...rest }: AppProps) {
   const { store, props } = wrapper.useWrappedStore(rest);
