@@ -35,7 +35,7 @@ const BottomBar = () => {
   const router = useRouter();
 
   return (
-    <div className="fixed btm-nav border-t border-grey md:hidden">
+    <div className="btm-nav fixed z-10 border-t border-grey md:hidden">
       {TAB_INFOS.map(({ icon, label, route }) => (
         <button key={route} onClick={() => router.push(route)}>
           <div className={router.route === route ? 'text-main' : ''}>{icon}</div>
