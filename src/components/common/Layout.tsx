@@ -13,8 +13,7 @@ interface LayoutProps {
 const Layout = ({ children, hideBottomBar, hideHeader, hideHeaderOnMobile }: LayoutProps) => {
   return (
     <>
-      {!hideHeader && <Header />}
-      {hideHeaderOnMobile && <Header hideOnMobile={true} />}
+      {!hideHeader && <Header hideOnMobile={hideHeaderOnMobile} />}
       <div
         className={classNames(
           !hideHeader && !hideBottomBar ? 'py-16' : 'py-0',
