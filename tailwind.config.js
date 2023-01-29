@@ -17,12 +17,6 @@ module.exports = {
       white: '#ffffff',
       'grey-middle': '#8E949F',
     },
-    textColor: {
-      main: '#91D3C8',
-      white: '#FFFFFF',
-      black: '#000000',
-      red: '#DF6B5A',
-    },
     extend: {},
   },
   daisyui: {
