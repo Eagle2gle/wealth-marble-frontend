@@ -5,7 +5,7 @@ import { Provider } from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
-import { wrapper } from '../store';
+import wrapper from '../store';
 
 import type { AppProps } from 'next/app';
 
@@ -13,7 +13,7 @@ const queryClient = new QueryClient({
   defaultOptions: { queries: { suspense: true, useErrorBoundary: true } },
 });
 
-function App({ Component, ...rest }: AppProps) {
+const App = ({ Component, ...rest }: AppProps) => {
   const { store, props } = wrapper.useWrappedStore(rest);
   const { pageProps } = props;
   return (
@@ -24,6 +24,6 @@ function App({ Component, ...rest }: AppProps) {
       </QueryClientProvider>
     </Provider>
   );
-}
+};
 
 export default App;

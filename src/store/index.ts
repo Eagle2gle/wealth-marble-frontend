@@ -1,26 +1,30 @@
+import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux';
+
 import { createWrapper } from 'next-redux-wrapper';
 import logger from 'redux-logger';
 
 import { configureStore } from '@reduxjs/toolkit';
 import type { ThunkAction } from '@reduxjs/toolkit';
 
-import type { Context } from 'next-redux-wrapper';
-
-import counterReducer from './modules/counter';
+import rootReducer from './modules';
 
 import type { Action } from 'redux';
 
-const makeStore = (context: Context) =>
+const makeStore = () =>
   configureStore({
-    reducer: {
-      counter: counterReducer,
-    },
+    reducer: rootReducer,
     middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
-    devTools: true,
+    devTools: process.env.NODE_ENV === 'development',
   });
 
-export type Appstore = ReturnType<typeof makeStore>;
-export type Appstate = ReturnType<Appstore['getState']>;
-export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, Appstate, unknown, Action>;
+const wrapper = createWrapper(makeStore);
 
-export const wrapper = createWrapper<Appstore>(makeStore);
+type AppStore = ReturnType<typeof makeStore>;
+type AppDispatch = AppStore['dispatch'];
+export type RootState = ReturnType<AppStore['getState']>;
+export type AppThunk<ReturnType = void> = ThunkAction<ReturnType, RootState, unknown, Action>;
+
+export const useTypeDispatch = () => useDispatch<AppDispatch>();
+export const useTypeSelector: TypedUseSelectorHook<RootState> = useSelector;
+
+export default wrapper;
