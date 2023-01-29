@@ -9,7 +9,7 @@ interface MockDataType {
 
 const DeadlineBanner = () => {
   const { data } = useSuspendedQuery<MockDataType>(['deadlineBannerData'], () =>
-    fetch(`${process.env.NEXT_PUBLIC_LOCAL_HOST}/deadlineBannerData.json`).then((res) => res.json())
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/deadlineBannerData.json`).then((res) => res.json())
   );
 
   return (
@@ -24,7 +24,7 @@ const DeadlineBanner = () => {
           </div>
         </div>
       </div>
-      <button className="btn btn-ghost btn-circle hidden md:flex">
+      <button className="btn-ghost btn-circle btn hidden md:flex">
         <Icon.Right />
       </button>
     </div>

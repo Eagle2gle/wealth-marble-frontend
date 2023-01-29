@@ -20,7 +20,7 @@ type MockDataType = {
 
 const CahootList = () => {
   const { data } = useSuspendedQuery<MockDataType>(['cahootListData'], () =>
-    fetch(`${process.env.NEXT_PUBLIC_LOCAL_HOST}/cahootListData.json`).then((res) => res.json())
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/cahootListData.json`).then((res) => res.json())
   );
 
   const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
@@ -57,7 +57,7 @@ const CahootList = () => {
                 <button
                   onClick={onBookmarkClick}
                   className={classNames(
-                    'btn btn-ghost btn-xs btn-circle',
+                    'btn-ghost btn-xs btn-circle btn',
                     bookmarked ? 'fill-main text-main' : 'fill-none'
                   )}
                 >

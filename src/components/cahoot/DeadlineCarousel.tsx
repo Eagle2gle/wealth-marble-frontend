@@ -12,9 +12,7 @@ type MockDataType = {
 
 const DeadlineCarousel = () => {
   const { data } = useSuspendedQuery<MockDataType>(['deadlineCarouselData'], () =>
-    fetch(`${process.env.NEXT_PUBLIC_LOCAL_HOST}/deadlineCarouselData.json`).then((res) =>
-      res.json()
-    )
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/deadlineCarouselData.json`).then((res) => res.json())
   );
 
   return (

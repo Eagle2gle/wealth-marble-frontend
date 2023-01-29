@@ -16,7 +16,7 @@ type MockDataType = {
 
 const Recap = () => {
   const { data } = useSuspendedQuery<MockDataType>(['cahootRecapData'], () =>
-    fetch(`${process.env.NEXT_PUBLIC_LOCAL_HOST}/cahootRecapData.json`).then((res) => res.json())
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/cahootRecapData.json`).then((res) => res.json())
   );
 
   return (
