@@ -10,33 +10,25 @@ import { CahootDetailInfoType } from '@/types/response';
 import Modal from '../common/Modal';
 
 const BuyButton = () => {
-  const [open, setOpen] = useState(false);
   const {
     data: { stockPrice, title, images },
   } = useSuspendedQuery<CahootDetailInfoType>(['cahootDetailData'], fetchCahootDetail);
   const quantity = useTypeSelector(({ cahootOrder }) => cahootOrder.quantity);
 
-  const onClick = () => {
-    setOpen(true);
-  };
-  const onDismiss = () => {
-    setOpen(false);
-  };
-
   return (
     <>
       {/* post 요청 보내기 필요 */}
-      <button
+      <label
         className="btn-primary btn flex h-full w-full justify-around px-1 text-base"
-        onClick={onClick}
+        htmlFor="modal"
       >
         <span className="flex-[0.2] break-keep">공모</span>
         <div className="h-full border-l-2 border-main-light"></div>
         <span className="flex-[0.7] break-keep text-right">
           {(stockPrice * quantity).toLocaleString()}원
         </span>
-      </button>
-      <Modal open={open} onDismiss={onDismiss}>
+      </label>
+      <Modal>
         <div className="space-y-4">
           <div className="text-center text-xl font-bold">
             <div>
@@ -70,12 +62,12 @@ const BuyButton = () => {
             </div>
           </div>
           <div className="space-y-2">
-            <button className="btn-primary btn w-full" onClick={onDismiss}>
+            <label className="btn-primary btn w-full" htmlFor="modal">
               재주문하기
-            </button>
-            <button className="btn-ghost btn w-full border-grey" onClick={onDismiss}>
+            </label>
+            <label className="btn-ghost btn w-full border-grey" htmlFor="modal">
               확인
-            </button>
+            </label>
           </div>
         </div>
       </Modal>

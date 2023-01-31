@@ -1,35 +1,32 @@
+import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 
 interface ModalProps {
   children: React.ReactNode;
-  open: boolean;
-  onDismiss: React.MouseEventHandler<HTMLDivElement>;
 }
 
-const Modal = ({ children, open, onDismiss }: ModalProps) => {
-  const onInnerClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
-    e.stopPropagation();
-  };
+const Modal = ({ children }: ModalProps) => {
+  const [modalRoot, setModalRoot] = useState<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    setModalRoot(document.querySelector<HTMLDivElement>('#modal-root'));
+  }, []);
+
+  if (!modalRoot) return <></>;
 
   return (
     <>
-      {open &&
-        createPortal(
-          <>
-            <div
-              className="fixed left-0 top-0 z-50 flex h-full w-full items-center justify-center bg-black/30"
-              onClick={onDismiss}
-            >
-              <div
-                className="mx-3 w-96 rounded-lg border border-grey bg-white p-6"
-                onClick={onInnerClick}
-              >
-                {children}
-              </div>
-            </div>
-          </>,
-          document.querySelector('#modal-root') as HTMLDivElement
-        )}
+      {createPortal(
+        <>
+          <input type="checkbox" id="modal" className="modal-toggle" />
+          <label htmlFor="modal" className="modal cursor-pointer">
+            <label htmlFor="" className="modal-box relative">
+              {children}
+            </label>
+          </label>
+        </>,
+        modalRoot
+      )}
     </>
   );
 };
