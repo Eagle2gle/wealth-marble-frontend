@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import Image from 'next/image';
+
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { fetchCahootDetail } from '@/libs/client/fetcher';
 import { useTypeSelector } from '@/store';
@@ -10,7 +12,7 @@ import Modal from '../common/Modal';
 const BuyButton = () => {
   const [open, setOpen] = useState(false);
   const {
-    data: { stockPrice },
+    data: { stockPrice, title, images },
   } = useSuspendedQuery<CahootDetailInfoType>(['cahootDetailData'], fetchCahootDetail);
   const quantity = useTypeSelector(({ cahootOrder }) => cahootOrder.quantity);
 
@@ -42,6 +44,29 @@ const BuyButton = () => {
             </div>
             <div>
               공모 <span className="text-main">성공</span> 하였어요
+            </div>
+          </div>
+          <div className="flex w-full justify-between gap-2 font-bold">
+            <div className="avatar">
+              <div className="w-20"></div>
+              <Image
+                className="rounded object-contain"
+                alt=""
+                src={images[0]}
+                placeholder="blur"
+                blurDataURL={images[0]}
+                fill
+                sizes="80px"
+              />
+            </div>
+            <div className="flex w-full flex-col justify-between">
+              <span>{title}</span>
+              <div className="flex justify-between text-sm">
+                주문 수량 <span className="text-main">{quantity}주</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                주문 수량 <span>{(quantity * stockPrice).toLocaleString()}원</span>
+              </div>
             </div>
           </div>
           <div className="space-y-2">
