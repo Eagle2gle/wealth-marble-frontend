@@ -1,9 +1,11 @@
+import { useRef } from 'react';
+
 import Link from 'next/link';
 
+import SelectBox from '@/components/common/SelectBox';
 import classNames from '@/utils/classnames';
 import { useQuery } from '@tanstack/react-query';
 
-import Carousel from './common/Carousel';
 import Icon from './common/Icons';
 
 interface MockDataType {
@@ -18,6 +20,7 @@ interface MockDataType {
 }
 
 const RecommendedList = () => {
+  const selectBoxContainer = useRef<HTMLDivElement>(null);
   const { data } = useQuery<MockDataType[]>({
     queryKey: ['cahootListData'],
     queryFn: () => fetch('/cahootListData.json').then((res) => res.json()),
@@ -28,9 +31,12 @@ const RecommendedList = () => {
   };
 
   return (
-    <div className="flex flex-col px-4 md:px-0 gap-4 md:w-96">
+    <div ref={selectBoxContainer} className="relative flex flex-col px-4 md:px-0 gap-4 md:w-96">
       <div className="flex justify-between items-center">
         <label className="font-bold">장소별 추천 휴양지</label>
+      </div>
+      <div>
+        <SelectBox placeholder="장소" container={selectBoxContainer.current} />
       </div>
       <div className="w-full grid grid-cols-6 md:grid-cols-3 gap-2 gap-y-6 max-md:carousel ">
         {data?.map(({ id, bookmarked, title }) => (
