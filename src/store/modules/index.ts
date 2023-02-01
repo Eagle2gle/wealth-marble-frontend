@@ -1,19 +1,21 @@
 import { HYDRATE } from 'next-redux-wrapper';
+import { combineReducers } from 'redux';
 
-import { combineReducers } from '@reduxjs/toolkit';
-import type { AnyAction } from '@reduxjs/toolkit';
+import cahootOrderSlice from './cahootOrder';
 
-import counter, { CounterState } from './counter';
+const combinedReducer = combineReducers({
+  [cahootOrderSlice.name]: cahootOrderSlice.reducer,
+});
 
-const reducer = (state: CounterState = { number: 0 }, action: AnyAction) => {
+const rootReducer: typeof combinedReducer = (state, action) => {
   if (action.type === HYDRATE) {
-    return {
+    const nextState = {
       ...state,
       ...action.payload,
     };
+    return nextState;
+  } else {
+    return combinedReducer(state, action);
   }
-  return combineReducers({
-    counter,
-  });
 };
-export default reducer;
+export default rootReducer;
