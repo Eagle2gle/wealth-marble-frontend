@@ -29,7 +29,7 @@ const RecentUploadCarousel = () => {
         </h2>
       </div>
       <Carousel itemCount={data?.length ?? 0}>
-        {data?.map(({ id, title, images }) => (
+        {data?.map(({ id, title, images, expectedRateOfReturn }) => (
           <Link
             key={id}
             href={`/cahoots/detail/${id}`}
@@ -37,7 +37,7 @@ const RecentUploadCarousel = () => {
           >
             <div className="avatar -z-10">
               {/* 이미지 */}
-              {/* TODO: 이미지 연결하려면 next.config.js 설정 필요 */}
+              {/* TODO: 이미지 연결 */}
               <div className="w-24 rounded-full bg-grey">
                 {/* <Image
                   alt="공모 이미지"
@@ -53,7 +53,7 @@ const RecentUploadCarousel = () => {
               {title}
             </div>
             <span className="text-center text-black/60 text-xs font-semibold">
-              예상 수익률 <span className="text-main">연 12%</span>
+              예상 수익률 <span className="text-main">{expectedRateOfReturn}%</span>
             </span>
           </Link>
         ))}
