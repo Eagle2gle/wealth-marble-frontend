@@ -31,7 +31,10 @@ const RecommendedList = () => {
   };
 
   return (
-    <div ref={selectBoxContainer} className="relative flex flex-col px-4 md:px-0 gap-4 md:w-96">
+    <div
+      ref={selectBoxContainer}
+      className="relative flex flex-col px-4 md:px-0 py-4 gap-4 md:w-96"
+    >
       <div className="flex justify-between items-center">
         <label className="font-bold">장소별 추천 휴양지</label>
       </div>
