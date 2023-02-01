@@ -1,0 +1,22 @@
+{
+  "id": 31,
+  "title": "준호네 우리집 영속2",
+  "themeLocation": "DOWNTOWN",
+  "themeBuilding": "GUEST_HOUSE",
+  "location": "경기도 성남시 분당구",
+  "expectedMonth": 12,
+  "expectedTotalCost": 10000000000,
+  "shortDescription": "우리집 그 준호입니다.",
+  "descritption": "우리집 준호를 다같이 이용합니다. 참 좋지않나요?",
+  "status": "CAHOOTS_BEFORE",
+  "stockStart": "2023-01-02",
+  "stockEnd": "2023-02-03",
+  "stockPrice": 10000,
+  "stockNum": 10,
+  "competitionRate": 0,
+  "images": [
+    "https://wealth-marble-image.s3.ap-northeast-2.amazonaws.com/IMG_1739.JPG",
+    "https://wealth-marble-image.s3.ap-northeast-2.amazonaws.com/s-kakimi-cvetami-sochetaetsya-myatnij-cvet-v-odezhde.jpg",
+    "https://wealth-marble-image.s3.ap-northeast-2.amazonaws.com/Wealth-Marvel%20%281%29.png"
+  ]
+}

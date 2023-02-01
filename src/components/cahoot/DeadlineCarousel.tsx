@@ -1,26 +1,25 @@
 import Link from 'next/link';
 
-import { useQuery } from '@tanstack/react-query';
+import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 
-import Carousel from './common/Carousel';
+import Carousel from '../common/Carousel';
 
-interface MockDataType {
+type MockDataType = {
   id: number;
   title: string;
   deadline: string;
-}
+}[];
 
 const DeadlineCarousel = () => {
-  const { data } = useQuery<MockDataType[]>({
-    queryKey: ['deadlineCarouselData'],
-    queryFn: () => fetch('/deadlineCarouselData.json').then((res) => res.json()),
-  });
+  const { data } = useSuspendedQuery<MockDataType>(['deadlineCarouselData'], () =>
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/deadlineCarouselData.json`).then((res) => res.json())
+  );
 
   return (
     <div className="flex flex-col gap-2 px-3 md:px-0">
       <label className="font-bold">마감 임박 공모</label>
       <Carousel itemCount={data?.length ?? 0}>
-        {data?.map(({ id, title, deadline }) => (
+        {data.map(({ id, title, deadline }) => (
           <Link
             key={id}
             href={`/cahoots/detail/${id}`}
@@ -30,10 +29,10 @@ const DeadlineCarousel = () => {
               {/* 이미지 */}
               <div className="w-24 rounded-full bg-dark-grey"></div>
             </div>
-            <div className="w-32 overflow-ellipsis overflow-hidden text-sm whitespace-nowrap">
+            <div className="w-32 overflow-hidden overflow-ellipsis whitespace-nowrap text-sm">
               {title}
             </div>
-            <span className="text-black/60 text-xs font-semibold">
+            <span className="text-xs font-semibold text-black/60">
               <span className="text-main">
                 {Math.floor(
                   (new Date(deadline).getTime() - new Date().getTime()) / (24 * 60 * 60 * 1000)
