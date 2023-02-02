@@ -50,13 +50,19 @@ const SelectBox = ({ placeholder, container }: PropsType) => {
         <div
           className={`${
             isOpen ? 'visible' : 'invisible'
-          } absolute top-20 mt-2 w-24 bg-white border border-grey rounded-lg`}
+          } absolute top-20 mt-6 w-24 bg-white border border-grey rounded-lg`}
         >
           <ul className="list-none list-inside ">
-            <li onClick={selectValue} className="cursor-pointer select-none p-2 hover:bg-main/50">
+            <li
+              onClick={selectValue}
+              className="cursor-pointer select-none p-2 hover:bg-main/50 rounded-lg"
+            >
               대만
             </li>
-            <li onClick={selectValue} className="cursor-pointer select-none p-2 hover:bg-main/50">
+            <li
+              onClick={selectValue}
+              className="cursor-pointer select-none p-2 hover:bg-main/50 rounded-lg"
+            >
               일본
             </li>
           </ul>
