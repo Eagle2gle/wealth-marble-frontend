@@ -24,11 +24,10 @@ const SelectBox = ({ placeholder, container }: PropsType) => {
     setSelectedValue(eventTarget.innerText);
   };
 
-  // 현재 문제점 - 셀렉트박스 클릭도 handleBlur에 잡힘 -> isOpen이 false가 되면서 selectValue 함수 동작 X
-  // -> 눌러도 값 세팅이 안됨
   const handleBlur = () => {
-    console.log('blur');
-    setIsOpen(false);
+    setTimeout(() => {
+      setIsOpen(false);
+    }, 100);
   };
 
   if (!container) return <></>;
