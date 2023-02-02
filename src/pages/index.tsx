@@ -1,5 +1,5 @@
+import DeadlineBanner from '@/components/cahoot/DeadlineBanner';
 import Layout from '@/components/common/Layout';
-import DeadlineBanner from '@/components/DeadlineBanner';
 import RecentUploadCarousel from '@/components/RecentUploadCarousel';
 import RecommendedList from '@/components/RecommendedList';
 import Thumbnail from '@/components/Thumbnail';

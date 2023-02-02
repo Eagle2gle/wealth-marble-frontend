@@ -17,7 +17,10 @@ interface MockDataType {
 const RecentUploadCarousel = () => {
   const { data } = useQuery<MockDataType[]>({
     queryKey: ['RecentUploadCarouselData'],
-    queryFn: () => fetch('/RecentUploadCarouselData.json').then((res) => res.json()),
+    queryFn: () =>
+      fetch(`${process.env.NEXT_PUBLIC_HOST}/RecentUploadCarouselData.json`).then((res) =>
+        res.json()
+      ),
   });
 
   return (

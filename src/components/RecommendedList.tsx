@@ -23,7 +23,8 @@ const RecommendedList = () => {
   const selectBoxContainer = useRef<HTMLDivElement>(null);
   const { data } = useQuery<MockDataType[]>({
     queryKey: ['cahootListData'],
-    queryFn: () => fetch('/cahootListData.json').then((res) => res.json()),
+    queryFn: () =>
+      fetch(`${process.env.NEXT_PUBLIC_HOST}/cahootListData.json`).then((res) => res.json()),
   });
 
   const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
