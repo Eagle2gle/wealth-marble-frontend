@@ -1,0 +1,8 @@
+[
+  { "id": 6, "title": "훈이네 민박 ", "stockStart": "2023-01-23", "expectedRateOfReturn": 130, "images": ["https://wealth-marble-image.s3.ap-northeast-2.amazonaws.com/icon-cup.png"] },
+  { "id": 5, "title": "짱구네 민박 ", "stockStart": "2022-12-15", "expectedRateOfReturn": 110, "images": ["https://wealth-marble-image.s3.ap-northeast-2.amazonaws.com/icon-cup.png"] },
+  { "id": 4, "title": "유리네 민박 ", "stockStart": "2022-12-01", "expectedRateOfReturn": 140, "images": ["https://wealth-marble-image.s3.ap-northeast-2.amazonaws.com/icon-cup.png"] },
+  { "id": 3, "title": "훈이네 민박 ", "stockStart": "2023-01-23", "expectedRateOfReturn": 130, "images": ["https://wealth-marble-image.s3.ap-northeast-2.amazonaws.com/icon-cup.png"] },
+  { "id": 2, "title": "짱구네 민박 ", "stockStart": "2022-12-15", "expectedRateOfReturn": 110, "images": ["https://wealth-marble-image.s3.ap-northeast-2.amazonaws.com/icon-cup.png"] },
+  { "id": 1, "title": "유리네 민박 ", "stockStart": "2022-12-01", "expectedRateOfReturn": 140, "images": ["https://wealth-marble-image.s3.ap-northeast-2.amazonaws.com/icon-cup.png"] }
+]
