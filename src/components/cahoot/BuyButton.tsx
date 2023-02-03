@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef } from 'react';
 
 import Image from 'next/image';
 
@@ -6,6 +6,8 @@ import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { fetchCahootDetail } from '@/libs/client/fetcher';
 import { useTypeSelector } from '@/store';
 import { CahootDetailInfoType } from '@/types/response';
+import classNames from '@/utils/classnames';
+import { useMutation } from '@tanstack/react-query';
 
 import Modal from '../common/Modal';
 
@@ -14,29 +16,72 @@ const BuyButton = () => {
     data: { stockPrice, title, images },
   } = useSuspendedQuery<CahootDetailInfoType>(['cahootDetailData'], fetchCahootDetail);
   const quantity = useTypeSelector(({ cahootOrder }) => cahootOrder.quantity);
+  const {
+    mutate,
+    isLoading,
+    data: response,
+  } = useMutation<Response, Error, { stocks: number }>({
+    mutationFn: (data) =>
+      fetch(`/api/cahoots/${router.query.id}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      }).then((res) => res.json()),
+  });
+  const modalOpenRef = useRef<HTMLLabelElement>(null);
+
+  const onBuyClick: React.MouseEventHandler<HTMLButtonElement> = () => {
+    if (quantity <= 0) return;
+    mutate({ stocks: quantity });
+  };
+
+  useEffect(() => {
+    if (response) {
+      modalOpenRef.current?.click();
+    }
+  }, [response]);
 
   return (
     <>
-      {/* post 요청 보내기 필요 */}
-      <label
-        className="btn-primary btn flex h-full w-full justify-around px-1 text-base"
-        htmlFor="modal"
+      <button
+        className={classNames(
+          'btn-primary btn flex h-full w-full justify-around px-1 text-base',
+          quantity ? '' : 'btn-disabled',
+          isLoading ? 'loading' : ''
+        )}
+        onClick={onBuyClick}
       >
         <span className="flex-[0.2] break-keep">공모</span>
-        <div className="h-full border-l-2 border-main-light"></div>
+        <div
+          className={classNames(
+            quantity ? 'border-main-light' : 'border-grey',
+            'h-full border-l-2 border-main-light'
+          )}
+        ></div>
         <span className="flex-[0.7] break-keep text-right">
           {(stockPrice * quantity).toLocaleString()}원
         </span>
-      </label>
+      </button>
+      <label htmlFor="modal" ref={modalOpenRef} hidden />
       <Modal>
         <div className="space-y-4">
           <div className="text-center text-xl font-bold">
-            <div>
-              <span className="text-main">Marble</span>과 함께
-            </div>
-            <div>
-              공모 <span className="text-main">성공</span> 하였어요
-            </div>
+            {response && response.status === 'success' ? (
+              <>
+                <div>
+                  <span className="text-main">Marble</span>과 함께
+                </div>
+                <div>
+                  공모 <span className="text-main">성공</span> 하였어요
+                </div>
+              </>
+            ) : (
+              <>
+                <div>
+                  공모에 <span className="text-red">실패</span> 하였어요
+                </div>
+              </>
+            )}
           </div>
           <div className="flex w-full justify-between gap-2 font-bold">
             <div className="avatar">
