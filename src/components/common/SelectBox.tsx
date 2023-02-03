@@ -5,9 +5,9 @@ import Icon from './Icons';
 
 interface PropsType {
   placeholder: string;
-  container: HTMLDivElement | null;
+  containerRef: React.RefObject<HTMLDivElement>;
 }
-const SelectBox = ({ placeholder, container }: PropsType) => {
+const SelectBox = ({ placeholder, containerRef }: PropsType) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedValue, setSelectedValue] = useState(placeholder);
 
@@ -30,8 +30,6 @@ const SelectBox = ({ placeholder, container }: PropsType) => {
     }, 100);
   };
 
-  if (!container) return <></>;
-
   return (
     <div className="w-24">
       <div
@@ -46,29 +44,30 @@ const SelectBox = ({ placeholder, container }: PropsType) => {
           {!isOpen && <Icon.Down></Icon.Down>}
         </span>
       </div>
-      {createPortal(
-        <div
-          className={`${
-            isOpen ? 'visible' : 'invisible'
-          } absolute top-20 mt-6 w-24 bg-white border border-grey rounded-lg`}
-        >
-          <ul className="list-none list-inside ">
-            <li
-              onClick={selectValue}
-              className="cursor-pointer select-none p-2 hover:bg-main/50 rounded-lg"
-            >
-              대만
-            </li>
-            <li
-              onClick={selectValue}
-              className="cursor-pointer select-none p-2 hover:bg-main/50 rounded-lg"
-            >
-              일본
-            </li>
-          </ul>
-        </div>,
-        container
-      )}
+      {containerRef.current &&
+        createPortal(
+          <div
+            className={`${
+              isOpen ? 'visible' : 'invisible'
+            } absolute top-20 mt-6 w-24 rounded-lg border border-grey bg-white`}
+          >
+            <ul className="list-inside list-none ">
+              <li
+                onClick={selectValue}
+                className="cursor-pointer select-none rounded-lg p-2 hover:bg-main/50"
+              >
+                대만
+              </li>
+              <li
+                onClick={selectValue}
+                className="cursor-pointer select-none rounded-lg p-2 hover:bg-main/50"
+              >
+                일본
+              </li>
+            </ul>
+          </div>,
+          containerRef.current
+        )}
     </div>
   );
 };

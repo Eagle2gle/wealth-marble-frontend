@@ -40,7 +40,7 @@ const RecommendedList = () => {
         <label className="font-bold">장소별 추천 휴양지</label>
       </div>
       <div>
-        <SelectBox placeholder="장소" container={selectBoxContainer.current} />
+        <SelectBox placeholder="장소" containerRef={selectBoxContainer} />
       </div>
       <div className="w-full grid grid-cols-6 md:grid-cols-3 gap-2 gap-y-6 max-md:carousel ">
         {data?.map(({ id, bookmarked, title }) => (
