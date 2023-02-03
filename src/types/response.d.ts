@@ -1,18 +1,5 @@
-export type CahootDetailInfoType = {
-  id: number;
-  title: string;
-  themeLocation: string;
-  themeBuilding: string;
-  location: string;
-  expectedMonth: number;
-  expectedTotalCost: number;
-  shortDescription: string;
-  descritption: string;
+export type Response<T = null> = {
   status: string;
-  stockStart: string;
-  stockEnd: string;
-  stockPrice: number;
-  stockNum: number;
-  competitionRate: number;
-  images: string[];
+  message: string | null;
+  data: T;
 };
