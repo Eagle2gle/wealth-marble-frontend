@@ -1,17 +1,25 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { fetchCahootDetail } from '@/libs/client/fetcher';
-import type { CahootDetailInfoType } from '@/types/response';
+import { fetcher } from '@/libs/client/fetcher';
+import type { CahootDetailType } from '@/types/cahoot';
+import type { Response } from '@/types/response';
 
 import Order from './Order';
 
 import Icon from '../common/Icons';
 
 const DetailHeader = () => {
+  const router = useRouter();
   const {
-    data: { images, title, location, competitionRate, stockPrice },
-  } = useSuspendedQuery<CahootDetailInfoType>(['cahootDetailData'], fetchCahootDetail);
+    data: {
+      data: { images, title, location, competitionRate, stockPrice },
+    },
+  } = useSuspendedQuery<Response<CahootDetailType>>(
+    ['cahoot/detail', router.query.id],
+    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=detail`)
+  );
 
   return (
     <div className="mx-4 mt-4 flex gap-3 md:mx-0 md:gap-5">

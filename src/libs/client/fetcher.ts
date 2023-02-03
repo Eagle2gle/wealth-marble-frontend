@@ -3,3 +3,5 @@ export const fetchCahootDetail = () =>
 
 export const fetchCahootHistory = () =>
   fetch(`${process.env.NEXT_PUBLIC_HOST}/cahootHistoryData.json`).then((res) => res.json());
+
+export const fetcher = (url: string) => () => fetch(url).then((res) => res.json());

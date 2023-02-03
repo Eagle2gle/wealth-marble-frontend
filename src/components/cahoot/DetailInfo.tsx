@@ -1,24 +1,32 @@
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { fetchCahootDetail } from '@/libs/client/fetcher';
-import type { CahootDetailInfoType } from '@/types/response';
+import { fetcher } from '@/libs/client/fetcher';
+import type { CahootDetailType } from '@/types/cahoot';
+import type { Response } from '@/types/response';
 import dateFormat from '@/utils/dateFormat';
 
 import Carousel from '../common/Carousel';
 
 const DetailInfo = () => {
+  const router = useRouter();
   const {
     data: {
-      images,
-      expectedMonth,
-      expectedTotalCost,
-      stockNum,
-      stockStart,
-      stockEnd,
-      descritption,
+      data: {
+        images,
+        expectedMonth,
+        expectedTotalCost,
+        stockNum,
+        stockStart,
+        stockEnd,
+        descritption,
+      },
     },
-  } = useSuspendedQuery<CahootDetailInfoType>(['cahootDetailData'], fetchCahootDetail);
+  } = useSuspendedQuery<Response<CahootDetailType>>(
+    ['cahoot/detail', router.query.id],
+    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=detail`)
+  );
   return (
     <>
       <Carousel itemCount={images.length ?? 0}>

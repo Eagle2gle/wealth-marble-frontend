@@ -1,8 +1,11 @@
 import { useState } from 'react';
 
+import { useRouter } from 'next/router';
+
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { fetchCahootDetail } from '@/libs/client/fetcher';
-import { CahootDetailInfoType } from '@/types/response';
+import { fetcher } from '@/libs/client/fetcher';
+import type { CahootDetailType } from '@/types/cahoot';
+import type { Response } from '@/types/response';
 
 import BuyButton from './BuyButton';
 import QuantityButtons from './QuantityButtons';
@@ -12,9 +15,15 @@ import BottomSheet from '../common/BottomSheet';
 
 const OrderMobile = () => {
   const [open, setOpen] = useState(false);
+  const router = useRouter();
   const {
-    data: { stockPrice },
-  } = useSuspendedQuery<CahootDetailInfoType>(['cahootDetailData'], fetchCahootDetail);
+    data: {
+      data: { stockPrice },
+    },
+  } = useSuspendedQuery<Response<CahootDetailType>>(
+    ['cahoot/detail', router.query.id],
+    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=detail`)
+  );
 
   return (
     <div className="md:hidden">
