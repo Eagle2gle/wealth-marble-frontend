@@ -1,15 +1,18 @@
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import type { CahootDeadlineType } from '@/types/cahoot';
+import type { Response } from '@/types/response';
 
 import Icon from '../common/Icons';
 
-interface MockDataType {
-  title: string;
-  participationRate: number;
-}
-
 const DeadlineBanner = () => {
-  const { data } = useSuspendedQuery<MockDataType>(['deadlineBannerData'], () =>
-    fetch(`${process.env.NEXT_PUBLIC_HOST}/deadlineBannerData.json`).then((res) => res.json())
+  const {
+    data: {
+      data: { result },
+    },
+  } = useSuspendedQuery<Response<CahootDeadlineType>>(['cahoot/deadline'], () =>
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots?status=ending-soon`).then((res) =>
+      res.json()
+    )
   );
 
   return (
@@ -19,8 +22,9 @@ const DeadlineBanner = () => {
         <div className="flex gap-2">
           <span className="text-main">[공모]</span>
           <div>
-            <span>{data.title}</span>
-            <span className="ml-1 text-main">참여율 {data.participationRate}% 달성</span>
+            <span>{result[0]?.title}</span>
+            {/* 참여율 추가 예정 */}
+            <span className="ml-1 text-main">참여율 % 달성</span>
           </div>
         </div>
       </div>

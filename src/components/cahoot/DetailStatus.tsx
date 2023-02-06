@@ -1,21 +1,28 @@
-import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { fetchCahootDetail, fetchCahootHistory } from '@/libs/client/fetcher';
-import { CahootDetailInfoType } from '@/types/response';
+import { useRouter } from 'next/router';
 
-interface CahootHistoryType {
-  result: {
-    time: string;
-    stocks: number;
-  }[];
-}
+import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { fetcher } from '@/libs/client/fetcher';
+import type { CahootDetailType, CahootHistoryType } from '@/types/cahoot';
+import type { Response } from '@/types/response';
 
 const DetailStatus = () => {
+  const router = useRouter();
   const {
-    data: { result },
-  } = useSuspendedQuery<CahootHistoryType>(['cahootHistoryData'], fetchCahootHistory);
+    data: {
+      data: { result },
+    },
+  } = useSuspendedQuery<Response<CahootHistoryType>>(
+    ['cahoot/history', router.query.id],
+    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=history`)
+  );
   const {
-    data: { stockPrice },
-  } = useSuspendedQuery<CahootDetailInfoType>(['cahootDetailData'], fetchCahootDetail);
+    data: {
+      data: { stockPrice },
+    },
+  } = useSuspendedQuery<Response<CahootDetailType>>(
+    ['cahoot/detail', router.query.id],
+    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=detail`)
+  );
   return (
     <table className="border-separate border-spacing-0 border-y border-grey md:rounded-lg md:border-x">
       <thead className="h-12">
