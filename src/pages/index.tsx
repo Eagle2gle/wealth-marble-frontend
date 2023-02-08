@@ -7,6 +7,8 @@ import RecommendedList from '@/components/RecommendedList';
 import Thumbnail from '@/components/Thumbnail';
 import TopFiveList from '@/components/TopFiveList';
 
+import type { GetServerSideProps } from 'next';
+
 export default function Home() {
   return (
     <Layout>
@@ -24,3 +26,9 @@ export default function Home() {
     </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
