@@ -7,6 +7,8 @@ import Recap from '@/components/cahoot/Recap';
 import Layout from '@/components/common/Layout';
 import { ErrorBoundary } from '@sentry/nextjs';
 
+import type { GetServerSideProps } from 'next';
+
 const Cahoots = () => {
   return (
     <Layout>
@@ -32,3 +34,9 @@ const Cahoots = () => {
 };
 
 export default Cahoots;
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {},
+  };
+};
