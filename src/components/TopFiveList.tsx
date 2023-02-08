@@ -11,7 +11,8 @@ interface MockDataType {
 const TopFiveList = () => {
   const { data } = useQuery<MockDataType[]>({
     queryKey: ['cahootListData'],
-    queryFn: () => fetch('/cahootListData.json').then((res) => res.json()),
+    queryFn: () =>
+      fetch(`${process.env.NEXT_PUBLIC_HOST}/cahootListData.json`).then((res) => res.json()),
   });
 
   return (
