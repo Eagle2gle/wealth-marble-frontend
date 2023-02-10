@@ -1,0 +1,26 @@
+name: CD
+
+on:
+  pull_request:
+    types: [closed]
+    branches: [main]
+
+jobs:
+  cd:
+    name: Deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: SSH Remote Commands
+        uses: appleboy/ssh-action@v0.1.7
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_KEY }}
+          timeout: 30s
+          script: |
+            cd wealth-marble-frontend
+            git pull
+            npm i -f
+            npm run build
+            pm2 delete wealth-marble
+            pm2 start npm --name "wealth-marble" -- start
