@@ -18,6 +18,8 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           timeout: 30s
           script: |
+            export NVM_DIR=~/.nvm
+            source ~/.nvm/nvm.sh
             cd wealth-marble-frontend
             git pull
             npm i -f
