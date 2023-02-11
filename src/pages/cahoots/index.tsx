@@ -12,7 +12,7 @@ import type { GetServerSideProps } from 'next';
 const Cahoots = () => {
   return (
     <Layout>
-      <Suspense fallback={<p>로딩...</p>}>
+      <div className="space-y-4">
         <ErrorBoundary
           fallback={({ resetError, error }) => (
             <>
@@ -21,14 +21,18 @@ const Cahoots = () => {
             </>
           )}
         >
-          <div className="space-y-4">
+          <Suspense fallback={<p>로딩...</p>}>
             <DeadlineBanner />
+          </Suspense>
+          <Suspense fallback={<p>로딩...</p>}>
             <DeadlineCarousel />
+          </Suspense>
+          <Suspense fallback={<p>로딩...</p>}>
             <Recap />
-            <List />
-          </div>
+          </Suspense>
+          <List />
         </ErrorBoundary>
-      </Suspense>
+      </div>
     </Layout>
   );
 };
