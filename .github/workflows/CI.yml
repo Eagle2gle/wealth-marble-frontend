@@ -1,0 +1,35 @@
+name: CI
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  ci:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3.3.0
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v3.6.0
+        with:
+          node-version: ${{ secrets.NODE_VERSION }}
+      - name: Cache node modules
+        uses: actions/cache@v3.2.4
+        id: node-modules-cache
+        with:
+          path: node_modules
+          key: ${{ runner.os }}-node-modules-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-modules-
+      - name: Install Dependencies
+        if: steps.node-modules-cache.outputs.cache-hit != 'true'
+        run: npm i -f
+      - name: Create .sentryclirc
+        shell: bash
+        run: |
+          echo "${{ secrets.SENTRY_TOKEN }}" > .sentryclirc
+      - name: Build Test
+        run: npm run build
