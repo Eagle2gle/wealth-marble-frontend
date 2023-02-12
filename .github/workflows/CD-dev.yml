@@ -3,14 +3,14 @@ name: CD
 on:
   pull_request:
     types: [closed]
-    branches: [main]
+    branches: [dev]
 
 jobs:
-  cd:
+  cd-dev:
     name: Deploy
     environment:
-      name: production
-      url: http://wealth-marble.kro.kr/
+      name: development
+      url: http://wealth-marble-dev.kro.kr/
     runs-on: ubuntu-latest
     steps:
       - name: SSH Remote Commands
@@ -23,9 +23,9 @@ jobs:
           script: |
             export NVM_DIR=~/.nvm
             source ~/.nvm/nvm.sh
-            cd wealth-marble-frontend
+            cd wealth-marble-frontend-dev
             git pull
             npm i -f
             npm run build
-            pm2 delete wealth-marble
-            pm2 start npm --name "wealth-marble" -- start
+            pm2 delete wealth-marble-dev
+            pm2 start npm --name "wealth-marble-dev" -- run start:dev
