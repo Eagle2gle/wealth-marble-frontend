@@ -25,7 +25,7 @@ export type CahootDetailType = CahootType & {
   expectedMonth: number;
   expectedTotalCost: number;
   shortDescription: string;
-  descritption: string;
+  description: string;
   status: string;
   expectedRateOfReturn: number;
 };

@@ -20,7 +20,7 @@ const DetailInfo = () => {
         stockNum,
         stockStart,
         stockEnd,
-        descritption,
+        description,
       },
     },
   } = useSuspendedQuery<Response<CahootDetailType>>(
@@ -72,7 +72,7 @@ const DetailInfo = () => {
       </div>
       <div className="mx-4 flex flex-col gap-2 md:mx-0">
         <label className="font-bold">공모 아이디어 소개</label>
-        {descritption}
+        {description}
       </div>
     </>
   );
