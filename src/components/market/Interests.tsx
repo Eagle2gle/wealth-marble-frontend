@@ -17,7 +17,7 @@ const Interests = () => {
     e.preventDefault();
   };
 
-  return (
+  return interests.length ? (
     <div className="flex flex-col gap-2 px-3 md:px-0">
       <label className="font-bold">관심가는 휴양지</label>
       <Carousel itemCount={interests.length}>
@@ -42,7 +42,7 @@ const Interests = () => {
         ))}
       </Carousel>
     </div>
-  );
+  ) : null;
 };
 
 export default Interests;
