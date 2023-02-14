@@ -25,6 +25,10 @@ module.exports = {
       blue: '#364BB3',
       'grey-middle': '#8E949F',
     },
+    gradientColorStops: {
+      'blue-start': '#00628B',
+      'blue-end': '#017797',
+    },
     extend: {},
   },
   daisyui: {
