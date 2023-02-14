@@ -14,7 +14,7 @@ const DetailHeader = () => {
   const router = useRouter();
   const {
     data: {
-      data: { images, title, location, competitionRate, stockPrice },
+      data: { images, title, location, competitionRate, stockPrice, status },
     },
   } = useSuspendedQuery<Response<CahootDetailType>>(
     ['cahoot/detail', router.query.id],
@@ -58,7 +58,7 @@ const DetailHeader = () => {
             주당 가격
             <span className="text-black">{stockPrice.toLocaleString()}원</span>
           </div>
-          <Order />
+          {status === 'CAHOOTS_ONGOING' && <Order />}
           <button className="btn-ghost btn hidden gap-1 border-grey fill-none md:flex">
             <Icon.Bookmark />
             <span className="font-medium">관심상품</span>

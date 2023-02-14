@@ -2,7 +2,7 @@ type CahootType = {
   id: number;
   title: string;
   location: string;
-  status: string;
+  status: 'CAHOOTS_CLOSE' | 'CAHOOTS_ONGOING' | 'CAHOOTS_BEFORE';
   stockStart: string;
   stockEnd: string;
   stockPrice: number;
@@ -25,7 +25,7 @@ export type CahootDetailType = CahootType & {
   expectedMonth: number;
   expectedTotalCost: number;
   shortDescription: string;
-  descritption: string;
+  description: string;
   status: string;
   expectedRateOfReturn: number;
 };

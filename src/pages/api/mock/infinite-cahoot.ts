@@ -1,9 +1,9 @@
-import type { CahootListType } from '@/types/cahoot';
+import type { CahootListType, CahootType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-const MOCK_DATA = Array(40)
+const MOCK_DATA: CahootType[] = Array(40)
   .fill(undefined)
   .map((_, index) => ({
     id: index + 1,
