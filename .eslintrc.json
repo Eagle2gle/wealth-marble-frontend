@@ -32,10 +32,9 @@
       "version": "detect"
     }
   },
-  "plugins": ["import", "react", "react-refresh"],
+  "plugins": ["import", "react"],
   "rules": {
     "eol-last": [1, "always"],
-    "react-refresh/only-export-components": "warn",
     "import/no-unresolved": "off",
     "import/order": [
       "error",
