@@ -5,6 +5,8 @@ import Layout from '@/components/common/Layout';
 import Interests from '@/components/market/Interests';
 import { ErrorBoundary } from '@sentry/nextjs';
 
+import type { GetServerSideProps } from 'next';
+
 const Markets = () => {
   return (
     <Layout>
@@ -27,6 +29,12 @@ const Markets = () => {
       </div>
     </Layout>
   );
+};
+
+export const getServerSideProps: GetServerSideProps = async () => {
+  return {
+    props: {},
+  };
 };
 
 export default Markets;
