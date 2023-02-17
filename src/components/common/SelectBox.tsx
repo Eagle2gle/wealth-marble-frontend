@@ -58,6 +58,7 @@ const SelectBox = ({ items, containerRef, currentItem, changeItem }: PropsType) 
               {items.map(({ index, item }) => (
                 <li
                   key={index.toString()}
+                  title={item}
                   onClick={() => onClickItem(item)}
                   className="cursor-pointer select-none truncate rounded-lg p-2 text-[10px] hover:bg-main/50"
                 >

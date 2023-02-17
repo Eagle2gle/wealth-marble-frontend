@@ -12,10 +12,11 @@ const ButtonGroup = ({ items, currentItem, changeItem }: PropsType) => {
   };
 
   return (
-    <div className="flex h-6 gap-2">
+    <div className="flex h-6 gap-1.5">
       {items.map((item, index) => (
         <button
           key={index}
+          title={item}
           className={classNames(
             'w-12 truncate rounded-lg px-1 text-[10px]',
             currentItem === item
