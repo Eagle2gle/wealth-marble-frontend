@@ -34,14 +34,14 @@ const SelectBox = ({ items, containerRef, currentItem, changeItem }: PropsType) 
   };
 
   return (
-    <div className="w-24">
+    <div>
       <div
         onBlur={onBlur}
         tabIndex={4}
         onClick={onClickToggle}
-        className="flex w-24 justify-between rounded-lg border border-grey px-3 py-2"
+        className="flex	h-6 w-16 items-center justify-between rounded-lg border border-grey px-3 "
       >
-        <span>{currentItem}</span>
+        <span className="truncate text-[10px]">{currentItem}</span>
         <span>
           {isOpen && <Icon.Up></Icon.Up>}
           {!isOpen && <Icon.Down></Icon.Down>}
@@ -52,15 +52,14 @@ const SelectBox = ({ items, containerRef, currentItem, changeItem }: PropsType) 
           <div
             className={`${
               isOpen ? 'visible' : 'invisible'
-            } absolute top-20 mt-6 w-24 rounded-lg border border-grey bg-white`}
+            } absolute top-20 mt-2 w-24 rounded-lg border border-grey bg-white`}
           >
             <ul className="list-inside list-none ">
               {items.map(({ index, item }) => (
-                // TODO: 말줄임표 추가하기
                 <li
                   key={index.toString()}
                   onClick={() => onClickItem(item)}
-                  className="cursor-pointer select-none rounded-lg p-2 hover:bg-main/50"
+                  className="cursor-pointer select-none truncate rounded-lg p-2 text-[10px] hover:bg-main/50"
                 >
                   {item}
                 </li>
