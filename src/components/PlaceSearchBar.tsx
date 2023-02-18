@@ -2,8 +2,6 @@ import { useRef } from 'react';
 import Autocomplete from 'react-google-autocomplete';
 import { UseFormSetValue } from 'react-hook-form';
 
-import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
-
 interface PropsType {
   name: string;
   setValue: UseFormSetValue<any>;
