@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import type { CahootListType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
-import dateFormat from '@/utils/dateFormat';
+import { formatDate } from '@/utils/date';
 
 import Carousel from '../common/Carousel';
 
@@ -35,7 +35,7 @@ const Recap = () => {
                 {title}
               </span>
               <span className="absolute bottom-0 w-full bg-black/25 text-center text-xs text-white">
-                {dateFormat(stockEnd)}
+                {formatDate(stockEnd)}
               </span>
             </div>
             <div className="flex w-full flex-col gap-1 rounded-b bg-white p-2 text-xs font-normal">

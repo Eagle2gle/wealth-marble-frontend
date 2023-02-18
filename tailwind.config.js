@@ -29,7 +29,11 @@ module.exports = {
       'blue-start': '#00628B',
       'blue-end': '#017797',
     },
-    extend: {},
+    extend: {
+      padding: {
+        18: '4.5rem',
+      },
+    },
   },
   daisyui: {
     themes: [
