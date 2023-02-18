@@ -1,32 +1,56 @@
 import { useRef } from 'react';
-import { UseFormRegisterReturn } from 'react-hook-form';
+import Autocomplete from 'react-google-autocomplete';
+import { UseFormSetValue } from 'react-hook-form';
 
 import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
 
 interface PropsType {
-  register?: UseFormRegisterReturn;
+  name: string;
+  setValue: UseFormSetValue<any>;
 }
 
-const PlaceSearchBar = ({ register }: PropsType) => {
-  const searchRef = useRef<HTMLInputElement>(null);
+const PlaceSearchBar = ({ name, setValue }: PropsType) => {
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const onPlacesChanged = () => {
-    const searchText = searchRef.current?.value;
-    // console.log(searchText);
-    // TODO: 모달 + 지도 연동
+  // 자동완성 목록에서 주소 선택 시 나라명, 우편번호를 제외한 주소 생성
+  const summarizeAddress = (addressComponents: google.maps.GeocoderAddressComponent[]) => {
+    let address = '';
+
+    addressComponents
+      .filter((item) => !item.types.includes('country') && !item.types.includes('postal_code'))
+      .reverse()
+      .map((item) => (address += `${item.long_name} `));
+
+    setValue(name, address.trim());
+  };
+
+  // 사용자 입력 주소 form value 세팅
+  const onInput = () => {
+    const inputText = inputRef.current?.value;
+    if (!inputText) {
+      return;
+    }
+    setValue(name, inputText.trim());
   };
   return (
-    <LoadScript googleMapsApiKey="AIzaSyBtxP6C_wyzDUffkRlJntn9pDY-MV26QG0" libraries={['places']}>
-      <StandaloneSearchBox onPlacesChanged={onPlacesChanged}>
-        <input
-          ref={searchRef}
-          type="text"
-          placeholder="휴양지 위치를 입력하세요."
-          className="border border-solid border-black/20 rounded-lg focus:outline-main  p-3 w-96"
-          {...register}
-        />
-      </StandaloneSearchBox>
-    </LoadScript>
+    <Autocomplete
+      ref={inputRef}
+      apiKey={'AIzaSyBtxP6C_wyzDUffkRlJntn9pDY-MV26QG0'}
+      onPlaceSelected={(place) => {
+        const addressComponents = place?.address_components;
+        if (!addressComponents) {
+          return;
+        }
+        summarizeAddress(addressComponents);
+      }}
+      onChange={onInput}
+      options={{
+        types: ['(regions)'],
+        componentRestrictions: { country: 'kr' },
+        fields: ['address_components'],
+      }}
+      className="w-96 rounded-lg border border-solid border-black/20  p-3 focus:outline-main"
+    />
   );
 };
 

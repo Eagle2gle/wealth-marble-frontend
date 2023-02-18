@@ -53,13 +53,13 @@ export default function CreateCahoot() {
 
   return (
     <Layout hideHeaderOnMobile hideBottomBar>
-      <section className="flex flex-col gap-2.5 max-md:hidden bg-main text-white px-10 pt-12 pb-6">
+      <section className="flex flex-col gap-2.5 bg-main px-10 pt-12 pb-6 text-white max-md:hidden">
         <h1 className="text-2xl font-semibold">공모 생성</h1>
         <p className="text-xs font-medium">
           공모를 위한 휴양지 건설 계획서를 상세하게 작성해주세요.
         </p>
       </section>
-      <article className="p-5 w-full">
+      <article className="w-full p-5">
         <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit, onErrors)}>
           {/* 휴양지명 */}
           <FormItem id="title" label="휴양지명" required={true}>
@@ -92,14 +92,14 @@ export default function CreateCahoot() {
           {/* 휴양지 테마 */}
           <FormItem id="theme" label="휴양지 테마" required={true}>
             <div className="px-2">
-              <p className="text-sm font-semibold text-black my-2">위치</p>
+              <p className="my-2 text-sm font-semibold text-black">위치</p>
               <RadioBtn
                 id="themeLocation"
                 name="themeLocation"
                 option={positionOption}
                 register={register('themeLocation')}
               />
-              <p className="text-sm font-semibold text-black mt-4 mb-2">건물 유형</p>
+              <p className="mt-4 mb-2 text-sm font-semibold text-black">건물 유형</p>
               <RadioBtn
                 id="themeBuilding"
                 name="themeBuilding"
@@ -112,13 +112,13 @@ export default function CreateCahoot() {
           <FormItem id="location" label="위치" required={true}>
             <div className="px-2">
               {/* TODO: Loading 일 때 처리 */}
-              <PlaceSearchBar register={register('location')} />
+              <PlaceSearchBar name="location" setValue={setValue} />
               {/* <Map /> */}
             </div>
           </FormItem>
           {/* 건설 진행 예상 시간 */}
           <FormItem id="expectedMonth" label="건설 진행 예상 시간" required={true}>
-            <div className="flex gap-4 items-center px-2">
+            <div className="flex items-center gap-4 px-2">
               <span>공모 완료 후</span>
               <NumberInput size="small" min={0} name="expectedMonth" setValue={setValue} />
               <span>month</span>
@@ -147,7 +147,7 @@ export default function CreateCahoot() {
           </FormItem>
           {/* 전체 건설 지출 예상 금액 */}
           <FormItem id="expectedTotalCost" label="전체 건설 지출 예상 금액" required={false}>
-            <div className="flex gap-4 items-center px-2">
+            <div className="flex items-center gap-4 px-2">
               <NumberInput size="large" min={0} name="expectedTotalCost" setValue={setValue} />
               <span>만원</span>
             </div>
@@ -156,15 +156,15 @@ export default function CreateCahoot() {
           <FormItem id="issuedStocks" label="발행 주식 수량 및 가격" required={true}>
             <div className="flex flex-wrap gap-10 px-2">
               <div className="basis-5/12">
-                <p className="text-sm font-semibold text-black my-2">1주 별 가격</p>
-                <div className="flex gap-4 items-center">
+                <p className="my-2 text-sm font-semibold text-black">1주 별 가격</p>
+                <div className="flex items-center gap-4">
                   <NumberInput size="large" min={0} name="stockPrice" setValue={setValue} />
                   <span>원</span>
                 </div>
               </div>
               <div className="basis-5/12">
-                <p className="text-sm font-semibold text-black my-2">발행 주식 수</p>
-                <div className="flex gap-4 items-center">
+                <p className="my-2 text-sm font-semibold text-black">발행 주식 수</p>
+                <div className="flex items-center gap-4">
                   <NumberInput size="large" min={1} name="stockNum" setValue={setValue} />
                   <span>주</span>
                 </div>
@@ -173,7 +173,7 @@ export default function CreateCahoot() {
           </FormItem>
           <button
             type="submit"
-            className="my-16 self-center w-36 btn bg-main border-none hover:bg-red"
+            className="btn my-16 w-36 self-center border-none bg-main hover:bg-red"
           >
             등록하기
           </button>
