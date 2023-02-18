@@ -3,42 +3,45 @@ import { createPortal } from 'react-dom';
 
 import Icon from './Icons';
 
-interface PropsType {
-  placeholder: string;
-  containerRef: React.RefObject<HTMLDivElement>;
+interface SelectItem {
+  index: number;
+  item: string;
 }
-const SelectBox = ({ placeholder, containerRef }: PropsType) => {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedValue, setSelectedValue] = useState(placeholder);
 
-  const handleClick = (e: MouseEvent) => {
+interface PropsType {
+  items: SelectItem[];
+  containerRef: React.RefObject<HTMLDivElement>;
+  currentItem: string;
+  changeItem: (item: string) => void;
+}
+const SelectBox = ({ items, containerRef, currentItem, changeItem }: PropsType) => {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const onClickToggle = (e: MouseEvent) => {
     e.stopPropagation();
     setIsOpen(!isOpen);
   };
 
-  const selectValue = (e: MouseEvent) => {
-    const eventTarget = e.target as HTMLElement;
-
-    console.log('click value');
+  const onClickItem = (item: string) => {
     setIsOpen(false);
-    setSelectedValue(eventTarget.innerText);
+    changeItem(item);
   };
 
-  const handleBlur = () => {
+  const onBlur = () => {
     setTimeout(() => {
       setIsOpen(false);
     }, 100);
   };
 
   return (
-    <div className="w-24">
+    <div>
       <div
-        onBlur={handleBlur}
+        onBlur={onBlur}
         tabIndex={4}
-        onClick={handleClick}
-        className="flex justify-between border border-grey w-24 rounded-lg px-3 py-2"
+        onClick={onClickToggle}
+        className="flex	h-6 w-16 items-center justify-between rounded-lg border border-grey px-3 "
       >
-        <span>{selectedValue}</span>
+        <span className="truncate text-[10px]">{currentItem}</span>
         <span>
           {isOpen && <Icon.Up></Icon.Up>}
           {!isOpen && <Icon.Down></Icon.Down>}
@@ -49,21 +52,19 @@ const SelectBox = ({ placeholder, containerRef }: PropsType) => {
           <div
             className={`${
               isOpen ? 'visible' : 'invisible'
-            } absolute top-20 mt-6 w-24 rounded-lg border border-grey bg-white`}
+            } absolute top-20 mt-2 w-24 rounded-lg border border-grey bg-white`}
           >
             <ul className="list-inside list-none ">
-              <li
-                onClick={selectValue}
-                className="cursor-pointer select-none rounded-lg p-2 hover:bg-main/50"
-              >
-                대만
-              </li>
-              <li
-                onClick={selectValue}
-                className="cursor-pointer select-none rounded-lg p-2 hover:bg-main/50"
-              >
-                일본
-              </li>
+              {items.map(({ index, item }) => (
+                <li
+                  key={index.toString()}
+                  title={item}
+                  onClick={() => onClickItem(item)}
+                  className="cursor-pointer select-none truncate rounded-lg p-2 text-[10px] hover:bg-main/50"
+                >
+                  {item}
+                </li>
+              ))}
             </ul>
           </div>,
           containerRef.current
