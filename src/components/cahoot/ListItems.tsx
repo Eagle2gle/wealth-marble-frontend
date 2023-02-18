@@ -7,7 +7,7 @@ import { fetcher } from '@/libs/client/fetcher';
 import type { CahootListType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
-import dateFormat from '@/utils/dateFormat';
+import { formatDate } from '@/utils/date';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
 import Icon from '../common/Icons';
@@ -110,7 +110,7 @@ const ListItems = ({ keyword }: ListItemsProps) => {
                     <div className="flex flex-1 items-center justify-center px-1 md:justify-between">
                       <span className="hidden md:block">공모 마감일</span>
                       <span>
-                        {dateFormat(stockEnd)}
+                        {formatDate(stockEnd)}
                         <span className="md:hidden"> 마감</span>
                       </span>
                     </div>

@@ -5,7 +5,7 @@ import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { fetcher } from '@/libs/client/fetcher';
 import type { CahootDetailType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
-import dateFormat from '@/utils/dateFormat';
+import { formatDate } from '@/utils/date';
 
 import Carousel from '../common/Carousel';
 
@@ -63,9 +63,9 @@ const DetailInfo = () => {
           <div className="flex flex-1 flex-col justify-between gap-4 border-grey px-1 text-center">
             공모 기간
             <span className="text-sm font-bold md:text-base">
-              <span>{dateFormat(stockStart ?? '')}</span>
+              <span>{formatDate(stockStart ?? '')}</span>
               <span> ~ </span>
-              <span>{dateFormat(stockEnd ?? '')}</span>
+              <span>{formatDate(stockEnd ?? '')}</span>
             </span>
           </div>
         </div>
