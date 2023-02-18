@@ -62,6 +62,7 @@ const RecommendedList = () => {
           containerRef={selectBoxContainer}
           currentItem={selectedCountry}
           changeItem={changeCountry}
+          size="small"
         />
         <ButtonGroup
           items={RecommendedCountryList}
@@ -83,7 +84,7 @@ const RecommendedList = () => {
                 <button
                   onClick={onBookmarkClick}
                   className={classNames(
-                    'btn btn-ghost btn-xs btn-circle',
+                    'btn-ghost btn-xs btn-circle btn',
                     bookmarked ? 'fill-main text-main' : 'fill-none'
                   )}
                 >

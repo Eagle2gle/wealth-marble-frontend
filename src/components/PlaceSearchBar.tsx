@@ -47,7 +47,7 @@ const PlaceSearchBar = ({ name, setValue }: PropsType) => {
         componentRestrictions: { country: 'kr' },
         fields: ['address_components'],
       }}
-      className="w-96 rounded-lg border border-solid border-black/20  p-3 focus:outline-main"
+      className="h-12 w-96 rounded-lg border border-solid border-black/20 p-3 text-sm focus:outline-main"
     />
   );
 };
