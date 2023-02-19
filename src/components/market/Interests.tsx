@@ -6,7 +6,11 @@ import { Response } from '@/types/response';
 import Carousel from '../common/Carousel';
 import Icon from '../common/Icons';
 
-const Interests = () => {
+interface InterestsProps {
+  scrollRef: React.RefObject<HTMLDivElement>;
+}
+
+const Interests = ({ scrollRef }: InterestsProps) => {
   const {
     data: { data: interests },
   } = useSuspendedQuery<Response<{ id: number; title: string }[]>>(['market/interests'], () =>
@@ -16,12 +20,20 @@ const Interests = () => {
   const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
   };
+  const onAddClick = () => {
+    if (!scrollRef.current) return;
+    const top = window.scrollY + scrollRef.current.getBoundingClientRect().top - 70;
+    window.scrollTo({ top });
+  };
 
   return (
     <div className="flex flex-col gap-2 px-3 md:px-0">
       <label className="font-bold">관심가는 휴양지</label>
       <Carousel itemCount={interests.length}>
-        <button className="carousel-item h-24 w-52 items-center justify-center gap-1 rounded bg-grey text-sm font-semibold">
+        <button
+          className="carousel-item h-24 w-52 items-center justify-center gap-1 rounded bg-grey text-sm font-semibold"
+          onClick={onAddClick}
+        >
           <Icon.PlusCircle />
           휴양지를 추가해 주세요
         </button>
