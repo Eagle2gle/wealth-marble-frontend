@@ -1,3 +1,4 @@
+import { useRef, useState } from 'react';
 import { useForm, FieldErrors } from 'react-hook-form';
 
 import DateRangeInput from '@/components/common/DateRangeInput';
@@ -6,6 +7,7 @@ import ImageUpload from '@/components/common/ImageUpload';
 import Layout from '@/components/common/Layout';
 import NumberInput from '@/components/common/NumberInput';
 import RadioBtn from '@/components/common/RadioBtn';
+import SelectBox from '@/components/common/SelectBox';
 import TextArea from '@/components/common/TextArea';
 import TextInput from '@/components/common/TextInput';
 import PlaceSearchBar from '@/components/PlaceSearchBar';
@@ -39,7 +41,14 @@ export interface FormDataType {
   stockNum: string;
 }
 
+const selectItems = [
+  { index: 1, item: '대한민국' },
+  { index: 2, item: '미국' },
+];
+
 export default function CreateCahoot() {
+  const selectBoxContainer = useRef<HTMLDivElement>(null);
+  const [selectedCountry, setSelectedCountry] = useState('국가'); // 휴양지 위치
   const { register, handleSubmit, setValue } = useForm<FormDataType>();
 
   const onSubmit = (data: FormDataType) => {
@@ -49,6 +58,10 @@ export default function CreateCahoot() {
 
   const onErrors = (errors: FieldErrors) => {
     console.log(errors);
+  };
+
+  const changeCountry = (country: string) => {
+    setSelectedCountry(country);
   };
 
   return (
@@ -110,9 +123,16 @@ export default function CreateCahoot() {
           </FormItem>
           {/* 위치 */}
           <FormItem id="location" label="위치" required={true}>
-            <div className="px-2">
+            <div ref={selectBoxContainer} className="relative flex gap-4 px-2">
+              <SelectBox
+                items={selectItems}
+                containerRef={selectBoxContainer}
+                currentItem={selectedCountry}
+                changeItem={changeCountry}
+                size="large"
+              />
               {/* TODO: Loading 일 때 처리 */}
-              <PlaceSearchBar name="location" setValue={setValue} />
+              <PlaceSearchBar name="location" country={selectedCountry} setValue={setValue} />
               {/* <Map /> */}
             </div>
           </FormItem>
