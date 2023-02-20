@@ -25,7 +25,7 @@ interface MockType {
 
 const ListItems = ({ keyword }: ListItemsProps) => {
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery<Response<MockType>>({
-    queryKey: ['cahoot/list', keyword],
+    queryKey: ['market/list', keyword],
     queryFn: ({ pageParam = 0 }) =>
       fetcher(
         `${
@@ -73,7 +73,7 @@ const ListItems = ({ keyword }: ListItemsProps) => {
                 />
               </div>
               <div className="relative flex w-full flex-col justify-center gap-1 overflow-hidden py-2 pr-2 text-sm md:pr-4 md:text-base">
-                <div className="flex flex-col border-grey pb-2.5 font-bold md:flex-row md:gap-2">
+                <div className="flex flex-col gap-1 border-grey font-bold md:flex-row md:gap-2">
                   <span className="break-keep text-main md:text-black">{location}</span>
                   <div className="mx-2 hidden border-l-2 py-0.5 md:block"></div>
                   <span className="truncate">{title}</span>
