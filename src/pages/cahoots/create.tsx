@@ -49,7 +49,12 @@ const selectItems = [
 export default function CreateCahoot() {
   const selectBoxContainer = useRef<HTMLDivElement>(null);
   const [selectedCountry, setSelectedCountry] = useState('국가'); // 휴양지 위치
-  const { register, handleSubmit, setValue } = useForm<FormDataType>();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<FormDataType>();
 
   const onSubmit = (data: FormDataType) => {
     console.log(data);
@@ -81,8 +86,17 @@ export default function CreateCahoot() {
                 id="title"
                 placeholder="5~20 글자로 작성해주세요."
                 required={true}
-                register={register('title')}
+                register={register('title', {
+                  minLength: 5,
+                  maxLength: 20,
+                })}
               />
+              {errors.title && errors.title.type === 'minLength' && (
+                <p className="p-1 text-red">5자 이상 입력해주세요.</p>
+              )}
+              {errors.title && errors.title.type === 'maxLength' && (
+                <p className="p-1 text-red">20자 이하로 입력해주세요.</p>
+              )}
             </div>
           </FormItem>
           {/* 간단한 소개 */}
