@@ -172,6 +172,13 @@ export default function CreateCahoot() {
               <span>만원</span>
             </div>
           </FormItem>
+          {/* 예상 수익률 */}
+          <FormItem id="expectedRateOfReturn" label="예상 수익률" required={true}>
+            <div className="flex items-center gap-4 px-2">
+              <NumberInput size="large" min={100} name="expectedRateOfReturn" setValue={setValue} />
+              <span>%</span>
+            </div>
+          </FormItem>
           {/* 발행 주식 수량 및 가격 */}
           <FormItem id="issuedStocks" label="발행 주식 수량 및 가격" required={true}>
             <div className="flex flex-wrap gap-10 px-2">
