@@ -154,7 +154,13 @@ export default function CreateCahoot() {
           <FormItem id="expectedMonth" label="건설 진행 예상 시간" required={true}>
             <div className="flex items-center gap-4 px-2">
               <span>공모 완료 후</span>
-              <NumberInput size="small" min={0} name="expectedMonth" setValue={setValue} />
+              <NumberInput
+                size="small"
+                min={0}
+                max={120}
+                name="expectedMonth"
+                setValue={setValue}
+              />
               <span>month</span>
             </div>
           </FormItem>
@@ -182,14 +188,26 @@ export default function CreateCahoot() {
           {/* 전체 건설 지출 예상 금액 */}
           <FormItem id="expectedTotalCost" label="전체 건설 지출 예상 금액" required={false}>
             <div className="flex items-center gap-4 px-2">
-              <NumberInput size="large" min={0} name="expectedTotalCost" setValue={setValue} />
+              <NumberInput
+                size="large"
+                min={0}
+                max={100000000000000} // 100조
+                name="expectedTotalCost"
+                setValue={setValue}
+              />
               <span>만원</span>
             </div>
           </FormItem>
           {/* 예상 수익률 */}
           <FormItem id="expectedRateOfReturn" label="예상 수익률" required={true}>
             <div className="flex items-center gap-4 px-2">
-              <NumberInput size="large" min={100} name="expectedRateOfReturn" setValue={setValue} />
+              <NumberInput
+                size="large"
+                min={100}
+                max={100000}
+                name="expectedRateOfReturn"
+                setValue={setValue}
+              />
               <span>%</span>
             </div>
           </FormItem>
@@ -199,14 +217,28 @@ export default function CreateCahoot() {
               <div className="basis-5/12">
                 <p className="my-2 text-sm font-semibold text-black">1주 별 가격</p>
                 <div className="flex items-center gap-4">
-                  <NumberInput size="large" min={0} name="stockPrice" setValue={setValue} />
+                  <NumberInput
+                    size="large"
+                    min={1000}
+                    max={10000000}
+                    unit={1000}
+                    name="stockPrice"
+                    setValue={setValue}
+                  />
                   <span>원</span>
                 </div>
               </div>
               <div className="basis-5/12">
                 <p className="my-2 text-sm font-semibold text-black">발행 주식 수</p>
                 <div className="flex items-center gap-4">
-                  <NumberInput size="large" min={1} name="stockNum" setValue={setValue} />
+                  <NumberInput
+                    size="large"
+                    min={0}
+                    max={10000}
+                    unit={100}
+                    name="stockNum"
+                    setValue={setValue}
+                  />
                   <span>주</span>
                 </div>
               </div>

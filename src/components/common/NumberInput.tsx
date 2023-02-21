@@ -3,59 +3,75 @@ import { UseFormSetValue } from 'react-hook-form';
 
 interface PropsType {
   size: 'small' | 'large';
-  min?: number;
+  min: number;
+  max: number;
+  unit?: number;
   value?: number;
   name: string;
   setValue: UseFormSetValue<any>;
 }
 
-const NumberInput = ({ size, min = 0, name, setValue }: PropsType) => {
-  const [num, setNum] = useState<number>(0);
+const NumberInput = ({ size, min = 0, max = 100, unit = 1, name, setValue }: PropsType) => {
+  const [num, setNum] = useState<number>(min);
 
   const handleInput = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const inputNum = Number(e.target.value);
+    let inputNum = Number(e.target.value);
 
     if (isNaN(inputNum) || inputNum < 0) {
       return;
     }
+
+    if (inputNum < min) {
+      inputNum = min;
+    } else if (inputNum > max) {
+      inputNum = max;
+    }
+    
     setNum(inputNum);
     setValue(name, inputNum);
   };
 
   const onClickPlus = () => {
-    setNum(num + 1);
-    setValue(name, num + 1);
+    const newVal = num + unit;
+
+    if (newVal > max) {
+      return;
+    }
+    setNum(newVal);
+    setValue(name, newVal);
   };
 
   const onClickMinus = () => {
-    if (num - 1 < min) {
+    const newVal = num - unit;
+
+    if (newVal < min) {
       return;
     }
-    setNum(num - 1);
-    setValue(name, num - 1);
+    setNum(newVal);
+    setValue(name, newVal);
   };
 
   return (
-    <div className={`${size === 'small' ? 'w-28' : 'w-60'} flex flex-wrap h-10`}>
+    <div className={`${size === 'small' ? 'w-28' : 'w-60'} flex h-10 flex-wrap`}>
       <div className={`${size === 'small' ? 'w-4/6' : 'w-5/6'} flex h-full`}>
         <input
           type="text"
           value={num}
-          className="outline-main bg-white text-sm text-gray-900 text-center border border-black/20 focus:border-gray-600 border-r-0 rounded-l-md w-full"
+          className="text-gray-900 focus:border-gray-600 w-full rounded-l-md border border-r-0 border-black/20 bg-white text-center text-sm outline-main"
           onChange={handleInput}
         />
       </div>
-      <div className={`${size === 'small' ? 'w-2/6' : 'w-1/6'} flex flex-col h-full`}>
+      <div className={`${size === 'small' ? 'w-2/6' : 'w-1/6'} flex h-full flex-col`}>
         <button
           type="button"
-          className="h-1/2 text-black/20 text-center text-md font-semibold rounded-tr-md px-3 focus:outline-none border border-b-0 border-black/20 hover:border-main hover:bg-main leading-none"
+          className="text-md h-1/2 rounded-tr-md border border-b-0 border-black/20 px-3 text-center font-semibold leading-none text-black/20 hover:border-main hover:bg-main focus:outline-none"
           onClick={onClickPlus}
         >
           +
         </button>
         <button
           type="button"
-          className="h-1/2 text-black/20 text-center text-md font-semibold rounded-br-md px-3 focus:outline-none border border-black/20 hover:border-main hover:bg-main leading-none"
+          className="text-md h-1/2 rounded-br-md border border-black/20 px-3 text-center font-semibold leading-none text-black/20 hover:border-main hover:bg-main focus:outline-none"
           onClick={onClickMinus}
         >
           -
