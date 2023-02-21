@@ -104,10 +104,19 @@ export default function CreateCahoot() {
             <div className="px-2">
               <TextArea
                 id="shortDescription"
-                placeholder="휴양지에 대한 간단한 소개를 작성해주세요."
+                placeholder="휴양지에 대한 간단한 소개를 작성해주세요.(최소 10자, 최대 50자)"
                 required={true}
-                register={register('shortDescription')}
+                register={register('shortDescription', {
+                  minLength: 10,
+                  maxLength: 50,
+                })}
               />
+              {errors.shortDescription && errors.shortDescription.type === 'minLength' && (
+                <p className="p-1 text-red">10자 이상 입력해주세요.</p>
+              )}
+              {errors.shortDescription && errors.shortDescription.type === 'maxLength' && (
+                <p className="p-1 text-red">50자 이하로 입력해주세요.</p>
+              )}
             </div>
           </FormItem>
           {/* 예상 이미지 */}
