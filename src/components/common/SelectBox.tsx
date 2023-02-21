@@ -1,5 +1,6 @@
 import { MouseEvent, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 
 import Icon from './Icons';
 
@@ -14,9 +15,21 @@ interface PropsType {
   currentItem: string;
   changeItem: (item: string) => void;
   size: 'large' | 'small';
+  name?: string;
+  setValue?: UseFormSetValue<any>;
+  trigger: UseFormTrigger<any>;
 }
 
-const SelectBox = ({ items, containerRef, currentItem, changeItem, size }: PropsType) => {
+const SelectBox = ({
+  items,
+  containerRef,
+  currentItem,
+  changeItem,
+  size,
+  name,
+  setValue,
+  trigger,
+}: PropsType) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const onClickToggle = (e: MouseEvent) => {
@@ -27,6 +40,12 @@ const SelectBox = ({ items, containerRef, currentItem, changeItem, size }: Props
   const onClickItem = (item: string) => {
     setIsOpen(false);
     changeItem(item);
+
+    // form 값 세팅
+    if (name && setValue) {
+      setValue(name, item, { shouldDirty: true });
+      trigger(name);
+    }
   };
 
   const onBlur = () => {

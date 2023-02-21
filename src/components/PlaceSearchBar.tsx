@@ -1,14 +1,15 @@
 import { useRef } from 'react';
 import Autocomplete from 'react-google-autocomplete';
-import { UseFormSetValue } from 'react-hook-form';
+import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 
 interface PropsType {
   name: string;
   country: string; // 국가코드
   setValue: UseFormSetValue<any>;
+  trigger: UseFormTrigger<any>;
 }
 
-const PlaceSearchBar = ({ name, country, setValue }: PropsType) => {
+const PlaceSearchBar = ({ name, country, setValue, trigger }: PropsType) => {
   const inputRef = useRef<HTMLInputElement>(null);
 
   // 자동완성 목록에서 주소 선택 시 나라명, 우편번호를 제외한 주소 생성
@@ -21,15 +22,18 @@ const PlaceSearchBar = ({ name, country, setValue }: PropsType) => {
       .map((item) => (address += `${item.long_name} `));
 
     setValue(name, address.trim());
+    trigger(name);
   };
 
   // 사용자 입력 주소 form value 세팅
   const onInput = () => {
     const inputText = inputRef.current?.value;
-    if (!inputText) {
+    // 공백인 경우 리턴하면 X
+    if (inputText === undefined) {
       return;
     }
     setValue(name, inputText.trim());
+    trigger(name);
   };
 
   // 국가 코드(ISO 2자리코드) 반환

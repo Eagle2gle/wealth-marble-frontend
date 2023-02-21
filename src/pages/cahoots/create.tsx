@@ -31,6 +31,7 @@ export interface FormDataType {
   images: string[];
   themeLocation: string;
   themeBuilding: string;
+  country: string;
   location: string;
   expectedMonth: string;
   descritption: string;
@@ -54,6 +55,7 @@ export default function CreateCahoot() {
     handleSubmit,
     setValue,
     formState: { errors },
+    trigger,
   } = useForm<FormDataType>();
 
   const onSubmit = (data: FormDataType) => {
@@ -85,10 +87,10 @@ export default function CreateCahoot() {
               <TextInput
                 id="title"
                 placeholder="5~20 글자로 작성해주세요."
-                required={true}
                 register={register('title', {
                   minLength: 5,
                   maxLength: 20,
+                  required: true,
                 })}
               />
               {errors.title && errors.title.type === 'minLength' && (
@@ -96,6 +98,9 @@ export default function CreateCahoot() {
               )}
               {errors.title && errors.title.type === 'maxLength' && (
                 <p className="p-1 text-red">20자 이하로 입력해주세요.</p>
+              )}
+              {errors.title && errors.title.type === 'required' && (
+                <p className="p-1 text-red">휴양지명을 입력해주세요.</p>
               )}
             </div>
           </FormItem>
@@ -105,10 +110,10 @@ export default function CreateCahoot() {
               <TextArea
                 id="shortDescription"
                 placeholder="휴양지에 대한 간단한 소개를 작성해주세요.(최소 10자, 최대 50자)"
-                required={true}
                 register={register('shortDescription', {
                   minLength: 10,
                   maxLength: 50,
+                  required: true,
                 })}
               />
               {errors.shortDescription && errors.shortDescription.type === 'minLength' && (
@@ -117,13 +122,25 @@ export default function CreateCahoot() {
               {errors.shortDescription && errors.shortDescription.type === 'maxLength' && (
                 <p className="p-1 text-red">50자 이하로 입력해주세요.</p>
               )}
+              {errors.shortDescription && errors.shortDescription.type === 'required' && (
+                <p className="p-1 text-red">휴양지에 대한 간단한 소개를 입력해주세요.</p>
+              )}
             </div>
           </FormItem>
           {/* 예상 이미지 */}
           <FormItem id="images" label="예상 이미지" required={true}>
             <div className="px-2">
-              <ImageUpload id="images" name="images" setValue={setValue} />
+              <input
+                type="hidden"
+                {...register('images', {
+                  required: true,
+                })}
+              />
+              <ImageUpload id="images" name="images" setValue={setValue} trigger={trigger} />
             </div>
+            {errors.images && errors.images.type === 'required' && (
+              <p className="p-1 text-red">예상 이미지를 선택해주세요.</p>
+            )}
           </FormItem>
           {/* 휴양지 테마 */}
           <FormItem id="theme" label="휴양지 테마" required={true}>
@@ -133,31 +150,58 @@ export default function CreateCahoot() {
                 id="themeLocation"
                 name="themeLocation"
                 option={positionOption}
-                register={register('themeLocation')}
+                register={register('themeLocation', { required: true })}
               />
               <p className="mt-4 mb-2 text-sm font-semibold text-black">건물 유형</p>
               <RadioBtn
                 id="themeBuilding"
                 name="themeBuilding"
                 option={typeOption}
-                register={register('themeBuilding')}
+                register={register('themeBuilding', { required: true })}
               />
             </div>
+            {(errors.themeLocation?.type === 'required' ||
+              errors.themeBuilding?.type === 'required') && (
+              <p className="p-1 text-red">휴양지 테마를 선택해주세요.</p>
+            )}
           </FormItem>
           {/* 위치 */}
           <FormItem id="location" label="위치" required={true}>
             <div ref={selectBoxContainer} className="relative flex gap-4 px-2">
+              <input
+                type="hidden"
+                {...register('country', {
+                  required: true,
+                })}
+              />
               <SelectBox
                 items={selectItems}
                 containerRef={selectBoxContainer}
                 currentItem={selectedCountry}
                 changeItem={changeCountry}
                 size="large"
+                name="country"
+                setValue={setValue}
+                trigger={trigger}
               />
               {/* TODO: Loading 일 때 처리 */}
-              <PlaceSearchBar name="location" country={selectedCountry} setValue={setValue} />
+              <input
+                type="hidden"
+                {...register('location', {
+                  required: true,
+                })}
+              />
+              <PlaceSearchBar
+                name="location"
+                country={selectedCountry}
+                setValue={setValue}
+                trigger={trigger}
+              />
               {/* <Map /> */}
             </div>
+            {(errors.country?.type === 'required' || errors.location?.type === 'required') && (
+              <p className="p-1 text-red">휴양지의 위치를 입력해주세요.</p>
+            )}
           </FormItem>
           {/* 건설 진행 예상 시간 */}
           <FormItem id="expectedMonth" label="건설 진행 예상 시간" required={true}>
@@ -179,10 +223,12 @@ export default function CreateCahoot() {
               <TextArea
                 id="descritption"
                 placeholder="최대한 상세히 작성해야 공모에 도움이 됩니다."
-                required={true}
-                register={register('descritption')}
+                register={register('descritption', { required: true })}
               />
             </div>
+            {errors.descritption && errors.descritption.type === 'required' && (
+              <p className="p-1 text-red">아이디어 설명을 입력해주세요.</p>
+            )}
           </FormItem>
           {/* 공모 진행 기간 */}
           <FormItem id="stockDurationRange" label="공모 진행 기간" required={true}>

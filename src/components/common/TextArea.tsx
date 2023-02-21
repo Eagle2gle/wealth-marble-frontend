@@ -3,18 +3,16 @@ import { UseFormRegisterReturn } from 'react-hook-form';
 interface PropsType {
   id: string;
   placeholder: string;
-  required: boolean;
   register?: UseFormRegisterReturn;
 }
 
-const TextArea = ({ id, placeholder, required, register }: PropsType) => {
+const TextArea = ({ id, placeholder, register }: PropsType) => {
   return (
     <textarea
       id={id}
       rows={4}
-      className="outline-main block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-black/20"
+      className="text-gray-900 bg-gray-50 block w-full rounded-lg border border-black/20 p-2.5 text-sm outline-main"
       placeholder={placeholder}
-      required={required}
       {...register}
     ></textarea>
   );
