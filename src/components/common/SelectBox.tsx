@@ -17,7 +17,7 @@ interface PropsType {
   size: 'large' | 'small';
   name?: string;
   setValue?: UseFormSetValue<any>;
-  trigger: UseFormTrigger<any>;
+  trigger?: UseFormTrigger<any>;
 }
 
 const SelectBox = ({
@@ -42,7 +42,7 @@ const SelectBox = ({
     changeItem(item);
 
     // form 값 세팅
-    if (name && setValue) {
+    if (name && setValue && trigger) {
       setValue(name, item, { shouldDirty: true });
       trigger(name);
     }
