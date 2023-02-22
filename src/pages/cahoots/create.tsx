@@ -14,15 +14,15 @@ import PlaceSearchBar from '@/components/PlaceSearchBar';
 // import Map from '@/components/Map';
 
 const positionOption = [
-  { value: 'OCEAN', label: '바다' },
-  { value: 'MOUNTAIN', label: '산' },
+  { value: 'BEACH', label: '바다' },
+  { value: 'FOREST', label: '산' },
   { value: 'DOWNTOWN', label: '도심' },
 ];
 
 const typeOption = [
-  { value: 'RESORT', label: '휴양지' },
+  { value: 'VACATION_SPOT', label: '휴양지' },
   { value: 'HOTEL', label: '호텔' },
-  { value: 'GUESTHOUSE', label: '게스트하우스' },
+  { value: 'GUEST_HOUSE', label: '게스트하우스' },
 ];
 
 export interface FormDataType {
@@ -33,13 +33,14 @@ export interface FormDataType {
   themeBuilding: string;
   country: string;
   location: string;
-  expectedMonth: string;
-  descritption: string;
+  expectedMonth: number;
+  description: string;
   stockStart: string;
   stockEnd: string;
-  expectedTotalCost: string;
-  stockPrice: string;
-  stockNum: string;
+  expectedTotalCost: number;
+  stockPrice: number;
+  stockNum: number;
+  expectedRateOfReturn: number;
 }
 
 const selectItems = [
@@ -89,7 +90,7 @@ export default function CreateCahoot() {
                 placeholder="5~20 글자로 작성해주세요."
                 register={register('title', {
                   minLength: 5,
-                  maxLength: 20,
+                  maxLength: 15,
                   required: true,
                 })}
               />
@@ -97,7 +98,7 @@ export default function CreateCahoot() {
                 <p className="p-1 text-red">5자 이상 입력해주세요.</p>
               )}
               {errors.title && errors.title.type === 'maxLength' && (
-                <p className="p-1 text-red">20자 이하로 입력해주세요.</p>
+                <p className="p-1 text-red">15자 이하로 입력해주세요.</p>
               )}
               {errors.title && errors.title.type === 'required' && (
                 <p className="p-1 text-red">휴양지명을 입력해주세요.</p>
@@ -169,6 +170,7 @@ export default function CreateCahoot() {
           <FormItem id="location" label="위치" required={true}>
             <div ref={selectBoxContainer} className="relative flex gap-4 px-2">
               <input
+                id="country"
                 type="hidden"
                 {...register('country', {
                   required: true,
@@ -186,6 +188,7 @@ export default function CreateCahoot() {
               />
               {/* TODO: Loading 일 때 처리 */}
               <input
+                id="location"
                 type="hidden"
                 {...register('location', {
                   required: true,
@@ -218,15 +221,25 @@ export default function CreateCahoot() {
             </div>
           </FormItem>
           {/* 아이디어 설명 */}
-          <FormItem id="descritption" label="아이디어 설명" required={true}>
+          <FormItem id="description" label="아이디어 설명" required={true}>
             <div className="px-2">
               <TextArea
-                id="descritption"
+                id="description"
                 placeholder="최대한 상세히 작성해야 공모에 도움이 됩니다."
-                register={register('descritption', { required: true })}
+                register={register('description', {
+                  minLength: 5,
+                  maxLength: 4000,
+                  required: true,
+                })}
               />
             </div>
-            {errors.descritption && errors.descritption.type === 'required' && (
+            {errors.description && errors.description.type === 'minLength' && (
+              <p className="p-1 text-red">5자 이상 입력해주세요.</p>
+            )}
+            {errors.description && errors.description.type === 'maxLength' && (
+              <p className="p-1 text-red">4000자 이하로 입력해주세요.</p>
+            )}
+            {errors.description && errors.description.type === 'required' && (
               <p className="p-1 text-red">아이디어 설명을 입력해주세요.</p>
             )}
           </FormItem>
@@ -246,7 +259,7 @@ export default function CreateCahoot() {
               <NumberInput
                 size="large"
                 min={0}
-                max={100000000000000} // 100조
+                max={100000000}
                 name="expectedTotalCost"
                 setValue={setValue}
               />
