@@ -4,6 +4,7 @@ import DeadlineBanner from '@/components/cahoot/DeadlineBanner';
 import Layout from '@/components/common/Layout';
 import Interests from '@/components/market/Interests';
 import List from '@/components/market/List';
+import PriceInfo from '@/components/market/PriceInfo';
 import RecentTrade from '@/components/market/RecentTrade';
 import { ErrorBoundary } from '@sentry/nextjs';
 
@@ -29,11 +30,11 @@ const Markets = () => {
           <Suspense fallback={<p>로딩...</p>}>
             <Interests scrollRef={scrollRef} />
           </Suspense>
-          <div className="flex flex-col-reverse gap-4 md:flex-row">
-            <div className="md:w-1/2">
-              <label className="font-bold">가격 정보</label>
+          <div className="flex flex-col-reverse md:flex-row md:justify-center">
+            <div className="md:w-1/2 md:pr-2">
+              <PriceInfo />
             </div>
-            <div className="md:w-1/2">
+            <div className="mb-4 md:mb-0 md:w-1/2 md:pl-2">
               <Suspense fallback={<p>로딩...</p>}>
                 <RecentTrade />
               </Suspense>

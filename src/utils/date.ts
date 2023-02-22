@@ -10,3 +10,10 @@ export const formatTime = (date: string) =>
     second: '2-digit',
     hour12: false,
   }).format(new Date(date || 0));
+
+export const formatTimeWithoutSecond = (date: string) =>
+  Intl.DateTimeFormat('ko-KR', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(date || 0));
