@@ -1,3 +1,7 @@
+interface IconSizeType {
+  size?: 'large' | 'small';
+}
+
 const Home = () => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
@@ -131,7 +135,7 @@ const Right = () => (
   </svg>
 );
 
-const Up = ({ size }: { size: 'large' | 'small' }) => (
+const Up = ({ size = 'large' }: IconSizeType) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
@@ -144,7 +148,7 @@ const Up = ({ size }: { size: 'large' | 'small' }) => (
   </svg>
 );
 
-const Down = ({ size }: { size: 'large' | 'small' }) => (
+const Down = ({ size = 'large' }: IconSizeType) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     fill="none"
