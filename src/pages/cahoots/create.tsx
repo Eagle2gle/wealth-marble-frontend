@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 import { useForm, FieldErrors } from 'react-hook-form';
 
+import axios from 'axios';
+
 import DateRangeInput from '@/components/common/DateRangeInput';
 import FormItem from '@/components/common/FormItem';
 import ImageUpload from '@/components/common/ImageUpload';
@@ -61,7 +63,15 @@ export default function CreateCahoot() {
 
   const onSubmit = (data: FormDataType) => {
     console.log(data);
-    // TODO: POST form data
+    // TODO: POST API 연동 (미완성)
+    axios
+      .post(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots`, data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const onErrors = (errors: FieldErrors) => {
