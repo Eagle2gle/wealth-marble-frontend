@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { KeyboardEvent, useRef } from 'react';
 import Autocomplete from 'react-google-autocomplete';
 import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 
@@ -26,7 +26,11 @@ const PlaceSearchBar = ({ name, country, setValue, trigger }: PropsType) => {
   };
 
   // 사용자 입력 주소 form value 세팅
-  const onInput = () => {
+  const onInput = (e: KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+
     const inputText = inputRef.current?.value;
     // 공백인 경우 리턴하면 X
     if (inputText === undefined) {
@@ -55,7 +59,7 @@ const PlaceSearchBar = ({ name, country, setValue, trigger }: PropsType) => {
         }
         summarizeAddress(addressComponents);
       }}
-      onChange={onInput}
+      onKeyDown={onInput}
       options={{
         types: ['(regions)'],
         componentRestrictions: { country: getCountryCode(country) },
