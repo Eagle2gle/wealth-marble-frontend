@@ -18,6 +18,9 @@ export type CahootListType = {
 export type CahootDeadlineType = {
   result: Omit<CahootType, 'location' | 'stockPrice' | 'stockNum' | 'competitionRate'>[];
 };
+export type CahootDeadlineMiniType = {
+  result: Pick<CahootType, 'id' | 'title' | 'competitionRate'>[];
+};
 
 export type CahootDetailType = CahootType & {
   themeLocation: string;
