@@ -15,6 +15,8 @@ interface PropsType {
 const ImageUpload = ({ id, name, setValue, trigger }: PropsType) => {
   const imgRef = useRef<HTMLInputElement>(null);
   const [imgSrcList, setImgSrcList] = useState<string[]>([]);
+  const [imgFileList, setImgFileList] = useState<Blob[]>([]);
+
   const limit = 5;
 
   const inputImgFile = () => {
@@ -29,18 +31,22 @@ const ImageUpload = ({ id, name, setValue, trigger }: PropsType) => {
     reader.onloadend = (e) => {
       const result = e.target?.result as string;
       const newImgSrcList = [...imgSrcList, result];
+      const newImgFileList = [...imgFileList, files[0]];
 
       setImgSrcList(newImgSrcList);
-      setValue(name, newImgSrcList);
+      setImgFileList(newImgFileList);
+      setValue(name, newImgFileList);
       trigger(name);
     };
   };
 
   const handleRemoveImage = (index: number) => {
     const newImgSrcList = imgSrcList.filter((val, idx) => idx !== index);
+    const newImgFileList = imgFileList.filter((val, idx) => idx !== index);
 
     setImgSrcList(newImgSrcList);
-    setValue(name, newImgSrcList);
+    setImgFileList(newImgFileList);
+    setValue(name, newImgFileList);
     trigger(name);
   };
 

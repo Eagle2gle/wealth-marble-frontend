@@ -1,8 +1,6 @@
 import { useRef, useState } from 'react';
 import { useForm, FieldErrors } from 'react-hook-form';
 
-import axios from 'axios';
-
 import DateRangeInput from '@/components/common/DateRangeInput';
 import FormItem from '@/components/common/FormItem';
 import ImageUpload from '@/components/common/ImageUpload';
@@ -28,6 +26,7 @@ const typeOption = [
 ];
 
 export interface FormDataType {
+  [key: string]: any;
   title: string;
   shortDescription: string;
   images: Blob[];
@@ -39,7 +38,7 @@ export interface FormDataType {
   description: string;
   stockStart: string;
   stockEnd: string;
-  expectedTotalCost?: number;
+  expectedTotalCost: number;
   stockPrice: number;
   stockNum: number;
   expectedRateOfReturn: number;
@@ -62,25 +61,14 @@ export default function CreateCahoot() {
   } = useForm<FormDataType>();
 
   const onSubmit = async (data: FormDataType) => {
-    // console.log(data);
-
     const formData = new FormData();
 
     for (const key in data) {
-      // console.log(key);
-      // console.log(data[key]);
-
       if (key === 'images') {
         data[key].forEach((img) => formData.append(key, img));
       } else {
-        formData.append(key, data[key] as keyof FormDataType);
+        formData.append(key, data[key]);
       }
-    }
-    console.log('- - - - - - -');
-
-    // FormData 확인
-    for (let val of formData.values()) {
-      console.log(val);
     }
 
     const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots`, {
@@ -88,18 +76,6 @@ export default function CreateCahoot() {
       body: formData,
     }).then((response) => response.json());
     console.log(response);
-
-    // TODO: POST API 연동 (미완성)
-    // axios
-    //   .post(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots`, formData, {
-    //     headers: { 'Content-Type': 'multipart/form-data' },
-    //   })
-    //   .then((res) => {
-    //     console.log(res);
-    //   })
-    //   .catch((e) => {
-    //     console.log(e);
-    //   });
   };
 
   const onErrors = (errors: FieldErrors) => {
