@@ -30,7 +30,7 @@ const typeOption = [
 export interface FormDataType {
   title: string;
   shortDescription: string;
-  images: string[];
+  images: Blob[];
   themeLocation: string;
   themeBuilding: string;
   country: string;
@@ -39,7 +39,7 @@ export interface FormDataType {
   description: string;
   stockStart: string;
   stockEnd: string;
-  expectedTotalCost: number;
+  expectedTotalCost?: number;
   stockPrice: number;
   stockNum: number;
   expectedRateOfReturn: number;
@@ -61,17 +61,45 @@ export default function CreateCahoot() {
     trigger,
   } = useForm<FormDataType>();
 
-  const onSubmit = (data: FormDataType) => {
-    console.log(data);
+  const onSubmit = async (data: FormDataType) => {
+    // console.log(data);
+
+    const formData = new FormData();
+
+    for (const key in data) {
+      // console.log(key);
+      // console.log(data[key]);
+
+      if (key === 'images') {
+        data[key].forEach((img) => formData.append(key, img));
+      } else {
+        formData.append(key, data[key] as keyof FormDataType);
+      }
+    }
+    console.log('- - - - - - -');
+
+    // FormData 확인
+    for (let val of formData.values()) {
+      console.log(val);
+    }
+
+    const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots`, {
+      method: 'POST',
+      body: formData,
+    }).then((response) => response.json());
+    console.log(response);
+
     // TODO: POST API 연동 (미완성)
-    axios
-      .post(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots`, data)
-      .then((res) => {
-        console.log(res);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
+    // axios
+    //   .post(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots`, formData, {
+    //     headers: { 'Content-Type': 'multipart/form-data' },
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //   })
+    //   .catch((e) => {
+    //     console.log(e);
+    //   });
   };
 
   const onErrors = (errors: FieldErrors) => {
