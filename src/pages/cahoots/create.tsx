@@ -1,6 +1,8 @@
 import { useRef, useState } from 'react';
 import { useForm, FieldErrors } from 'react-hook-form';
 
+import { useRouter } from 'next/router';
+
 import DateRangeInput from '@/components/common/DateRangeInput';
 import FormItem from '@/components/common/FormItem';
 import ImageUpload from '@/components/common/ImageUpload';
@@ -50,6 +52,7 @@ const selectItems = [
 ];
 
 export default function CreateCahoot() {
+  const router = useRouter();
   const selectBoxContainer = useRef<HTMLDivElement>(null);
   const [selectedCountry, setSelectedCountry] = useState('국가'); // 휴양지 위치
   const {
@@ -60,7 +63,7 @@ export default function CreateCahoot() {
     trigger,
   } = useForm<FormDataType>();
 
-  const onSubmit = async (data: FormDataType) => {
+  const onSubmit = (data: FormDataType) => {
     const formData = new FormData();
 
     for (const key in data) {
@@ -71,11 +74,18 @@ export default function CreateCahoot() {
       }
     }
 
-    const response = await fetch(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots`, {
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots`, {
       method: 'POST',
       body: formData,
-    }).then((response) => response.json());
-    console.log(response);
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        router.push('/');
+        console.log(result);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   };
 
   const onErrors = (errors: FieldErrors) => {
