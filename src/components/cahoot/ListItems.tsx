@@ -54,7 +54,17 @@ const ListItems = ({ keyword }: ListItemsProps) => {
       {data?.pages.map((page, index) => (
         <Fragment key={index}>
           {page.data.result.map(
-            ({ id, stockNum, competitionRate, stockEnd, location, stockPrice, title, images }) => (
+            ({
+              id,
+              stockNum,
+              competitionRate,
+              stockEnd,
+              location,
+              stockPrice,
+              title,
+              images,
+              isInterest,
+            }) => (
               <Link
                 href={`/cahoots/detail/${id}`}
                 key={id}
@@ -82,8 +92,7 @@ const ListItems = ({ keyword }: ListItemsProps) => {
                         onClick={onBookmarkClick}
                         className={classNames(
                           'btn-ghost btn-xs btn-circle btn',
-                          // bookmarked ? 'fill-main text-main' : 'fill-none'
-                          'fill-none'
+                          isInterest ? 'fill-main text-main' : 'fill-none'
                         )}
                       >
                         <Icon.Bookmark />
