@@ -23,7 +23,7 @@ const ListItems = ({ keyword }: ListItemsProps) => {
       fetcher(
         `${
           process.env.NEXT_PUBLIC_HOST
-        }/api/cahoots?status=ongoing&offset=${pageParam}&keyword=${encodeURIComponent(keyword)}`
+        }/api/cahoots?status=ongoing&page=${pageParam}&keyword=${encodeURIComponent(keyword)}`
       )(),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.data.result.length ? allPages.length : false,
