@@ -2,11 +2,13 @@ import { KeyboardEvent, useRef } from 'react';
 import Autocomplete from 'react-google-autocomplete';
 import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 
+import { FormDataType } from '@/pages/cahoots/create';
+
 interface PropsType {
   name: string;
   country: string; // 국가코드
-  setValue: UseFormSetValue<any>;
-  trigger: UseFormTrigger<any>;
+  setValue: UseFormSetValue<FormDataType>;
+  trigger: UseFormTrigger<FormDataType>;
 }
 
 const PlaceSearchBar = ({ name, country, setValue, trigger }: PropsType) => {
@@ -27,7 +29,7 @@ const PlaceSearchBar = ({ name, country, setValue, trigger }: PropsType) => {
 
   // 사용자 입력 주소 form value 세팅
   const onInput = (e: KeyboardEvent) => {
-    if (e.key === "Enter") {
+    if (e.key === 'Enter') {
       e.preventDefault();
     }
 
