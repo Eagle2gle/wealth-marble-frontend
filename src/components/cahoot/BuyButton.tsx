@@ -94,15 +94,17 @@ const BuyButton = () => {
           <div className="flex w-full justify-between gap-2 font-bold">
             <div className="avatar">
               <div className="w-20"></div>
-              <Image
-                className="rounded object-contain"
-                alt=""
-                src={images[0]}
-                placeholder="blur"
-                blurDataURL={images[0]}
-                fill
-                sizes="80px"
-              />
+              {images[0] && (
+                <Image
+                  className="rounded object-contain"
+                  alt=""
+                  src={images[0]}
+                  placeholder="blur"
+                  blurDataURL={images[0]}
+                  fill
+                  sizes="80px"
+                />
+              )}
             </div>
             <div className="flex w-full flex-col justify-between">
               <span>{title}</span>

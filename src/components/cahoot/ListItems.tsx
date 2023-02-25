@@ -72,13 +72,15 @@ const ListItems = ({ keyword }: ListItemsProps) => {
               >
                 <div className="avatar">
                   <div className="w-32 rounded-l-lg md:rounded-lg"></div>
-                  <Image
-                    src={images[0]}
-                    alt=""
-                    className="rounded-l-lg md:rounded-lg"
-                    fill
-                    sizes="128px"
-                  />
+                  {images[0] && (
+                    <Image
+                      src={images[0]}
+                      alt=""
+                      className="rounded-l-lg md:rounded-lg"
+                      fill
+                      sizes="128px"
+                    />
+                  )}
                 </div>
                 <div className="relative flex w-full flex-col justify-center gap-1 overflow-hidden py-2 pr-4 text-sm md:text-base">
                   <div className="flex flex-col border-b border-grey pb-2.5 font-bold md:flex-row md:gap-2">
