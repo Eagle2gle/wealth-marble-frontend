@@ -4,8 +4,8 @@ import { GetServerSideProps } from 'next';
 
 import DetailBody from '@/components/cahoot/DetailBody';
 import DetailHeader from '@/components/cahoot/DetailHeader';
+import InterestButton from '@/components/cahoot/InterestButton';
 import OrderMobile from '@/components/cahoot/OrderMobile';
-import Icon from '@/components/common/Icons';
 import Layout from '@/components/common/Layout';
 import { ErrorBoundary } from '@sentry/nextjs';
 
@@ -23,11 +23,7 @@ const CahootsDetail = () => {
             )}
           >
             <DetailHeader />
-            <button className="btn-ghost btn mx-4 gap-1 border-grey fill-none md:hidden">
-              <Icon.Bookmark />
-              <span className="font-medium">관심상품</span>
-              <span>1,239</span>
-            </button>
+            <InterestButton />
             <DetailBody />
             <OrderMobile />
           </ErrorBoundary>

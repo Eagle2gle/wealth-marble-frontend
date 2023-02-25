@@ -6,9 +6,8 @@ import { fetcher } from '@/libs/client/fetcher';
 import type { CahootDetailType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
 
+import InterestButton from './InterestButton';
 import Order from './Order';
-
-import Icon from '../common/Icons';
 
 const DetailHeader = () => {
   const router = useRouter();
@@ -61,11 +60,7 @@ const DetailHeader = () => {
             <span className="text-black">{stockPrice.toLocaleString()}원</span>
           </div>
           {status === 'CAHOOTS_ONGOING' && <Order />}
-          <button className="btn-ghost btn hidden gap-1 border-grey fill-none md:flex">
-            <Icon.Bookmark />
-            <span className="font-medium">관심상품</span>
-            <span>1,239</span>
-          </button>
+          <InterestButton hideOnMobile />
         </div>
       </div>
     </div>
