@@ -2,6 +2,8 @@ import { MouseEvent, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 
+import { FormDataType } from '@/pages/cahoots/create';
+
 import Icon from './Icons';
 
 interface SelectItem {
@@ -16,8 +18,8 @@ interface PropsType {
   changeItem: (item: string) => void;
   size: 'large' | 'small';
   name?: string;
-  setValue?: UseFormSetValue<any>;
-  trigger?: UseFormTrigger<any>;
+  setValue?: UseFormSetValue<FormDataType>;
+  trigger?: UseFormTrigger<FormDataType>;
 }
 
 const SelectBox = ({

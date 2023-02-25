@@ -6,10 +6,13 @@ import { UseFormSetValue } from 'react-hook-form';
 
 import moment from 'moment';
 
+import { FormDataType } from '@/pages/cahoots/create';
+
+
 interface PropsType {
   startDateName: string;
   endDateName: string;
-  setValue: UseFormSetValue<any>;
+  setValue: UseFormSetValue<FormDataType>;
 }
 
 const DateRangeInput = ({ startDateName, endDateName, setValue }: PropsType) => {

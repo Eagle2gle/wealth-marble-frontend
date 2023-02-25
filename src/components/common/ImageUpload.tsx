@@ -4,12 +4,13 @@ import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 import Image from 'next/image';
 
 import Icon from '@/components/common/Icons';
+import { FormDataType } from '@/pages/cahoots/create';
 
 interface PropsType {
   id: string;
   name: string;
-  setValue: UseFormSetValue<any>;
-  trigger: UseFormTrigger<any>;
+  setValue: UseFormSetValue<FormDataType>;
+  trigger: UseFormTrigger<FormDataType>;
 }
 
 const ImageUpload = ({ id, name, setValue, trigger }: PropsType) => {
