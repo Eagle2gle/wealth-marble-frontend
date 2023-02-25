@@ -29,21 +29,23 @@ const DetailInfo = () => {
   );
   return (
     <>
-      <Carousel itemCount={images.length ?? 0}>
-        {images.map((imageUrl, index) => (
-          <div key={index} className="carousel-item relative h-96 w-full bg-grey">
-            <Image
-              alt="image"
-              src={imageUrl}
-              className="object-contain"
-              fill
-              placeholder="blur"
-              blurDataURL={imageUrl}
-              sizes="768px"
-            />
-          </div>
-        ))}
-      </Carousel>
+      {!!images.length && (
+        <Carousel itemCount={images.length ?? 0}>
+          {images.map((imageUrl, index) => (
+            <div key={index} className="carousel-item relative h-96 w-full bg-grey">
+              <Image
+                alt="image"
+                src={imageUrl}
+                className="object-contain"
+                fill
+                placeholder="blur"
+                blurDataURL={imageUrl}
+                sizes="768px"
+              />
+            </div>
+          ))}
+        </Carousel>
+      )}
       <div className="mx-4 flex flex-col gap-2 md:mx-0">
         <label className="font-bold">공모 정보</label>
         <div className="flex break-keep border-y border-grey py-4">

@@ -30,7 +30,9 @@ const Recap = () => {
             <div className="avatar z-0">
               {/* 이미지 */}
               <div className="w-32 rounded-t bg-dark-grey"></div>
-              <Image src={images[0]} className="rounded-t" alt="" fill sizes="128px" />
+              {images[0] && (
+                <Image src={images[0]} className="rounded-t" alt="" fill sizes="128px" />
+              )}
               <span className="absolute bottom-5 w-32 overflow-hidden overflow-ellipsis whitespace-nowrap px-2 text-xs text-white">
                 {title}
               </span>
