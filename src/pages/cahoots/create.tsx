@@ -28,7 +28,6 @@ const typeOption = [
 ];
 
 export interface FormDataType {
-  [key: string]: any;
   title: string;
   shortDescription: string;
   images: Blob[];
@@ -66,11 +65,11 @@ export default function CreateCahoot() {
   const onSubmit = (data: FormDataType) => {
     const formData = new FormData();
 
-    for (const key in data) {
+    for (const [key, value] of Object.entries(data)) {
       if (key === 'images') {
-        data[key].forEach((img) => formData.append(key, img));
+        value.forEach((img: Blob) => formData.append(key, img));
       } else {
-        formData.append(key, data[key]);
+        formData.append(key, value);
       }
     }
 
