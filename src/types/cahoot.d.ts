@@ -9,6 +9,7 @@ type CahootType = {
   stockNum: number;
   competitionRate: number;
   images: string[];
+  isInterest: boolean;
 };
 
 export type CahootListType = {
@@ -31,6 +32,8 @@ export type CahootDetailType = CahootType & {
   description: string;
   status: string;
   expectedRateOfReturn: number;
+  interestCount: number;
+  country: string;
 };
 
 export type CahootHistoryType = {
