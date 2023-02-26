@@ -6,9 +6,8 @@ import { fetcher } from '@/libs/client/fetcher';
 import type { CahootDetailType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
 
+import InterestButton from './InterestButton';
 import Order from './Order';
-
-import Icon from '../common/Icons';
 
 const DetailHeader = () => {
   const router = useRouter();
@@ -25,17 +24,19 @@ const DetailHeader = () => {
     <div className="mx-4 mt-4 flex gap-3 md:mx-0 md:gap-5">
       <div className="avatar">
         <div className="relative h-36 w-full bg-grey md:h-80">
-          <Image
-            alt="image"
-            src={images[0]}
-            className="object-contain"
-            fill
-            placeholder="blur"
-            blurDataURL={images[0]}
-            sizes="(max-width: 768px) 100vw,
+          {images[0] && (
+            <Image
+              alt="image"
+              src={images[0]}
+              className="object-contain"
+              fill
+              placeholder="blur"
+              blurDataURL={images[0]}
+              sizes="(max-width: 768px) 100vw,
               (max-width: 1200px) 50vw,
               33vw"
-          />
+            />
+          )}
         </div>
       </div>
       <div className="border-l border-black/50"></div>
@@ -59,11 +60,7 @@ const DetailHeader = () => {
             <span className="text-black">{stockPrice.toLocaleString()}원</span>
           </div>
           {status === 'CAHOOTS_ONGOING' && <Order />}
-          <button className="btn-ghost btn hidden gap-1 border-grey fill-none md:flex">
-            <Icon.Bookmark />
-            <span className="font-medium">관심상품</span>
-            <span>1,239</span>
-          </button>
+          <InterestButton hideOnMobile />
         </div>
       </div>
     </div>

@@ -16,6 +16,7 @@ const MOCK_DATA: CahootType[] = Array(40)
     stockNum: 20,
     competitionRate: 40,
     images: ['https://wealth-marble-image.s3.ap-northeast-2.amazonaws.com/icon-cup.png'],
+    isInterest: false,
   }));
 
 const handler = (req: NextApiRequest, res: NextApiResponse<Response<CahootListType>>) => {

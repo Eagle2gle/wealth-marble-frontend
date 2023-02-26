@@ -23,7 +23,7 @@ const ListItems = ({ keyword }: ListItemsProps) => {
       fetcher(
         `${
           process.env.NEXT_PUBLIC_HOST
-        }/api/cahoots?status=ongoing&offset=${pageParam}&keyword=${encodeURIComponent(keyword)}`
+        }/api/cahoots?status=ongoing&page=${pageParam}&keyword=${encodeURIComponent(keyword)}`
       )(),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.data.result.length ? allPages.length : false,
@@ -54,7 +54,17 @@ const ListItems = ({ keyword }: ListItemsProps) => {
       {data?.pages.map((page, index) => (
         <Fragment key={index}>
           {page.data.result.map(
-            ({ id, stockNum, competitionRate, stockEnd, location, stockPrice, title, images }) => (
+            ({
+              id,
+              stockNum,
+              competitionRate,
+              stockEnd,
+              location,
+              stockPrice,
+              title,
+              images,
+              isInterest,
+            }) => (
               <Link
                 href={`/cahoots/detail/${id}`}
                 key={id}
@@ -62,13 +72,15 @@ const ListItems = ({ keyword }: ListItemsProps) => {
               >
                 <div className="avatar">
                   <div className="w-32 rounded-l-lg md:rounded-lg"></div>
-                  <Image
-                    src={images[0]}
-                    alt=""
-                    className="rounded-l-lg md:rounded-lg"
-                    fill
-                    sizes="128px"
-                  />
+                  {images[0] && (
+                    <Image
+                      src={images[0]}
+                      alt=""
+                      className="rounded-l-lg md:rounded-lg"
+                      fill
+                      sizes="128px"
+                    />
+                  )}
                 </div>
                 <div className="relative flex w-full flex-col justify-center gap-1 overflow-hidden py-2 pr-4 text-sm md:text-base">
                   <div className="flex flex-col border-b border-grey pb-2.5 font-bold md:flex-row md:gap-2">
@@ -82,8 +94,7 @@ const ListItems = ({ keyword }: ListItemsProps) => {
                         onClick={onBookmarkClick}
                         className={classNames(
                           'btn-ghost btn-xs btn-circle btn',
-                          // bookmarked ? 'fill-main text-main' : 'fill-none'
-                          'fill-none'
+                          isInterest ? 'fill-main text-main' : 'fill-none'
                         )}
                       >
                         <Icon.Bookmark />

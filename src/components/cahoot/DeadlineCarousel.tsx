@@ -30,7 +30,9 @@ const DeadlineCarousel = () => {
           >
             <div className="avatar -z-10">
               <div className="w-24 rounded-full bg-dark-grey"></div>
-              <Image src={images[0]} alt="" className="rounded-full" fill sizes="96px" />
+              {images[0] && (
+                <Image src={images[0]} alt="" className="rounded-full" fill sizes="96px" />
+              )}
             </div>
             <div className="w-32 overflow-hidden overflow-ellipsis whitespace-nowrap text-sm">
               {title}
