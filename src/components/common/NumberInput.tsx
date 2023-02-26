@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { UseFormSetValue } from 'react-hook-form';
 
-import { FormDataType } from '@/pages/cahoots/create';
-
 interface PropsType {
   size: 'small' | 'large';
   min: number;
@@ -10,7 +8,7 @@ interface PropsType {
   unit?: number;
   value?: number;
   name: string;
-  setValue: UseFormSetValue<FormDataType>;
+  setValue: UseFormSetValue<any>;
 }
 
 const NumberInput = ({ size, min = 0, max = 100, unit = 1, name, setValue }: PropsType) => {
