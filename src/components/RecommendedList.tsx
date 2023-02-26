@@ -4,6 +4,9 @@ import Link from 'next/link';
 
 import ButtonGroup from '@/components/common/ButtonGroup';
 import SelectBox from '@/components/common/SelectBox';
+import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { CountriesType } from '@/types/cahoot';
+import { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
 import { useQuery } from '@tanstack/react-query';
 
@@ -25,6 +28,14 @@ const RecommendedCountryList = ['대만', '일본', '파푸아뉴기니'] as con
 const RecommendedList = () => {
   const selectBoxContainer = useRef<HTMLDivElement>(null);
   const [selectedCountry, setSelectedCountry] = useState('장소');
+  const {
+    data: {
+      data: { result: countries },
+    },
+  } = useSuspendedQuery<Response<CountriesType>>(['MarketCountries'], () =>
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/markets/countries`).then((res) => res.json())
+  );
+
   const { data } = useQuery<MockDataType[]>({
     queryKey: ['cahootListData'],
     queryFn: () =>
@@ -58,7 +69,7 @@ const RecommendedList = () => {
       </div>
       <div className="flex gap-4">
         <SelectBox
-          items={selectItems}
+          items={countries}
           containerRef={selectBoxContainer}
           currentItem={selectedCountry}
           changeItem={changeCountry}

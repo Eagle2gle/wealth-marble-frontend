@@ -50,3 +50,7 @@ type RecentCahootType = Pick<CahootType, 'id' | 'title' | 'stockStart' | 'images
 export type RecentCahootListType = {
   result: RecentCahootType[];
 };
+
+export type CountriesType = {
+  result: string[];
+};

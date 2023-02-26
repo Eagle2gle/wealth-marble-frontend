@@ -3,14 +3,8 @@ import { createPortal } from 'react-dom';
 import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 
 import Icon from './Icons';
-
-interface SelectItem {
-  index: number;
-  item: string;
-}
-
 interface PropsType {
-  items: SelectItem[];
+  items: string[];
   containerRef: React.RefObject<HTMLDivElement>;
   currentItem: string;
   changeItem: (item: string) => void;
@@ -80,7 +74,7 @@ const SelectBox = ({
             } absolute mt-2 rounded-lg border border-grey bg-white`}
           >
             <ul className="list-inside list-none ">
-              {items.map(({ index, item }) => (
+              {items.map((item, index) => (
                 <li
                   key={index.toString()}
                   title={item}
