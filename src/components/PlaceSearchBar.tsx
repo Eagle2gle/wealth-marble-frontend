@@ -1,32 +1,72 @@
-import { useRef } from 'react';
-import { UseFormRegisterReturn } from 'react-hook-form';
-
-import { LoadScript, StandaloneSearchBox } from '@react-google-maps/api';
+import { KeyboardEvent, useRef } from 'react';
+import Autocomplete from 'react-google-autocomplete';
+import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 
 interface PropsType {
-  register?: UseFormRegisterReturn;
+  name: string;
+  country: string; // 국가코드
+  setValue: UseFormSetValue<any>; // TODO: 추후 수정
+  trigger: UseFormTrigger<any>; // TODO: 추후 수정
 }
 
-const PlaceSearchBar = ({ register }: PropsType) => {
-  const searchRef = useRef<HTMLInputElement>(null);
+const PlaceSearchBar = ({ name, country, setValue, trigger }: PropsType) => {
+  const inputRef = useRef<HTMLInputElement>(null);
 
-  const onPlacesChanged = () => {
-    const searchText = searchRef.current?.value;
-    // console.log(searchText);
-    // TODO: 모달 + 지도 연동
+  // 자동완성 목록에서 주소 선택 시 나라명, 우편번호를 제외한 주소 생성
+  const summarizeAddress = (addressComponents: google.maps.GeocoderAddressComponent[]) => {
+    let address = '';
+
+    addressComponents
+      .filter((item) => !item.types.includes('country') && !item.types.includes('postal_code'))
+      .reverse()
+      .map((item) => (address += `${item.long_name} `));
+
+    setValue(name, address.trim());
+    trigger(name);
   };
+
+  // 사용자 입력 주소 form value 세팅
+  const onInput = (e: KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      e.preventDefault();
+    }
+
+    const inputText = inputRef.current?.value;
+    // 공백인 경우 리턴하면 X
+    if (inputText === undefined) {
+      return;
+    }
+    setValue(name, inputText.trim());
+    trigger(name);
+  };
+
+  // 국가 코드(ISO 2자리코드) 반환
+  // TODO: 국가 목록 API 나온 뒤 수정 예정
+  const getCountryCode = (countryName: string) => {
+    if (countryName === '대한민국') return 'kr';
+    else if (countryName === '미국') return 'us';
+    return 'kr';
+  };
+
   return (
-    <LoadScript googleMapsApiKey="AIzaSyBtxP6C_wyzDUffkRlJntn9pDY-MV26QG0" libraries={['places']}>
-      <StandaloneSearchBox onPlacesChanged={onPlacesChanged}>
-        <input
-          ref={searchRef}
-          type="text"
-          placeholder="휴양지 위치를 입력하세요."
-          className="border border-solid border-black/20 rounded-lg focus:outline-main  p-3 w-96"
-          {...register}
-        />
-      </StandaloneSearchBox>
-    </LoadScript>
+    <Autocomplete
+      ref={inputRef}
+      apiKey={'AIzaSyBtxP6C_wyzDUffkRlJntn9pDY-MV26QG0'}
+      onPlaceSelected={(place) => {
+        const addressComponents = place?.address_components;
+        if (!addressComponents) {
+          return;
+        }
+        summarizeAddress(addressComponents);
+      }}
+      onKeyDown={onInput}
+      options={{
+        types: ['(regions)'],
+        componentRestrictions: { country: getCountryCode(country) },
+        fields: ['address_components'],
+      }}
+      className="h-12 w-96 rounded-lg border border-solid border-black/20 p-3 text-sm focus:outline-main"
+    />
   );
 };
 

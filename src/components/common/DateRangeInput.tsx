@@ -9,7 +9,7 @@ import moment from 'moment';
 interface PropsType {
   startDateName: string;
   endDateName: string;
-  setValue: UseFormSetValue<any>;
+  setValue: UseFormSetValue<any>; // TODO: 추후 수정
 }
 
 const DateRangeInput = ({ startDateName, endDateName, setValue }: PropsType) => {

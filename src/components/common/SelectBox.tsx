@@ -1,5 +1,6 @@
 import { MouseEvent, useState } from 'react';
 import { createPortal } from 'react-dom';
+import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 
 import Icon from './Icons';
 
@@ -13,8 +14,22 @@ interface PropsType {
   containerRef: React.RefObject<HTMLDivElement>;
   currentItem: string;
   changeItem: (item: string) => void;
+  size: 'large' | 'small';
+  name?: string;
+  setValue?: UseFormSetValue<any>; // TODO: 추후 수정
+  trigger?: UseFormTrigger<any>; // TODO: 추후 수정
 }
-const SelectBox = ({ items, containerRef, currentItem, changeItem }: PropsType) => {
+
+const SelectBox = ({
+  items,
+  containerRef,
+  currentItem,
+  changeItem,
+  size,
+  name,
+  setValue,
+  trigger,
+}: PropsType) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const onClickToggle = (e: MouseEvent) => {
@@ -25,6 +40,12 @@ const SelectBox = ({ items, containerRef, currentItem, changeItem }: PropsType) 
   const onClickItem = (item: string) => {
     setIsOpen(false);
     changeItem(item);
+
+    // form 값 세팅
+    if (name && setValue && trigger) {
+      setValue(name, item, { shouldDirty: true });
+      trigger(name);
+    }
   };
 
   const onBlur = () => {
@@ -39,20 +60,24 @@ const SelectBox = ({ items, containerRef, currentItem, changeItem }: PropsType) 
         onBlur={onBlur}
         tabIndex={4}
         onClick={onClickToggle}
-        className="flex	h-6 w-16 items-center justify-between rounded-lg border border-grey px-3 "
+        className={`flex ${
+          size === 'large' ? 'h-12 w-36 ' : 'h-6 w-16'
+        } items-center justify-between rounded-lg border border-grey px-3 `}
       >
-        <span className="truncate text-[10px]">{currentItem}</span>
+        <span className={`truncate ${size === 'large' ? 'text-sm' : 'text-[10px]'}`}>
+          {currentItem}
+        </span>
         <span>
-          {isOpen && <Icon.Up></Icon.Up>}
-          {!isOpen && <Icon.Down></Icon.Down>}
+          {isOpen && <Icon.Up size={size === 'large' ? 'large' : 'small'} />}
+          {!isOpen && <Icon.Down size={size === 'large' ? 'large' : 'small'} />}
         </span>
       </div>
       {containerRef.current &&
         createPortal(
           <div
-            className={`${
-              isOpen ? 'visible' : 'invisible'
-            } absolute top-20 mt-2 w-24 rounded-lg border border-grey bg-white`}
+            className={`${isOpen ? 'visible' : 'invisible'} ${
+              size === 'large' ? 'top-12 w-36' : 'top-20 w-16'
+            } absolute mt-2 rounded-lg border border-grey bg-white`}
           >
             <ul className="list-inside list-none ">
               {items.map(({ index, item }) => (
@@ -60,7 +85,9 @@ const SelectBox = ({ items, containerRef, currentItem, changeItem }: PropsType) 
                   key={index.toString()}
                   title={item}
                   onClick={() => onClickItem(item)}
-                  className="cursor-pointer select-none truncate rounded-lg p-2 text-[10px] hover:bg-main/50"
+                  className={`${
+                    size === 'large' ? 'text-sm' : 'text-[10px]'
+                  } cursor-pointer select-none truncate rounded-lg p-2 hover:bg-main/50`}
                 >
                   {item}
                 </li>
