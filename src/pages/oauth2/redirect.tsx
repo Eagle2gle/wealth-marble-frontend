@@ -1,36 +1,21 @@
-import { useEffect } from 'react';
-
-import { useRouter } from 'next/router';
-
-import { useTypeDispatch } from '@/store';
+import wrapper from '@/store';
 import { setId, setToken } from '@/store/modules/user';
 
-import type { GetServerSideProps, InferGetServerSidePropsType } from 'next';
-
-const Redirect = ({ token, id }: InferGetServerSidePropsType<typeof getServerSideProps>) => {
-  const dispatch = useTypeDispatch();
-  const router = useRouter();
-
-  useEffect(() => {
-    dispatch(setToken(token));
-    dispatch(setId(id));
-    router.replace('/');
-  }, [dispatch, router, token, id]);
-
+const Redirect = () => {
   return <></>;
 };
 
-export const getServerSideProps: GetServerSideProps<{ token: string; id: number }> = async (
-  context
-) => {
+export const getServerSideProps = wrapper.getServerSideProps((state) => async (context) => {
   const { token } = context.query;
   if (typeof token !== 'string' || !token) return { notFound: true };
   try {
     const jwtPayload = JSON.parse(Buffer.from(token.split('.')[1], 'base64').toString());
+    state.dispatch(setToken(token));
+    state.dispatch(setId(jwtPayload.id));
     return {
-      props: {
-        token,
-        id: jwtPayload.id,
+      redirect: {
+        destination: '/',
+        permanent: false,
       },
     };
   } catch (e) {
@@ -39,6 +24,6 @@ export const getServerSideProps: GetServerSideProps<{ token: string; id: number 
       notFound: true,
     };
   }
-};
+});
 
 export default Redirect;
