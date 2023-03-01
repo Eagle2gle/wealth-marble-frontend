@@ -5,12 +5,14 @@ import { createSlice, createAction } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 type UserState = {
-  token: string;
+  id: number | undefined;
+  token: string | undefined;
 };
 
 const hydrate = createAction<UserState>(HYDRATE);
 const initialState: UserState = {
-  token: '',
+  id: undefined,
+  token: undefined,
 };
 const userSlice = createSlice({
   name: 'user',
@@ -18,6 +20,9 @@ const userSlice = createSlice({
   reducers: {
     setToken: (state, action: PayloadAction<string>) => {
       state.token = action.payload;
+    },
+    setId: (state, action: PayloadAction<number>) => {
+      state.id = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -31,5 +36,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setToken } = userSlice.actions;
+export const { setToken, setId } = userSlice.actions;
 export default userSlice;
