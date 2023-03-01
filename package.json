@@ -22,6 +22,8 @@
     "daisyui": "^2.47.0",
     "eslint": "8.31.0",
     "eslint-config-next": "13.1.2",
+    "ky": "^0.33.2",
+    "ky-universal": "^0.11.0",
     "moment": "^2.29.4",
     "next": "13.1.2",
     "next-redux-cookie-wrapper": "^2.2.1",
