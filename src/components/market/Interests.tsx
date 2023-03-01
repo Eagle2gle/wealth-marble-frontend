@@ -7,13 +7,19 @@ import Carousel from '../common/Carousel';
 import Icon from '../common/Icons';
 
 interface InterestsProps {
+  type: 'cahoot' | 'market';
   scrollRef: React.RefObject<HTMLDivElement>;
 }
 
-const Interests = ({ scrollRef }: InterestsProps) => {
+const TypeUrlPathMap = {
+  cahoot: 'cahoots',
+  market: 'markets',
+} as const;
+
+const Interests = ({ scrollRef, type }: InterestsProps) => {
   const {
     data: { data: interests },
-  } = useSuspendedQuery<Response<{ id: number; title: string }[]>>(['market/interests'], () =>
+  } = useSuspendedQuery<Response<{ id: number; title: string }[]>>([`${type}/interests`], () =>
     fetch(`${process.env.NEXT_PUBLIC_HOST}/api/mock/markets/interests`).then((res) => res.json())
   );
 
@@ -40,7 +46,7 @@ const Interests = ({ scrollRef }: InterestsProps) => {
         {interests.map(({ id, title }) => (
           <Link
             key={id}
-            href={`/markets/detail/${id}`}
+            href={`/${TypeUrlPathMap[type]}/detail/${id}`}
             className="carousel-item flex-col items-center font-semibold"
           >
             <div className="relative flex h-24 w-52 items-center break-keep rounded bg-gradient-to-br from-blue-start to-blue-end p-6 text-center text-sm text-white">

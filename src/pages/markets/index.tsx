@@ -28,7 +28,7 @@ const Markets = () => {
             <DeadlineBanner />
           </Suspense>
           <Suspense fallback={<p>로딩...</p>}>
-            <Interests scrollRef={scrollRef} />
+            <Interests type="market" scrollRef={scrollRef} />
           </Suspense>
           <div className="flex flex-col-reverse md:flex-row md:justify-center">
             <div className="md:w-1/2 md:pr-2">
@@ -41,9 +41,7 @@ const Markets = () => {
             </div>
           </div>
           <div ref={scrollRef}></div>
-          <Suspense fallback={<p>로딩...</p>}>
-            <List />
-          </Suspense>
+          <List />
         </ErrorBoundary>
       </div>
     </Layout>
