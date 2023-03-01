@@ -2,6 +2,7 @@ import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux
 
 import { createWrapper } from 'next-redux-wrapper';
 import logger from 'redux-logger';
+import { persistStore } from 'redux-persist';
 
 import { configureStore } from '@reduxjs/toolkit';
 import type { ThunkAction } from '@reduxjs/toolkit';
@@ -10,12 +11,16 @@ import rootReducer from './modules';
 
 import type { Action } from 'redux';
 
-const makeStore = () =>
-  configureStore({
-    reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
-    devTools: process.env.NODE_ENV === 'development',
-  });
+const store = configureStore({
+  reducer: rootReducer,
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware({ serializableCheck: false }).concat(logger),
+  devTools: process.env.NODE_ENV === 'development',
+});
+
+const makeStore = () => store;
+
+export const persistor = persistStore(store);
 
 const wrapper = createWrapper(makeStore);
 
