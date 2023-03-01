@@ -33,6 +33,9 @@ module.exports = {
       padding: {
         18: '4.5rem',
       },
+      minHeight: {
+        list: 'calc(100vh - 70px)',
+      },
     },
   },
   daisyui: {
