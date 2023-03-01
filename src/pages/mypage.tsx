@@ -45,9 +45,14 @@ const Mypage = () => {
                   </li>
                   <li>
                     <Link href="/" className="font-medium">
+                      관심 상품
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/" className="font-medium">
                       공모 내역
                     </Link>
-                  </li>{' '}
+                  </li>
                   <li>
                     <Link href="/" className="font-medium">
                       거래 현황
