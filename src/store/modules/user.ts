@@ -24,6 +24,10 @@ const userSlice = createSlice({
     setId: (state, action: PayloadAction<number>) => {
       state.id = action.payload;
     },
+    logout: (state) => {
+      state.token = undefined;
+      state.id = undefined;
+    },
   },
   extraReducers: (builder) => {
     builder.addCase(hydrate, (state, action) => {
@@ -36,5 +40,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setToken, setId } = userSlice.actions;
+export const { setToken, setId, logout } = userSlice.actions;
 export default userSlice;
