@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Layout from '@/components/common/Layout';
+import UserInfo from '@/components/UserInfo';
 import { ErrorBoundary } from '@sentry/nextjs';
 
 const Mypage = () => {
@@ -20,7 +21,7 @@ const Mypage = () => {
               </>
             )}
           >
-            <div className="flex justify-between py-12">
+            <div className="flex justify-between md:py-12">
               <div className="hidden w-1/4 md:block">
                 <p className="text-xl font-black">마이페이지</p>
                 <div className="avatar my-4">
@@ -65,7 +66,9 @@ const Mypage = () => {
                   </li>
                 </ul>
               </div>
-              <div className="w-full bg-main md:w-3/4">우측</div>
+              <div className="w-full md:w-3/4">
+                <UserInfo />
+              </div>
             </div>
           </ErrorBoundary>
         </Suspense>
