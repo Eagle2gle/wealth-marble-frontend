@@ -1,12 +1,11 @@
 import { Suspense } from 'react';
 
-import { GetServerSideProps } from 'next';
-
 import DetailBody from '@/components/cahoot/DetailBody';
 import DetailHeader from '@/components/cahoot/DetailHeader';
 import InterestButton from '@/components/cahoot/InterestButton';
 import OrderMobile from '@/components/cahoot/OrderMobile';
 import Layout from '@/components/common/Layout';
+import wrapper from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
 
 const CahootsDetail = () => {
@@ -33,10 +32,10 @@ const CahootsDetail = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps = wrapper.getServerSideProps(() => async () => {
   return {
     props: {},
   };
-};
+});
 
 export default CahootsDetail;

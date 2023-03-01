@@ -6,9 +6,8 @@ import Interests from '@/components/market/Interests';
 import List from '@/components/market/List';
 import PriceInfo from '@/components/market/PriceInfo';
 import RecentTrade from '@/components/market/RecentTrade';
+import wrapper from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
-
-import type { GetServerSideProps } from 'next';
 
 const Markets = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -48,10 +47,10 @@ const Markets = () => {
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps = wrapper.getServerSideProps(() => async () => {
   return {
     props: {},
   };
-};
+});
 
 export default Markets;

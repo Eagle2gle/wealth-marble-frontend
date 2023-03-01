@@ -6,9 +6,9 @@ import List from '@/components/cahoot/List';
 import Recap from '@/components/cahoot/Recap';
 import Layout from '@/components/common/Layout';
 import Interests from '@/components/market/Interests';
+import wrapper from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
 
-import type { GetServerSideProps } from 'next';
 
 const Cahoots = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -46,8 +46,8 @@ const Cahoots = () => {
 
 export default Cahoots;
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps = wrapper.getServerSideProps((state) => async () => {
   return {
     props: {},
   };
-};
+});

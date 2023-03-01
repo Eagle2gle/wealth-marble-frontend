@@ -13,6 +13,7 @@ import SelectBox from '@/components/common/SelectBox';
 import TextArea from '@/components/common/TextArea';
 import TextInput from '@/components/common/TextInput';
 import PlaceSearchBar from '@/components/PlaceSearchBar';
+import wrapper from '@/store';
 // import Map from '@/components/Map';
 
 const positionOption = [
@@ -346,3 +347,9 @@ export default function CreateCahoot() {
     </Layout>
   );
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(() => async () => {
+  return {
+    props: {},
+  };
+});
