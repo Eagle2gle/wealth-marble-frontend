@@ -2,7 +2,6 @@ import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux
 
 import { createWrapper } from 'next-redux-wrapper';
 import logger from 'redux-logger';
-import { persistStore } from 'redux-persist';
 
 import { configureStore } from '@reduxjs/toolkit';
 import type { ThunkAction } from '@reduxjs/toolkit';
@@ -20,7 +19,6 @@ const store = configureStore({
 
 const makeStore = () => store;
 
-export const persistor = persistStore(store);
 
 const wrapper = createWrapper(makeStore);
 
