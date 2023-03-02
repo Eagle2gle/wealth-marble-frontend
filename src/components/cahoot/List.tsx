@@ -17,7 +17,7 @@ const List = () => {
   };
 
   return (
-    <div className="flex flex-col gap-4 px-4 md:px-0">
+    <div className="flex min-h-list flex-col gap-4 px-4 md:px-0">
       <div className="flex items-center justify-between">
         <label className="font-bold">공모 목록</label>
         <form onSubmit={onSubmit}>

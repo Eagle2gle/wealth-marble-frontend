@@ -11,7 +11,7 @@ interface HeaderPropsType {
 
 const Header = ({ hideOnMobile = false }: HeaderPropsType) => {
   const dispatch = useTypeDispatch();
-  const { id } = useTypeSelector((state) => state.user);
+  const id = useTypeSelector((state) => state.user.id);
 
   const onLogoutClick = () => {
     dispatch(logout());

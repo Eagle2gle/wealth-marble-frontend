@@ -6,18 +6,21 @@ import { fetcher } from '@/libs/client/fetcher';
 import type { CahootDetailType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
 
-import InterestButton from './InterestButton';
 import Order from './Order';
 
+import InterestButton from '../common/InterestButton';
+
 const DetailHeader = () => {
-  const router = useRouter();
+  const {
+    query: { id },
+  } = useRouter();
   const {
     data: {
-      data: { images, title, location, competitionRate, stockPrice, status },
+      data: { images, title, location, competitionRate, stockPrice, status, isInterest },
     },
   } = useSuspendedQuery<Response<CahootDetailType>>(
-    ['cahoot/detail', router.query.id],
-    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=detail`)
+    ['cahoot/detail', id],
+    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${id}?info=detail`)
   );
 
   return (
@@ -60,7 +63,12 @@ const DetailHeader = () => {
             <span className="text-black">{stockPrice.toLocaleString()}원</span>
           </div>
           {status === 'CAHOOTS_ONGOING' && <Order />}
-          <InterestButton hideOnMobile />
+          <InterestButton
+            type="large"
+            isInterest={isInterest}
+            id={parseInt(String(id))}
+            hideOnMobile
+          />
         </div>
       </div>
     </div>

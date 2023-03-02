@@ -1,14 +1,13 @@
 import { Suspense, useRef } from 'react';
 
 import DeadlineBanner from '@/components/cahoot/DeadlineBanner';
+import Interests from '@/components/common/Interests';
 import Layout from '@/components/common/Layout';
-import Interests from '@/components/market/Interests';
 import List from '@/components/market/List';
 import PriceInfo from '@/components/market/PriceInfo';
 import RecentTrade from '@/components/market/RecentTrade';
+import wrapper from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
-
-import type { GetServerSideProps } from 'next';
 
 const Markets = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -28,7 +27,7 @@ const Markets = () => {
             <DeadlineBanner />
           </Suspense>
           <Suspense fallback={<p>로딩...</p>}>
-            <Interests scrollRef={scrollRef} />
+            <Interests type="market" scrollRef={scrollRef} />
           </Suspense>
           <div className="flex flex-col-reverse md:flex-row md:justify-center">
             <div className="md:w-1/2 md:pr-2">
@@ -41,19 +40,17 @@ const Markets = () => {
             </div>
           </div>
           <div ref={scrollRef}></div>
-          <Suspense fallback={<p>로딩...</p>}>
-            <List />
-          </Suspense>
+          <List />
         </ErrorBoundary>
       </div>
     </Layout>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps = wrapper.getServerSideProps(() => async () => {
   return {
     props: {},
   };
-};
+});
 
 export default Markets;

@@ -6,9 +6,8 @@ import RecentUploadCarousel from '@/components/RecentUploadCarousel';
 import RecommendedList from '@/components/RecommendedList';
 import Thumbnail from '@/components/Thumbnail';
 import TopFiveList from '@/components/TopFiveList';
+import wrapper from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
-
-import type { GetServerSideProps } from 'next';
 
 export default function Home() {
   return (
@@ -43,8 +42,8 @@ export default function Home() {
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps = wrapper.getServerSideProps(() => async () => {
   return {
     props: {},
   };
-};
+});

@@ -1,8 +1,8 @@
 import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux';
 
+import { nextReduxCookieMiddleware, wrapMakeStore } from 'next-redux-cookie-wrapper';
 import { createWrapper } from 'next-redux-wrapper';
 import logger from 'redux-logger';
-import { persistStore } from 'redux-persist';
 
 import { configureStore } from '@reduxjs/toolkit';
 import type { ThunkAction } from '@reduxjs/toolkit';
@@ -11,16 +11,22 @@ import rootReducer from './modules';
 
 import type { Action } from 'redux';
 
-const store = configureStore({
-  reducer: rootReducer,
-  middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware({ serializableCheck: false }).concat(logger),
-  devTools: process.env.NODE_ENV === 'development',
-});
-
-const makeStore = () => store;
-
-export const persistor = persistStore(store);
+const makeStore = wrapMakeStore(() =>
+  configureStore({
+    reducer: rootReducer,
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware()
+        .prepend(
+          nextReduxCookieMiddleware({
+            subtrees: ['user'],
+            sameSite: 'lax',
+            maxAge: 60 * 60,
+          })
+        )
+        .concat(logger),
+    devTools: process.env.NODE_ENV === 'development',
+  })
+);
 
 const wrapper = createWrapper(makeStore);
 

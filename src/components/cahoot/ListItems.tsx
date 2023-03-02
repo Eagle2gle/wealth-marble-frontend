@@ -6,11 +6,10 @@ import Link from 'next/link';
 import { fetcher } from '@/libs/client/fetcher';
 import type { CahootListType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
-import classNames from '@/utils/classnames';
 import { formatDate } from '@/utils/date';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import Icon from '../common/Icons';
+import InterestButton from '../common/InterestButton';
 
 interface ListItemsProps {
   keyword: string;
@@ -30,10 +29,6 @@ const ListItems = ({ keyword }: ListItemsProps) => {
   });
   const observerRef = useRef<IntersectionObserver>();
   const listEndRef = useRef<HTMLDivElement>(null);
-
-  const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-  };
 
   useEffect(() => {
     const onIntersection: IntersectionObserverCallback = (entries, observer) => {
@@ -90,15 +85,7 @@ const ListItems = ({ keyword }: ListItemsProps) => {
                       {title}
                     </span>
                     <div className="absolute right-3 top-1 md:top-auto">
-                      <button
-                        onClick={onBookmarkClick}
-                        className={classNames(
-                          'btn-ghost btn-xs btn-circle btn',
-                          isInterest ? 'fill-main text-main' : 'fill-none'
-                        )}
-                      >
-                        <Icon.Bookmark />
-                      </button>
+                      <InterestButton type="small" id={id} isInterest={isInterest} />
                     </div>
                   </div>
                   <div className="flex flex-col gap-1 md:flex-row md:gap-4">
