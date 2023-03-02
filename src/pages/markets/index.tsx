@@ -2,7 +2,7 @@ import { Suspense, useRef } from 'react';
 
 import DeadlineBanner from '@/components/cahoot/DeadlineBanner';
 import Layout from '@/components/common/Layout';
-import Interests from '@/components/market/Interests';
+import Interests from '@/components/common/Interests';
 import List from '@/components/market/List';
 import PriceInfo from '@/components/market/PriceInfo';
 import RecentTrade from '@/components/market/RecentTrade';

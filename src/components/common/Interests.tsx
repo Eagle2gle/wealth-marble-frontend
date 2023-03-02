@@ -6,8 +6,8 @@ import { useTypeSelector } from '@/store';
 import { Interests, Response } from '@/types/response';
 import { useMutation } from '@tanstack/react-query';
 
-import Carousel from '../common/Carousel';
-import Icon from '../common/Icons';
+import Carousel from './Carousel';
+import Icon from './Icons';
 
 interface InterestsProps {
   type: 'cahoot' | 'market';
@@ -26,7 +26,7 @@ const Interests = ({ scrollRef, type }: InterestsProps) => {
     [`${type}/interests`],
     () =>
       ky
-        .get(`${process.env.NEXT_PUBLIC_HOST}/api/auth/interests/me?page=0&size=10`, {
+        .get(`${process.env.NEXT_PUBLIC_HOST}/api/auth/interests/me?page=0&size=10&type=${type}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .json<Response<Interests>>(),
