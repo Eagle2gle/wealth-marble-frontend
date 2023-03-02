@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import Layout from '@/components/common/Layout';
 import ParticapatedContest from '@/components/mypage/ParticipatedContest';
+import Stocks from '@/components/mypage/Stocks';
 import Transactions from '@/components/mypage/Transactions';
 import UserInfo from '@/components/mypage/UserInfo';
 import { ErrorBoundary } from '@sentry/nextjs';
@@ -39,15 +40,10 @@ const Mypage = () => {
                   {/* )} */}
                 </div>
                 <ul className="menu w-4/5 bg-base-100">
-                  <hr className="my-2 border border-main"></hr>
+                  <hr className="border-1 my-2 border-main"></hr>
                   <li>
                     <Link href="/" className="font-medium">
                       내 정보
-                    </Link>
-                  </li>
-                  <li>
-                    <Link href="/" className="font-medium">
-                      관심 상품
                     </Link>
                   </li>
                   <li>
@@ -65,7 +61,7 @@ const Mypage = () => {
                       자산 현황
                     </Link>
                   </li>
-                  <hr className="my-2 border border-main"></hr>
+                  <hr className="border-1 my-2 border-main"></hr>
                   <li>
                     <Link href="/" className="font-medium">
                       로그아웃
@@ -77,6 +73,7 @@ const Mypage = () => {
                 <UserInfo />
                 <ParticapatedContest />
                 <Transactions />
+                <Stocks />
               </div>
             </div>
           </ErrorBoundary>
