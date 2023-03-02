@@ -20,6 +20,7 @@ const makeStore = wrapMakeStore(() =>
           nextReduxCookieMiddleware({
             subtrees: ['user'],
             sameSite: 'lax',
+            maxAge: 60 * 60,
           })
         )
         .concat(logger),
