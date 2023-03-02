@@ -3,7 +3,6 @@ import { Suspense } from 'react';
 import DetailBody from '@/components/cahoot/DetailBody';
 import DetailHeader from '@/components/cahoot/DetailHeader';
 import OrderMobile from '@/components/cahoot/OrderMobile';
-import InterestButton from '@/components/common/InterestButton';
 import Layout from '@/components/common/Layout';
 import { api } from '@/libs/client/api';
 import wrapper from '@/store';
@@ -26,8 +25,7 @@ const CahootsDetail = ({ id }: InferGetServerSidePropsType<typeof getServerSideP
             )}
           >
             <DetailHeader />
-            <InterestButton id={id} type="large" />
-            <DetailBody />
+            <DetailBody id={id} />
             <OrderMobile />
           </ErrorBoundary>
         </Suspense>
