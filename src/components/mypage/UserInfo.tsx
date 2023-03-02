@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import Icon from '@/components/common/Icons';
 
 const UserInfo = () => {
@@ -32,10 +34,17 @@ const UserInfo = () => {
       </div>
       {/* only mobile */}
       <div className="block md:hidden">
-        <div className="border-y-1 border border-grey bg-black/5 py-2 px-4">
-          <p className="text-base font-black">홍길동님</p>
-          <p className="text-xs text-grey-middle">test@gmail.com</p>
-        </div>
+        <Link href={`/mypage/management`}>
+          <div className="border-y-1 border border-grey bg-black/5 py-2 px-4">
+            <p className="flex text-base font-black">
+              <span>홍길동님</span>
+              <span>
+                <Icon.Right />
+              </span>
+            </p>
+            <p className="text-xs text-grey-middle">test@gmail.com</p>
+          </div>
+        </Link>
         <div className="my-6 mx-12 rounded-md border border-main px-6 pt-4 pb-6">
           <p className="text-xl font-bold">내 지갑</p>
           <hr className="border-1 my-2 border-grey"></hr>
