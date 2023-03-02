@@ -10,7 +10,7 @@ const Table = ({ printAllData, border }: PropsType) => {
     <>
       <div className={`${border ? 'rounded border border-grey' : ''} overflow-x-auto text-xs`}>
         <table className={`table-compact table w-full text-center`}>
-          <thead>
+          <thead className={`${border ? 'border-b border-grey' : ''}`}>
             <tr className="text-bold text-dark-grey">
               <th className="bg-white px-5">공모명</th>
               <th className="bg-white px-5">거래 시간</th>
