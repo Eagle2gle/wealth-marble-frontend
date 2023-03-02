@@ -23,6 +23,7 @@ module.exports = {
       black: '#000000',
       red: '#DF6B5A',
       blue: '#364BB3',
+      'dark-grey': '#606060',
       'grey-middle': '#8E949F',
     },
     gradientColorStops: {
