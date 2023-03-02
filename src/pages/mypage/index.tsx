@@ -42,23 +42,28 @@ const Mypage = () => {
                 <ul className="menu w-4/5 bg-base-100">
                   <hr className="border-1 my-2 border-main"></hr>
                   <li>
-                    <Link href="/" className="font-medium">
+                    <Link href="/mypage/management" className="font-medium">
                       내 정보
                     </Link>
                   </li>
                   <li>
-                    <Link href="/" className="font-medium">
+                    <Link href="/mypage/cahoots" className="font-medium">
                       공모 내역
                     </Link>
                   </li>
                   <li>
-                    <Link href="/" className="font-medium">
+                    <Link href="/mypage/transactions" className="font-medium">
                       거래 현황
                     </Link>
                   </li>
                   <li>
-                    <Link href="/" className="font-medium">
+                    <Link href="/mypage/stocks" className="font-medium">
                       자산 현황
+                    </Link>
+                  </li>
+                  <li>
+                    <Link href="/cahoots/create" className="font-medium">
+                      공모 등록
                     </Link>
                   </li>
                   <hr className="border-1 my-2 border-main"></hr>
@@ -69,11 +74,17 @@ const Mypage = () => {
                   </li>
                 </ul>
               </div>
-              <div className="w-full md:w-3/4">
+              <div className="flex w-full flex-col md:w-3/4">
                 <UserInfo />
                 <ParticapatedContest />
                 <Transactions />
                 <Stocks />
+                <Link
+                  href="/cahoots/create"
+                  className="mx-6 my-2 ml-auto block w-40 font-medium text-grey-middle md:hidden"
+                >
+                  공모 등록하러가기 {'>'}
+                </Link>
               </div>
             </div>
           </ErrorBoundary>
