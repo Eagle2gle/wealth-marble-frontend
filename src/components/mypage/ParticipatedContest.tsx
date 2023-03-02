@@ -16,7 +16,7 @@ const ParticapatedContest = () => {
       </div>
       {/* only mobile */}
       <Link href={`/mypage/cahoots`}>
-        <div className="my-6 mx-12 block flex items-center justify-start gap-4 rounded-md border border-grey px-6 py-4 md:hidden">
+        <div className="my-2 mx-12 block flex items-center justify-start gap-4 rounded-md border border-grey px-6 py-4 md:hidden">
           <div>
             <Icon.Gavel />
           </div>
