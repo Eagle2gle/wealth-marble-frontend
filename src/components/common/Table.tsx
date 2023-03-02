@@ -8,7 +8,11 @@ const Table = ({ printAllData, border }: PropsType) => {
   // TODO: 데이터 0개일때 처리
   return (
     <>
-      <div className={`${border ? 'rounded border border-grey' : ''} overflow-x-auto text-xs`}>
+      <div
+        className={`${
+          border ? 'rounded border border-grey' : ''
+        } w-full max-w-4xl overflow-x-auto text-xs`}
+      >
         <table className={`table-compact table w-full text-center`}>
           <thead className={`${border ? 'border-b border-grey' : ''}`}>
             <tr className="text-bold text-dark-grey">
