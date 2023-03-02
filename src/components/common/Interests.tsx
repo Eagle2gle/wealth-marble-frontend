@@ -67,7 +67,7 @@ const Interests = ({ scrollRef, type }: InterestsProps) => {
           휴양지를 추가해 주세요
         </button>
         {token &&
-          data?.data.result.filter(Boolean).map(({ title, picture: { id } }) => (
+          data?.data.result.map(({ title, picture: { id } }) => (
             <Link
               key={id}
               href={`/${TypeUrlPathMap[type]}/detail/${id}`}
