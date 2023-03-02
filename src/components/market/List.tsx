@@ -4,7 +4,11 @@ import ListItems from './ListItems';
 
 import Search from '../common/Search';
 
-const List = () => {
+interface ListProps {
+  scrollRef: React.RefObject<HTMLDivElement>;
+}
+
+const List = ({ scrollRef }: ListProps) => {
   const [keyword, setKeyword] = useState('');
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -13,6 +17,9 @@ const List = () => {
       search: { value: string };
     };
     setKeyword(target.search.value);
+    if (!scrollRef.current) return;
+    const top = window.scrollY + scrollRef.current.getBoundingClientRect().top - 70;
+    window.scrollTo({ top });
   };
 
   return (

@@ -38,7 +38,7 @@ const Cahoots = () => {
             <Recap />
           </Suspense>
           <div ref={scrollRef}></div>
-          <List />
+          <List scrollRef={scrollRef} />
         </ErrorBoundary>
       </div>
     </Layout>
