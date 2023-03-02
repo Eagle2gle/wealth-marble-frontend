@@ -1,7 +1,7 @@
-import ky from 'ky-universal';
 import Link from 'next/link';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
 import { Interests, Response } from '@/types/response';
 import { useMutation } from '@tanstack/react-query';
@@ -25,8 +25,8 @@ const Interests = ({ scrollRef, type }: InterestsProps) => {
   const { data } = useSuspendedQuery<Response<Interests>>(
     [`${type}/interests`],
     () =>
-      ky
-        .get(`${process.env.NEXT_PUBLIC_HOST}/api/auth/interests/me?page=0&size=10&type=${type}`, {
+      api
+        .get(`auth/interests/me?page=0&size=10&type=${type}`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .json<Response<Interests>>(),

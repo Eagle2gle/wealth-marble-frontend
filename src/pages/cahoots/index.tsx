@@ -1,13 +1,12 @@
 import { Suspense, useRef } from 'react';
 
-import ky from 'ky-universal';
-
 import DeadlineBanner from '@/components/cahoot/DeadlineBanner';
 import DeadlineCarousel from '@/components/cahoot/DeadlineCarousel';
 import List from '@/components/cahoot/List';
 import Recap from '@/components/cahoot/Recap';
-import Layout from '@/components/common/Layout';
 import Interests from '@/components/common/Interests';
+import Layout from '@/components/common/Layout';
+import { api } from '@/libs/client/api';
 import wrapper from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
@@ -53,8 +52,8 @@ export const getServerSideProps = wrapper.getServerSideProps((state) => async ()
   const { token } = state.getState().user;
   if (token) {
     await queryClient.prefetchQuery([`cahoots/interests`], () =>
-      ky
-        .get(`${process.env.NEXT_PUBLIC_HOST}/api/auth/interests/me?page=0&size=10`, {
+      api
+        .get(`auth/interests/me?page=0&size=10`, {
           headers: { Authorization: `Bearer ${token}` },
         })
         .json()

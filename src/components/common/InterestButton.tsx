@@ -1,6 +1,5 @@
-import ky from 'ky-universal';
-
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
 import { CahootDetailType } from '@/types/cahoot';
 import { Response } from '@/types/response';
@@ -25,7 +24,9 @@ const InterestButton = ({ id, isInterest, type, hideOnMobile = false }: Interest
     { userId: number; vacationId: number }
   >({
     mutationFn: (body) =>
-      ky.post(`${process.env.NEXT_PUBLIC_HOST}/api/auth/interests`, { json: body }).json(),
+      api
+        .post(`auth/interests`, { json: body, headers: { Authorization: `Bearer ${token}` } })
+        .json(),
   });
   const { mutate: deleteInterest } = useMutation<
     Response,
@@ -33,16 +34,13 @@ const InterestButton = ({ id, isInterest, type, hideOnMobile = false }: Interest
     { userId: number; vacationId: number }
   >({
     mutationFn: (body) =>
-      ky
-        .delete(`${process.env.NEXT_PUBLIC_HOST}/api/auth/interests`, {
-          json: body,
-          headers: { Authorization: `Bearer ${token}` },
-        })
+      api
+        .delete(`auth/interests`, { json: body, headers: { Authorization: `Bearer ${token}` } })
         .json(),
   });
   const { data } = useSuspendedQuery<Response<CahootDetailType>>(
-    ['cahoot/detail', id],
-    () => ky.get(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${id}?info=detail`).json(),
+    ['cahoot/detail', `${id}`],
+    () => api.get(`cahoots/${id}?info=detail`).json(),
     { enabled: type === 'large' }
   );
 
