@@ -9,12 +9,13 @@ export type Interests = {
     title: string;
     shortDescription: string;
     location: string;
+    vacationId: number;
     picture: {
       createdAt: string;
       updatedAt: string;
       id: number;
       type: string;
       url: string;
-    };
+    } | null;
   }[];
 };
