@@ -6,6 +6,7 @@ import Link from 'next/link';
 
 import Layout from '@/components/common/Layout';
 import ParticapatedContest from '@/components/mypage/ParticipatedContest';
+import Transactions from '@/components/mypage/Transactions';
 import UserInfo from '@/components/mypage/UserInfo';
 import { ErrorBoundary } from '@sentry/nextjs';
 
@@ -75,6 +76,7 @@ const Mypage = () => {
               <div className="w-full md:w-3/4">
                 <UserInfo />
                 <ParticapatedContest />
+                <Transactions />
               </div>
             </div>
           </ErrorBoundary>
