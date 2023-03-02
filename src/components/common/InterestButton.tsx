@@ -1,8 +1,8 @@
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
-import { CahootDetailType } from '@/types/cahoot';
-import { Response } from '@/types/response';
+import type { CahootDetailType } from '@/types/cahoot';
+import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
@@ -15,29 +15,34 @@ interface InterestButtonProps {
   hideOnMobile?: boolean;
 }
 
+type MutationBody = {
+  userId: number;
+  vacationId: number;
+};
+
 const InterestButton = ({ id, isInterest, type, hideOnMobile = false }: InterestButtonProps) => {
   const token = useTypeSelector((state) => state.user.token);
   const userId = useTypeSelector((state) => state.user.id);
   const queryClient = useQueryClient();
-  const { mutateAsync: addInterest } = useMutation<
-    Response,
-    Error,
-    { userId: number; vacationId: number }
-  >({
+  const onSuccess = () => {
+    queryClient.invalidateQueries({ queryKey: ['cahoot/list'] });
+    queryClient.invalidateQueries({ queryKey: ['cahoot/interests'] });
+    queryClient.invalidateQueries({ queryKey: ['cahoot/detail', `${id}`] });
+    queryClient.invalidateQueries({ queryKey: ['market/list'] });
+  };
+  const { mutate: addInterest } = useMutation<Response, Error, MutationBody>({
     mutationFn: (body) =>
       api
         .post(`auth/interests`, { json: body, headers: { Authorization: `Bearer ${token}` } })
         .json(),
+    onSuccess,
   });
-  const { mutateAsync: deleteInterest } = useMutation<
-    Response,
-    Error,
-    { userId: number; vacationId: number }
-  >({
+  const { mutate: deleteInterest } = useMutation<Response, Error, MutationBody>({
     mutationFn: (body) =>
       api
         .delete(`auth/interests`, { json: body, headers: { Authorization: `Bearer ${token}` } })
         .json(),
+    onSuccess,
   });
   const { data } = useSuspendedQuery<Response<CahootDetailType>>(
     ['cahoot/detail', `${id}`],
@@ -45,19 +50,15 @@ const InterestButton = ({ id, isInterest, type, hideOnMobile = false }: Interest
     { enabled: type === 'large' }
   );
 
-  const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
+  const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
     if (!userId) return;
     const body = { userId, vacationId: id };
     if (isInterest) {
-      await deleteInterest(body);
+      deleteInterest(body);
     } else {
-      await addInterest(body);
+      addInterest(body);
     }
-    queryClient.invalidateQueries({ queryKey: ['cahoot/list'] });
-    queryClient.invalidateQueries({ queryKey: ['cahoot/interests'] });
-    queryClient.invalidateQueries({ queryKey: ['cahoot/detail', `${id}`] });
-    queryClient.invalidateQueries({ queryKey: ['market/list'] });
   };
 
   return userId ? (
