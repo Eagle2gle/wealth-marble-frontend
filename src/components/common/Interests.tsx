@@ -4,10 +4,10 @@ import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
 import { Interests, Response } from '@/types/response';
-import { useMutation } from '@tanstack/react-query';
 
 import Carousel from './Carousel';
 import Icon from './Icons';
+import InterestButton from './InterestButton';
 
 interface InterestsProps {
   type: 'cahoot' | 'market';
@@ -20,7 +20,6 @@ const TypeUrlPathMap = {
 } as const;
 
 const Interests = ({ scrollRef, type }: InterestsProps) => {
-  const userId = useTypeSelector((state) => state.user.id);
   const token = useTypeSelector((state) => state.user.token);
   const { data } = useSuspendedQuery<Response<Interests>>(
     [`${type}/interests`],
@@ -32,23 +31,7 @@ const Interests = ({ scrollRef, type }: InterestsProps) => {
         .json<Response<Interests>>(),
     { enabled: !!token }
   );
-  const { mutate } = useMutation<Response, Error, { userId: number; vacationId: number }>({
-    mutationFn: (body) =>
-      ky
-        .delete(`${process.env.NEXT_PUBLIC_HOST}/api/auth/interests`, {
-          json: body,
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .json(),
-  });
 
-  const onDeleteClick =
-    (interestId: number): React.MouseEventHandler<HTMLButtonElement> =>
-    (e) => {
-      e.preventDefault();
-      if (!userId) return;
-      mutate({ userId, vacationId: interestId });
-    };
   const onAddClick = () => {
     if (!scrollRef.current) return;
     const top = window.scrollY + scrollRef.current.getBoundingClientRect().top - 70;
@@ -67,21 +50,16 @@ const Interests = ({ scrollRef, type }: InterestsProps) => {
           휴양지를 추가해 주세요
         </button>
         {token &&
-          data?.data.result.map(({ title, picture: { id } }) => (
+          data?.data.result.map(({ title, vacationId }) => (
             <Link
-              key={id}
-              href={`/${TypeUrlPathMap[type]}/detail/${id}`}
+              key={vacationId}
+              href={`/${TypeUrlPathMap[type]}/detail/${vacationId}`}
               className="carousel-item flex-col items-center font-semibold"
             >
               <div className="relative flex h-24 w-52 items-center justify-center break-keep rounded bg-gradient-to-br from-blue-start to-blue-end p-6 text-center text-sm text-white">
                 {title}
                 <div className="absolute right-1 top-1">
-                  <button
-                    onClick={onDeleteClick(id)}
-                    className="btn-ghost btn-xs btn-circle btn fill-main text-main"
-                  >
-                    <Icon.Bookmark />
-                  </button>
+                  <InterestButton type="small" id={vacationId} isInterest />
                 </div>
               </div>
             </Link>
