@@ -60,30 +60,32 @@ const InterestButton = ({ id, isInterest, type, hideOnMobile = false }: Interest
     queryClient.invalidateQueries({ queryKey: ['market/list'] });
   };
 
-  return type === 'small' ? (
-    <button
-      onClick={onBookmarkClick}
-      className={classNames(
-        'btn-ghost btn-xs btn-circle btn',
-        isInterest ? 'fill-main text-main' : 'fill-none'
-      )}
-    >
-      <Icon.Bookmark />
-    </button>
-  ) : (
-    <button
-      className={classNames(
-        'btn-ghost btn mx-4 gap-1 border-grey',
-        data?.data.isInterest ? 'fill-main text-main' : 'fill-none',
-        hideOnMobile ? 'hidden md:flex' : 'md:hidden'
-      )}
-      onClick={onBookmarkClick}
-    >
-      <Icon.Bookmark />
-      <span className="font-medium">관심상품</span>
-      <span>{data?.data.interestCount.toLocaleString()}</span>
-    </button>
-  );
+  return userId ? (
+    type === 'small' ? (
+      <button
+        onClick={onBookmarkClick}
+        className={classNames(
+          'btn-ghost btn-xs btn-circle btn',
+          isInterest ? 'fill-main text-main' : 'fill-none'
+        )}
+      >
+        <Icon.Bookmark />
+      </button>
+    ) : (
+      <button
+        className={classNames(
+          'btn-ghost btn mx-4 gap-1 border-grey',
+          data?.data.isInterest ? 'fill-main text-main' : 'fill-none',
+          hideOnMobile ? 'hidden md:flex' : 'md:hidden'
+        )}
+        onClick={onBookmarkClick}
+      >
+        <Icon.Bookmark />
+        <span className="font-medium">관심상품</span>
+        <span>{data?.data.interestCount.toLocaleString()}</span>
+      </button>
+    )
+  ) : null;
 };
 
 export default InterestButton;
