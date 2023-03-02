@@ -5,8 +5,10 @@ import DetailHeader from '@/components/cahoot/DetailHeader';
 import OrderMobile from '@/components/cahoot/OrderMobile';
 import InterestButton from '@/components/common/InterestButton';
 import Layout from '@/components/common/Layout';
+import { api } from '@/libs/client/api';
 import wrapper from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
+import { QueryClient } from '@tanstack/react-query';
 
 import type { InferGetServerSidePropsType } from 'next';
 
@@ -38,6 +40,17 @@ export const getServerSideProps = wrapper.getServerSideProps<{ id: number }>(
   () => async (context) => {
     const { id } = context.query;
     if (typeof id !== 'string' || !parseInt(id)) return { notFound: true };
+
+    const queryClient = new QueryClient();
+    try {
+      await queryClient.fetchQuery(['cahoot/detail', id], () =>
+        api.get(`cahoots/${id}?info=detail`).json()
+      );
+    } catch (e) {
+      return {
+        notFound: true,
+      };
+    }
 
     return {
       props: {
