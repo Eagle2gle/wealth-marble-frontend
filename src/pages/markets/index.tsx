@@ -40,7 +40,7 @@ const Markets = () => {
             </div>
           </div>
           <div ref={scrollRef}></div>
-          <List />
+          <List scrollRef={scrollRef} />
         </ErrorBoundary>
       </div>
     </Layout>
