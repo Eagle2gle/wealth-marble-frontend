@@ -4,7 +4,7 @@ import { useTypeSelector } from '@/store';
 import { CahootDetailType } from '@/types/cahoot';
 import { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import Icon from './Icons';
 
@@ -18,7 +18,8 @@ interface InterestButtonProps {
 const InterestButton = ({ id, isInterest, type, hideOnMobile = false }: InterestButtonProps) => {
   const token = useTypeSelector((state) => state.user.token);
   const userId = useTypeSelector((state) => state.user.id);
-  const { mutate: addInterest } = useMutation<
+  const queryClient = useQueryClient();
+  const { mutateAsync: addInterest } = useMutation<
     Response,
     Error,
     { userId: number; vacationId: number }
@@ -28,7 +29,7 @@ const InterestButton = ({ id, isInterest, type, hideOnMobile = false }: Interest
         .post(`auth/interests`, { json: body, headers: { Authorization: `Bearer ${token}` } })
         .json(),
   });
-  const { mutate: deleteInterest } = useMutation<
+  const { mutateAsync: deleteInterest } = useMutation<
     Response,
     Error,
     { userId: number; vacationId: number }
@@ -44,15 +45,19 @@ const InterestButton = ({ id, isInterest, type, hideOnMobile = false }: Interest
     { enabled: type === 'large' }
   );
 
-  const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
+  const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = async (e) => {
     e.preventDefault();
     if (!userId) return;
     const body = { userId, vacationId: id };
     if (isInterest) {
-      deleteInterest(body);
+      await deleteInterest(body);
     } else {
-      addInterest(body);
+      await addInterest(body);
     }
+    queryClient.invalidateQueries({ queryKey: ['cahoot/list'] });
+    queryClient.invalidateQueries({ queryKey: ['cahoot/interests'] });
+    queryClient.invalidateQueries({ queryKey: ['cahoot/detail', `${id}`] });
+    queryClient.invalidateQueries({ queryKey: ['market/list'] });
   };
 
   return type === 'small' ? (
