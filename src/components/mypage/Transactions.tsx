@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import Icon from '@/components/common/Icons';
-import TransactionType from '@/components/mypage/TransactionTable';
+import TransactionTable from '@/components/mypage/TransactionTable';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import { Response } from '@/types/response';
@@ -30,7 +30,7 @@ const Transactions = ({ token }: PropsType) => {
         <p className="text-lg font-bold text-main">거래 현황</p>
         <hr className="border-1 my-2 border-grey"></hr>
         <div className="flex flex-col gap-3">
-          <TransactionType printAllData={false} data={data?.data.result} />
+          <TransactionTable printAllData={false} data={data?.data.result} />
         </div>
       </div>
       {/* only mobile */}
