@@ -1,7 +1,24 @@
 import Icon from '@/components/common/Icons';
-import Table from '@/components/common/Table';
+import ContestTable from '@/components/mypage/ContestTable';
+import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { api } from '@/libs/client/api';
+import { useTypeSelector } from '@/store';
+import { Response } from '@/types/response';
+import { ParticipatedContestType } from '@/types/user';
 
 export default function Cahoots() {
+  const token = useTypeSelector((state) => state.user.token);
+  const { data } = useSuspendedQuery<Response<ParticipatedContestType>>(
+    [`user/contest`],
+    () =>
+      api
+        .get(`auth/contestParticipation/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .json<Response<ParticipatedContestType>>(),
+    { enabled: !!token }
+  );
+
   return (
     <div>
       <section className="flex w-full items-center gap-2.5 px-10 py-4 text-center">
@@ -13,7 +30,7 @@ export default function Cahoots() {
       </section>
       <hr className="border-1 mb-2 border-grey" />
       <main className="flex justify-center p-4">
-        <Table printAllData={true} border={true} />
+        <ContestTable printAllData={true} border={true} data={data?.data.result} />
       </main>
     </div>
   );
