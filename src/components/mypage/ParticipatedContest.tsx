@@ -23,7 +23,6 @@ const ParticipatedContest = ({ token }: PropsType) => {
     { enabled: !!token }
   );
 
-
   return (
     <>
       {/* only desktop */}
