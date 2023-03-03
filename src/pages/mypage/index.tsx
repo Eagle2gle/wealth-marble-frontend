@@ -8,12 +8,18 @@ import ParticipatedContest from '@/components/mypage/ParticipatedContest';
 import Stocks from '@/components/mypage/Stocks';
 import Transactions from '@/components/mypage/Transactions';
 import UserInfo from '@/components/mypage/UserInfo';
-import wrapper, { useTypeSelector } from '@/store';
+import wrapper, { useTypeDispatch, useTypeSelector } from '@/store';
+import { logout } from '@/store/modules/user';
 import { ErrorBoundary } from '@sentry/nextjs';
 
 const Mypage = () => {
   const id = useTypeSelector((state) => state.user.id);
   const token = useTypeSelector((state) => state.user.token);
+  const dispatch = useTypeDispatch();
+
+  const onLogoutClick = () => {
+    dispatch(logout());
+  };
 
   return (
     <>
@@ -73,8 +79,8 @@ const Mypage = () => {
                       </li>
                       <hr className="border-1 my-2 border-main"></hr>
                       <li>
-                        <Link href="/" className="font-medium">
-                          로그아웃
+                        <Link href="/" className="font-medium" legacyBehavior>
+                          <a onClick={onLogoutClick}>로그아웃</a>
                         </Link>
                       </li>
                     </ul>
