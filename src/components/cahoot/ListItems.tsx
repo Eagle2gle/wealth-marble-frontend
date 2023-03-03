@@ -85,7 +85,7 @@ const ListItems = ({ keyword }: ListItemsProps) => {
                       {title}
                     </span>
                     <div className="absolute right-3 top-1 md:top-auto">
-                      <InterestButton type="small" id={id} isInterest={isInterest} />
+                      <InterestButton type="cahoot" size="small" id={id} isInterest={isInterest} />
                     </div>
                   </div>
                   <div className="flex flex-col gap-1 md:flex-row md:gap-4">

@@ -59,7 +59,7 @@ const Interests = ({ scrollRef, type }: InterestsProps) => {
               <div className="relative flex h-24 w-52 items-center justify-center break-keep rounded bg-gradient-to-br from-blue-start to-blue-end p-6 text-center text-sm text-white">
                 {title}
                 <div className="absolute right-1 top-1">
-                  <InterestButton type="small" id={vacationId} isInterest />
+                  <InterestButton type={type} size="small" id={vacationId} isInterest />
                 </div>
               </div>
             </Link>
