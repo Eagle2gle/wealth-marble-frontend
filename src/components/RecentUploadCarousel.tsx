@@ -42,14 +42,15 @@ const RecentUploadCarousel = () => {
               {/* 이미지 */}
               {/* TODO: 이미지 연결 */}
               <div className="w-24 rounded-full bg-grey">
-                {/* <Image
-                  alt="공모 이미지"
-                  src={images}
-                  className="object-contain"
-                  fill
-                  width={96}
-                  height={96}
-                /> */}
+                {images[0] && (
+                  <Image
+                    alt="공모 이미지"
+                    src={images[0]}
+                    className="rounded-full object-contain"
+                    fill
+                    sizes="96px"
+                  />
+                )}
               </div>
             </div>
             <div className="w-32 overflow-ellipsis text-center overflow-hidden text-sm whitespace-nowrap">
