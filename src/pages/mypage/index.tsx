@@ -81,9 +81,9 @@ const Mypage = () => {
                   </div>
                   <div className="flex w-full flex-col md:w-3/4">
                     <UserInfo token={token} />
-                    <ParticipatedContest />
-                    <Transactions />
-                    <Stocks />
+                    <ParticipatedContest token={token} />
+                    {/* <Transactions />
+                    <Stocks /> */}
                     <Link
                       href="/cahoots/create"
                       className="mx-6 my-2 ml-auto block w-40 font-medium text-grey-middle md:hidden"
