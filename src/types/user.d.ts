@@ -1,4 +1,3 @@
-import { Transactions } from '@/components/mypage/Transactions';
 export type UserInfoType = {
   username: string;
   cash: number;
@@ -24,10 +23,22 @@ export type TransactionType = {
   transactionType: string;
 };
 
+export type StockType = {
+  title: string;
+  profitRate: number;
+  currentPrice: number;
+  pricePerStock: number;
+  totalAmount: number;
+};
+
 export type ParticipatedContestType = {
   result: ContestType[];
 };
 
 export type TransactionsType = {
   result: TransactionType[];
+};
+
+export type StocksType = {
+  result: StockType[];
 }

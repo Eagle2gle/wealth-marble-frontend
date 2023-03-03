@@ -83,7 +83,7 @@ const Mypage = () => {
                     <UserInfo token={token} />
                     <ParticipatedContest token={token} />
                     <Transactions token={token} />
-                    {/* <Stocks /> */}
+                    <Stocks token={token} />
                     <Link
                       href="/cahoots/create"
                       className="mx-6 my-2 ml-auto block w-40 font-medium text-grey-middle md:hidden"
