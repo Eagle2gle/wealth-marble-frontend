@@ -1,6 +1,7 @@
 import { Suspense } from 'react';
 
 import Layout from '@/components/common/Layout';
+import DetailHeader from '@/components/market/DetailHeader';
 import { api } from '@/libs/client/api';
 import wrapper from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
@@ -19,6 +20,7 @@ const MarketDetail = () => {
           )}
         >
           <Suspense fallback={<p>로딩...</p>}>
+            <DetailHeader />
           </Suspense>
         </ErrorBoundary>
       </div>
