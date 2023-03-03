@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import Layout from '@/components/common/Layout';
-import ParticapatedContest from '@/components/mypage/ParticipatedContest';
+import ParticipatedContest from '@/components/mypage/ParticipatedContest';
 import Stocks from '@/components/mypage/Stocks';
 import Transactions from '@/components/mypage/Transactions';
 import UserInfo from '@/components/mypage/UserInfo';
@@ -81,7 +81,7 @@ const Mypage = () => {
                   </div>
                   <div className="flex w-full flex-col md:w-3/4">
                     <UserInfo token={token} />
-                    <ParticapatedContest />
+                    <ParticipatedContest />
                     <Transactions />
                     <Stocks />
                     <Link

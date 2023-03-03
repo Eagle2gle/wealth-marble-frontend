@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Icon from '@/components/common/Icons';
 import Table from '@/components/common/Table';
 
-const ParticapatedContest = () => {
+const ParticipatedContest = () => {
   return (
     <>
       {/* only desktop */}
@@ -33,4 +33,4 @@ const ParticapatedContest = () => {
   );
 };
 
-export default ParticapatedContest;
+export default ParticipatedContest;
