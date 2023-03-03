@@ -7,7 +7,7 @@ import Layout from '@/components/common/Layout';
 import { api } from '@/libs/client/api';
 import wrapper from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
-import { QueryClient } from '@tanstack/react-query';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 import type { InferGetServerSidePropsType } from 'next';
 
@@ -53,6 +53,7 @@ export const getServerSideProps = wrapper.getServerSideProps<{ id: number }>(
     return {
       props: {
         id: parseInt(id),
+        dehydratedState: dehydrate(queryClient),
       },
     };
   }
