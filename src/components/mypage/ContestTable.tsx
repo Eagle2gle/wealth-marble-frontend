@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { ContestType } from '@/types/user';
 
 interface PropsType {
@@ -51,7 +53,9 @@ const ContestTable = ({ printAllData, data, border }: PropsType) => {
         </table>
       </div>
       {!printAllData && data.length > 3 && (
-        <button className="btn-primary btn-block btn-sm btn">More</button>
+        <Link href="/mypage/cahoots" className="font-medium">
+          <button className="btn-primary btn-block btn-sm btn">More</button>
+        </Link>
       )}
     </>
   );

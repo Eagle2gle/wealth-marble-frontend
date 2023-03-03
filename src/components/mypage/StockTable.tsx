@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { StockType } from '@/types/user';
 
 interface PropsType {
@@ -47,7 +49,9 @@ const StockTable = ({ printAllData, data, border }: PropsType) => {
         </table>
       </div>
       {!printAllData && data.length > 3 && (
-        <button className="btn-primary btn-block btn-sm btn">More</button>
+        <Link href="/mypage/stocks" className="font-medium">
+          <button className="btn-primary btn-block btn-sm btn">More</button>
+        </Link>
       )}
     </>
   );
