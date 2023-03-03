@@ -37,7 +37,7 @@ const RecentUploadCarousel = () => {
                   <Image
                     alt="공모 이미지"
                     src={images[0]}
-                    className="object-contain"
+                    className="rounded-full object-contain"
                     fill
                     sizes="96px"
                   />
