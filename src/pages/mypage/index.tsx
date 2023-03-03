@@ -1,6 +1,5 @@
 import { Suspense } from 'react';
 
-import { GetServerSideProps } from 'next';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -9,7 +8,7 @@ import ParticapatedContest from '@/components/mypage/ParticipatedContest';
 import Stocks from '@/components/mypage/Stocks';
 import Transactions from '@/components/mypage/Transactions';
 import UserInfo from '@/components/mypage/UserInfo';
-import { useTypeSelector } from '@/store';
+import wrapper, { useTypeSelector } from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
 
 const Mypage = () => {
@@ -98,16 +97,16 @@ const Mypage = () => {
         </Layout>
       ) : (
         // TODO: 로그인 X시 띄울 화면 기획 필요
-        <div>로그인 후 이용해주세요</div>
+        <Layout>로그인 후 이용해주세요</Layout>
       )}
     </>
   );
 };
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps = wrapper.getServerSideProps(() => async () => {
   return {
     props: {},
   };
-};
+});
 
 export default Mypage;
