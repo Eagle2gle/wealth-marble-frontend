@@ -64,7 +64,8 @@ const DetailHeader = () => {
           </div>
           {status === 'CAHOOTS_ONGOING' && <Order />}
           <InterestButton
-            type="large"
+            type="cahoot"
+            size="large"
             isInterest={isInterest}
             id={parseInt(String(id))}
             hideOnMobile

@@ -34,7 +34,7 @@ const DetailBody = ({ id }: DetailBodyProps) => {
 
   return (
     <>
-      <InterestButton id={id} type="large" isInterest={isInterest} />
+      <InterestButton type="cahoot" id={id} size="large" isInterest={isInterest} />
       <TabButton tabs={TABS} currentTab={tab} onTabClick={onTabClick} />
       <div className={classNames(tab === '정보' ? 'flex flex-col' : 'hidden', 'gap-[inherit]')}>
         <DetailInfo />
