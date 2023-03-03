@@ -5,7 +5,7 @@ import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { fetcher } from '@/libs/client/fetcher';
 import type { CahootDetailType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
-import dateFormat from '@/utils/dateFormat';
+import { formatDate } from '@/utils/date';
 
 import Carousel from '../common/Carousel';
 
@@ -20,7 +20,7 @@ const DetailInfo = () => {
         stockNum,
         stockStart,
         stockEnd,
-        descritption,
+        description,
       },
     },
   } = useSuspendedQuery<Response<CahootDetailType>>(
@@ -29,21 +29,23 @@ const DetailInfo = () => {
   );
   return (
     <>
-      <Carousel itemCount={images.length ?? 0}>
-        {images.map((imageUrl, index) => (
-          <div key={index} className="carousel-item relative h-96 w-full bg-grey">
-            <Image
-              alt="image"
-              src={imageUrl}
-              className="object-contain"
-              fill
-              placeholder="blur"
-              blurDataURL={imageUrl}
-              sizes="768px"
-            />
-          </div>
-        ))}
-      </Carousel>
+      {!!images.length && (
+        <Carousel itemCount={images.length ?? 0}>
+          {images.map((imageUrl, index) => (
+            <div key={index} className="carousel-item relative h-96 w-full bg-grey">
+              <Image
+                alt="image"
+                src={imageUrl}
+                className="object-contain"
+                fill
+                placeholder="blur"
+                blurDataURL={imageUrl}
+                sizes="768px"
+              />
+            </div>
+          ))}
+        </Carousel>
+      )}
       <div className="mx-4 flex flex-col gap-2 md:mx-0">
         <label className="font-bold">공모 정보</label>
         <div className="flex break-keep border-y border-grey py-4">
@@ -63,16 +65,16 @@ const DetailInfo = () => {
           <div className="flex flex-1 flex-col justify-between gap-4 border-grey px-1 text-center">
             공모 기간
             <span className="text-sm font-bold md:text-base">
-              <span>{dateFormat(stockStart ?? '')}</span>
+              <span>{formatDate(stockStart ?? '')}</span>
               <span> ~ </span>
-              <span>{dateFormat(stockEnd ?? '')}</span>
+              <span>{formatDate(stockEnd ?? '')}</span>
             </span>
           </div>
         </div>
       </div>
       <div className="mx-4 flex flex-col gap-2 md:mx-0">
         <label className="font-bold">공모 아이디어 소개</label>
-        {descritption}
+        {description}
       </div>
     </>
   );

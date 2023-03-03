@@ -1,30 +1,104 @@
+import { useEffect, useState } from 'react';
+
+import { useRouter } from 'next/router';
+
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import type { CahootDeadlineType } from '@/types/cahoot';
+import type { CahootDeadlineMiniType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
+import classNames from '@/utils/classnames';
 
 import Icon from '../common/Icons';
+
+const INTERVAL_DURATION = 3000;
+const TRANSITION_DURATION = 300;
 
 const DeadlineBanner = () => {
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<CahootDeadlineType>>(['cahoot/deadline'], () =>
-    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots?status=ending-soon`).then((res) =>
+  } = useSuspendedQuery<Response<CahootDeadlineMiniType>>(['cahoot/deadline-mini'], () =>
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/mock/cahoots/mini?status=ending-soon`).then((res) =>
       res.json()
     )
   );
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isMouseOver, setIsMouseOver] = useState(false);
+  const [isTransition, setIsTransition] = useState(true);
+  const [items, setItems] = useState<CahootDeadlineMiniType['result']>([]);
+  const router = useRouter();
+
+  const onBannerClick = () => {
+    if (!items.length) return;
+    router.push(`/cahoots/detail/${items[currentIndex].id}`);
+  };
+  // 마우스 오버 시 슬라이드 이동 멈춤
+  const onMouseOver = () => {
+    if (!items.length || items.length === 1) return;
+    setIsMouseOver(true);
+  };
+  const onMouseOut = () => {
+    if (!items.length || items.length === 1) return;
+    setIsMouseOver(false);
+  };
+  // 슬라이드 이동 설정
+  useEffect(() => {
+    if (!items.length || items.length === 1) return;
+    const interval = setInterval(() => {
+      if (isMouseOver) return;
+      setCurrentIndex((prev) => prev + 1);
+      setIsTransition(true);
+    }, INTERVAL_DURATION);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [isMouseOver, items]);
+  // 무한 슬라이드를 위한 복제 슬라이드 추가
+  useEffect(() => {
+    if (!result.length) return;
+    if (result.length === 1) {
+      setItems([...result]);
+      return;
+    }
+    setItems([...result, result[0]]);
+  }, [result]);
+  // 마지막 슬라이드에서 복제 슬라이드로 이동 시 첫 슬라이드로 변경
+  useEffect(() => {
+    if (!items.length || items.length === 1) return;
+    if (currentIndex === items.length - 1) {
+      setTimeout(() => {
+        setIsTransition(false);
+        setCurrentIndex(0);
+      }, TRANSITION_DURATION);
+    }
+  }, [currentIndex, items]);
 
   return (
-    <div className="flex h-12 w-full max-w-3xl cursor-pointer items-center justify-between bg-tab px-4 text-[8px] font-semibold md:text-xs">
-      <div className="flex items-center gap-4">
-        <div className="rounded-2xl border border-black/50 bg-grey p-1.5">오늘 마감 임박</div>
-        <div className="flex gap-2">
-          <span className="text-main">[공모]</span>
-          <div>
-            <span>{result[0]?.title}</span>
-            {/* 참여율 추가 예정 */}
-            <span className="ml-1 text-main">참여율 % 달성</span>
+    <div
+      className="flex h-12 w-full cursor-pointer items-center justify-between bg-tab pl-2 text-[8px] font-semibold md:pl-4 md:text-xs"
+      onMouseOver={onMouseOver}
+      onMouseOut={onMouseOut}
+      onClick={onBannerClick}
+    >
+      <div className="flex items-center gap-1 md:gap-4">
+        <div className="rounded-2xl border border-black/50 bg-grey p-1 md:p-1.5">
+          오늘 마감 임박
+        </div>
+        <span className="text-main md:-mx-2">[공모]</span>
+        <div className="overflow-hidden">
+          <div
+            className={classNames(
+              'flex h-8 flex-col',
+              isTransition ? 'transition-all duration-300' : ''
+            )}
+            style={{ transform: `translateY(-${currentIndex}00%)` }}
+          >
+            {items.map(({ competitionRate, title }, index) => (
+              <div key={index} className="flex h-full flex-none items-center gap-1 md:gap-2">
+                <span className="truncate">{title}</span>
+                <span className="text-main">경쟁률 {competitionRate}%</span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

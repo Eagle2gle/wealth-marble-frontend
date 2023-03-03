@@ -1,5 +1,6 @@
 import { useDispatch, useSelector, type TypedUseSelectorHook } from 'react-redux';
 
+import { nextReduxCookieMiddleware, wrapMakeStore } from 'next-redux-cookie-wrapper';
 import { createWrapper } from 'next-redux-wrapper';
 import logger from 'redux-logger';
 
@@ -10,12 +11,22 @@ import rootReducer from './modules';
 
 import type { Action } from 'redux';
 
-const makeStore = () =>
+const makeStore = wrapMakeStore(() =>
   configureStore({
     reducer: rootReducer,
-    middleware: (getDefaultMiddleware) => getDefaultMiddleware().concat(logger),
+    middleware: (getDefaultMiddleware) =>
+      getDefaultMiddleware()
+        .prepend(
+          nextReduxCookieMiddleware({
+            subtrees: ['user'],
+            sameSite: 'lax',
+            maxAge: 60 * 60,
+          })
+        )
+        .concat(logger),
     devTools: process.env.NODE_ENV === 'development',
-  });
+  })
+);
 
 const wrapper = createWrapper(makeStore);
 

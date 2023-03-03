@@ -8,34 +8,38 @@ import type { Response } from '@/types/response';
 
 import Order from './Order';
 
-import Icon from '../common/Icons';
+import InterestButton from '../common/InterestButton';
 
 const DetailHeader = () => {
-  const router = useRouter();
+  const {
+    query: { id },
+  } = useRouter();
   const {
     data: {
-      data: { images, title, location, competitionRate, stockPrice },
+      data: { images, title, location, competitionRate, stockPrice, status, isInterest },
     },
   } = useSuspendedQuery<Response<CahootDetailType>>(
-    ['cahoot/detail', router.query.id],
-    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=detail`)
+    ['cahoot/detail', id],
+    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${id}?info=detail`)
   );
 
   return (
     <div className="mx-4 mt-4 flex gap-3 md:mx-0 md:gap-5">
       <div className="avatar">
         <div className="relative h-36 w-full bg-grey md:h-80">
-          <Image
-            alt="image"
-            src={images[0]}
-            className="object-contain"
-            fill
-            placeholder="blur"
-            blurDataURL={images[0]}
-            sizes="(max-width: 768px) 100vw,
+          {images[0] && (
+            <Image
+              alt="image"
+              src={images[0]}
+              className="object-contain"
+              fill
+              placeholder="blur"
+              blurDataURL={images[0]}
+              sizes="(max-width: 768px) 100vw,
               (max-width: 1200px) 50vw,
               33vw"
-          />
+            />
+          )}
         </div>
       </div>
       <div className="border-l border-black/50"></div>
@@ -58,12 +62,13 @@ const DetailHeader = () => {
             주당 가격
             <span className="text-black">{stockPrice.toLocaleString()}원</span>
           </div>
-          <Order />
-          <button className="btn-ghost btn hidden gap-1 border-grey fill-none md:flex">
-            <Icon.Bookmark />
-            <span className="font-medium">관심상품</span>
-            <span>1,239</span>
-          </button>
+          {status === 'CAHOOTS_ONGOING' && <Order />}
+          <InterestButton
+            type="large"
+            isInterest={isInterest}
+            id={parseInt(String(id))}
+            hideOnMobile
+          />
         </div>
       </div>
     </div>

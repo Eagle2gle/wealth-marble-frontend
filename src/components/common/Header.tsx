@@ -1,5 +1,8 @@
 import Link from 'next/link';
 
+import { useTypeDispatch, useTypeSelector } from '@/store';
+import { logout } from '@/store/modules/user';
+
 import Icon from './Icons';
 
 interface HeaderPropsType {
@@ -7,21 +10,28 @@ interface HeaderPropsType {
 }
 
 const Header = ({ hideOnMobile = false }: HeaderPropsType) => {
+  const dispatch = useTypeDispatch();
+  const id = useTypeSelector((state) => state.user.id);
+
+  const onLogoutClick = () => {
+    dispatch(logout());
+  };
+
   return (
     <div
       className={`${
-        hideOnMobile ? 'md:visible invisible' : ''
-      } fixed z-50 bg-base-100 navbar border-b border-grey md:shadow-md md:border-none justify-center`}
+        hideOnMobile ? 'invisible md:visible' : ''
+      } navbar fixed z-50 justify-center border-b border-grey bg-base-100 md:border-none md:shadow-md`}
     >
-      <div className="max-w-3xl justify-center w-full">
+      <div className="w-full max-w-3xl justify-center">
         <div className="navbar-start flex">
           <Link
             href="/"
-            className="hidden md:inline-flex btn btn-ghost normal-case text-2xl font-black text-main"
+            className="btn-ghost btn hidden text-2xl font-black normal-case text-main md:inline-flex"
           >
             Marble
           </Link>
-          <ul className="hidden md:flex menu menu-horizontal px-1">
+          <ul className="menu menu-horizontal hidden px-1 md:flex">
             <li>
               <Link href="/cahoots" className="font-black">
                 공모
@@ -35,21 +45,21 @@ const Header = ({ hideOnMobile = false }: HeaderPropsType) => {
           </ul>
         </div>
         <div className="navbar-center flex md:hidden">
-          <Link href="/" className="btn btn-ghost normal-case text-2xl font-black text-main">
+          <Link href="/" className="btn-ghost btn text-2xl font-black normal-case text-main">
             Marble
           </Link>
         </div>
         <div className="navbar-end flex">
-          <div className="dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle">
+          <div className="dropdown-end dropdown">
+            <label tabIndex={0} className="btn-ghost btn-circle btn">
               <div className="indicator">
                 <Icon.Bell />
-                <span className="badge badge-xs bg-main border-main indicator-item"></span>
+                <span className="badge badge-xs indicator-item border-main bg-main"></span>
               </div>
             </label>
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-60"
+              className="dropdown-content menu rounded-box menu-compact mt-3 w-60 bg-base-100 p-2 shadow"
             >
               <li>
                 <a>알림 내역입니다.</a>
@@ -68,23 +78,34 @@ const Header = ({ hideOnMobile = false }: HeaderPropsType) => {
               </li>
             </ul>
           </div>
-          <div className="hidden md:inline-block dropdown dropdown-end">
-            <label tabIndex={0} className="btn btn-ghost btn-circle">
+          <div className="dropdown-end dropdown hidden md:inline-block">
+            <label tabIndex={0} className="btn-ghost btn-circle btn">
               <Icon.User />
             </label>
             <ul
               tabIndex={0}
-              className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box accent-main"
+              className="dropdown-content menu rounded-box menu-compact mt-3 bg-base-100 p-2 accent-main shadow"
             >
-              <li>
-                <a>Profile</a>
-              </li>
-              <li>
-                <a>Settings</a>
-              </li>
-              <li>
-                <a>Logout</a>
-              </li>
+              {id ? (
+                <>
+                  <li>
+                    <Link href="/mypage" className="break-keep">
+                      마이페이지
+                    </Link>
+                  </li>
+                  <li>
+                    <button onClick={onLogoutClick}>로그아웃</button>
+                  </li>
+                </>
+              ) : (
+                <>
+                  <li>
+                    <Link href="/login" className="break-keep">
+                      로그인
+                    </Link>
+                  </li>
+                </>
+              )}
             </ul>
           </div>
         </div>

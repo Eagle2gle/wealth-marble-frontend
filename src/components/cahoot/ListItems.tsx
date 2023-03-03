@@ -6,11 +6,10 @@ import Link from 'next/link';
 import { fetcher } from '@/libs/client/fetcher';
 import type { CahootListType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
-import classNames from '@/utils/classnames';
-import dateFormat from '@/utils/dateFormat';
+import { formatDate } from '@/utils/date';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import Icon from '../common/Icons';
+import InterestButton from '../common/InterestButton';
 
 interface ListItemsProps {
   keyword: string;
@@ -23,17 +22,13 @@ const ListItems = ({ keyword }: ListItemsProps) => {
       fetcher(
         `${
           process.env.NEXT_PUBLIC_HOST
-        }/api/cahoots?status=ongoing&offset=${pageParam}&keyword=${encodeURIComponent(keyword)}`
+        }/api/cahoots?status=ongoing&page=${pageParam}&keyword=${encodeURIComponent(keyword)}`
       )(),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.data.result.length ? allPages.length : false,
   });
   const observerRef = useRef<IntersectionObserver>();
   const listEndRef = useRef<HTMLDivElement>(null);
-
-  const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-  };
 
   useEffect(() => {
     const onIntersection: IntersectionObserverCallback = (entries, observer) => {
@@ -54,7 +49,17 @@ const ListItems = ({ keyword }: ListItemsProps) => {
       {data?.pages.map((page, index) => (
         <Fragment key={index}>
           {page.data.result.map(
-            ({ id, stockNum, competitionRate, stockEnd, location, stockPrice, title, images }) => (
+            ({
+              id,
+              stockNum,
+              competitionRate,
+              stockEnd,
+              location,
+              stockPrice,
+              title,
+              images,
+              isInterest,
+            }) => (
               <Link
                 href={`/cahoots/detail/${id}`}
                 key={id}
@@ -62,13 +67,15 @@ const ListItems = ({ keyword }: ListItemsProps) => {
               >
                 <div className="avatar">
                   <div className="w-32 rounded-l-lg md:rounded-lg"></div>
-                  <Image
-                    src={images[0]}
-                    alt=""
-                    className="rounded-l-lg md:rounded-lg"
-                    fill
-                    sizes="128px"
-                  />
+                  {images[0] && (
+                    <Image
+                      src={images[0]}
+                      alt=""
+                      className="rounded-l-lg md:rounded-lg"
+                      fill
+                      sizes="128px"
+                    />
+                  )}
                 </div>
                 <div className="relative flex w-full flex-col justify-center gap-1 overflow-hidden py-2 pr-4 text-sm md:text-base">
                   <div className="flex flex-col border-b border-grey pb-2.5 font-bold md:flex-row md:gap-2">
@@ -78,16 +85,7 @@ const ListItems = ({ keyword }: ListItemsProps) => {
                       {title}
                     </span>
                     <div className="absolute right-3 top-1 md:top-auto">
-                      <button
-                        onClick={onBookmarkClick}
-                        className={classNames(
-                          'btn-ghost btn-xs btn-circle btn',
-                          // bookmarked ? 'fill-main text-main' : 'fill-none'
-                          'fill-none'
-                        )}
-                      >
-                        <Icon.Bookmark />
-                      </button>
+                      <InterestButton type="small" id={id} isInterest={isInterest} />
                     </div>
                   </div>
                   <div className="flex flex-col gap-1 md:flex-row md:gap-4">
@@ -110,7 +108,7 @@ const ListItems = ({ keyword }: ListItemsProps) => {
                     <div className="flex flex-1 items-center justify-center px-1 md:justify-between">
                       <span className="hidden md:block">공모 마감일</span>
                       <span>
-                        {dateFormat(stockEnd)}
+                        {formatDate(stockEnd)}
                         <span className="md:hidden"> 마감</span>
                       </span>
                     </div>

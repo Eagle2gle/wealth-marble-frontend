@@ -23,9 +23,21 @@ module.exports = {
       black: '#000000',
       red: '#DF6B5A',
       blue: '#364BB3',
+      'dark-grey': '#606060',
       'grey-middle': '#8E949F',
     },
-    extend: {},
+    gradientColorStops: {
+      'blue-start': '#00628B',
+      'blue-end': '#017797',
+    },
+    extend: {
+      padding: {
+        18: '4.5rem',
+      },
+      minHeight: {
+        list: 'calc(100vh - 70px)',
+      },
+    },
   },
   daisyui: {
     themes: [

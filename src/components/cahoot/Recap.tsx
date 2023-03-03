@@ -4,7 +4,7 @@ import Link from 'next/link';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import type { CahootListType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
-import dateFormat from '@/utils/dateFormat';
+import { formatDate } from '@/utils/date';
 
 import Carousel from '../common/Carousel';
 
@@ -30,12 +30,14 @@ const Recap = () => {
             <div className="avatar z-0">
               {/* 이미지 */}
               <div className="w-32 rounded-t bg-dark-grey"></div>
-              <Image src={images[0]} className="rounded-t" alt="" fill sizes="128px" />
+              {images[0] && (
+                <Image src={images[0]} className="rounded-t" alt="" fill sizes="128px" />
+              )}
               <span className="absolute bottom-5 w-32 overflow-hidden overflow-ellipsis whitespace-nowrap px-2 text-xs text-white">
                 {title}
               </span>
               <span className="absolute bottom-0 w-full bg-black/25 text-center text-xs text-white">
-                {dateFormat(stockEnd)}
+                {formatDate(stockEnd)}
               </span>
             </div>
             <div className="flex w-full flex-col gap-1 rounded-b bg-white p-2 text-xs font-normal">

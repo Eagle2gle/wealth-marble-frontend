@@ -6,29 +6,44 @@ import RecentUploadCarousel from '@/components/RecentUploadCarousel';
 import RecommendedList from '@/components/RecommendedList';
 import Thumbnail from '@/components/Thumbnail';
 import TopFiveList from '@/components/TopFiveList';
-
-import type { GetServerSideProps } from 'next';
+import wrapper from '@/store';
+import { ErrorBoundary } from '@sentry/nextjs';
 
 export default function Home() {
   return (
     <Layout>
       <div className="space-y-6 ">
-        <Thumbnail />
-        <Suspense fallback={<p>error</p>}>
-          <DeadlineBanner />
-        </Suspense>
-        <RecentUploadCarousel />
-        <div className="flex flex-col md:flex-row md:space-x-12">
-          <RecommendedList />
-          <TopFiveList />
-        </div>
+        <ErrorBoundary
+          fallback={({ resetError, error }) => (
+            <>
+              <p>{error.message}</p>
+              <button onClick={() => resetError()}>reset</button>
+            </>
+          )}
+        >
+          <Thumbnail />
+          <Suspense fallback={<p>로딩...</p>}>
+            <DeadlineBanner />
+          </Suspense>
+          <Suspense fallback={<p>로딩...</p>}>
+            <RecentUploadCarousel />
+          </Suspense>
+          <div className="flex flex-col md:flex-row md:space-x-12">
+            <Suspense fallback={<p>로딩...</p>}>
+              <RecommendedList />
+            </Suspense>
+            <Suspense fallback={<p>로딩...</p>}>
+              <TopFiveList />
+            </Suspense>
+          </div>
+        </ErrorBoundary>
       </div>
     </Layout>
   );
 }
 
-export const getServerSideProps: GetServerSideProps = async () => {
+export const getServerSideProps = wrapper.getServerSideProps(() => async () => {
   return {
     props: {},
   };
-};
+});

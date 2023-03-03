@@ -18,7 +18,7 @@ const moduleExports = {
   },
 
   async rewrites() {
-    return [{ source: '/api/:path*', destination: `http://13.125.187.195:8080/api/:path*` }];
+    return [{ source: '/api/:path*', destination: `${process.env.SERVER_DOMAIN}/api/:path*` }];
   },
   sentry: {
     // Use `hidden-source-map` rather than `source-map` as the Webpack `devtool`

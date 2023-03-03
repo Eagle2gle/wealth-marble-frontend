@@ -31,5 +31,9 @@ jobs:
         shell: bash
         run: |
           echo "${{ secrets.SENTRY_TOKEN }}" > .sentryclirc
+      - name: Create .env
+        shell: bash
+        run: |
+          echo "${{ secrets.ENVIRONMENTS }}" > .env
       - name: Build Test
         run: npm run build
