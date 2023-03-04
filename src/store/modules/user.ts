@@ -5,14 +5,14 @@ import { createSlice, createAction } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 
 type UserState = {
-  id: number | undefined;
-  token: string | undefined;
+  id: number | null;
+  token: string | null;
 };
 
 const hydrate = createAction<UserState>(HYDRATE);
 const initialState: UserState = {
-  id: undefined,
-  token: undefined,
+  id: null,
+  token: null,
 };
 const userSlice = createSlice({
   name: 'user',
@@ -25,8 +25,8 @@ const userSlice = createSlice({
       state.id = action.payload;
     },
     logout: (state) => {
-      state.token = undefined;
-      state.id = undefined;
+      state.token = null;
+      state.id = null;
     },
   },
   extraReducers: (builder) => {
