@@ -3,14 +3,12 @@ import Link from 'next/link';
 import Icon from '@/components/common/Icons';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
+import { useTypeSelector } from '@/store';
 import { Response } from '@/types/response';
 import { UserInfoType } from '@/types/user';
 
-interface PropsType {
-  token: string | undefined;
-}
-
-const UserInfo = ({ token }: PropsType) => {
+const UserInfo = () => {
+  const token = useTypeSelector((state) => state.user.token);
   const { data } = useSuspendedQuery<Response<UserInfoType>>(
     [`user/info`],
     () =>
