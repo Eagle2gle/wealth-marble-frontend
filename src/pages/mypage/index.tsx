@@ -14,7 +14,6 @@ import { ErrorBoundary } from '@sentry/nextjs';
 
 const Mypage = () => {
   const id = useTypeSelector((state) => state.user.id);
-  const token = useTypeSelector((state) => state.user.token);
   const dispatch = useTypeDispatch();
 
   const onLogoutClick = () => {
@@ -86,7 +85,7 @@ const Mypage = () => {
                     </ul>
                   </div>
                   <div className="flex w-full flex-col md:w-3/4">
-                    <UserInfo token={token} />
+                    <UserInfo />
                     <ParticipatedContest />
                     <Transactions />
                     <Stocks />
