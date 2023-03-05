@@ -1,5 +1,6 @@
 import Image from 'next/image';
 
+import { PROVIDER_TYPE, ROLE } from '@/constants/mypage';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
@@ -52,9 +53,12 @@ const UserInfoManagement = () => {
             </span>
             <span
               title={data?.data.providerType}
-              className="w-1/3 truncate rounded-lg bg-black/30 py-3 px-4 text-center text-sm text-white"
+              className="w-1/3 truncate rounded-lg bg-black/30 py-3 px-4 text-center text-white"
             >
-              {data?.data.providerType} 연동
+              {data
+                ? PROVIDER_TYPE[data?.data.providerType as keyof typeof PROVIDER_TYPE].TEXT
+                : '소셜'}{' '}
+              연동
             </span>
           </p>
         </div>
@@ -65,10 +69,10 @@ const UserInfoManagement = () => {
             <span className="label-text text-xs">권한</span>
           </label>
           <p className="rounded-lg border border-grey bg-black/5 py-2 px-4 text-dark-grey">
-            {data?.data.role}
+            {data ? ROLE[data?.data.role as keyof typeof ROLE].TEXT : ''}
           </p>
         </div>
-        <button className="btn-primary btn-block btn-sm btn my-6 ">업데이트 하기</button>
+        <button className="btn-primary btn-block btn-md btn my-6 ">업데이트 하기</button>
       </div>
     </main>
   );
