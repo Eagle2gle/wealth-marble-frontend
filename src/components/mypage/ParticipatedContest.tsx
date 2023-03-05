@@ -1,28 +1,11 @@
+import { Suspense } from 'react';
+
 import Link from 'next/link';
 
 import Icon from '@/components/common/Icons';
-import Table from '@/components/mypage/ContestTable';
-import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import { Response } from '@/types/response';
-import { ParticipatedContestType } from '@/types/user';
+import ContestTable from '@/components/mypage/ContestTable';
 
-interface PropsType {
-  token: string | undefined;
-}
-
-const ParticipatedContest = ({ token }: PropsType) => {
-  const { data } = useSuspendedQuery<Response<ParticipatedContestType>>(
-    [`user/contest`],
-    () =>
-      api
-        .get(`auth/contestParticipation/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .json<Response<ParticipatedContestType>>(),
-    { enabled: !!token }
-  );
-
+const ParticipatedContest = () => {
   return (
     <>
       {/* only desktop */}
@@ -30,7 +13,9 @@ const ParticipatedContest = ({ token }: PropsType) => {
         <p className="text-lg font-bold text-main">공모 내역</p>
         <hr className="border-1 my-2 border-grey"></hr>
         <div className="flex flex-col gap-3">
-          <Table printAllData={false} data={data?.data.result} />
+          <Suspense fallback={<p>로딩...</p>}>
+            <ContestTable printAllData={false} />
+          </Suspense>
         </div>
       </div>
       {/* only mobile */}

@@ -1,24 +1,10 @@
+import { Suspense } from 'react';
+
 import Icon from '@/components/common/Icons';
 import TransactionTable from '@/components/mypage/TransactionTable';
-import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import { useTypeSelector } from '@/store';
-import { Response } from '@/types/response';
-import { TransactionsType } from '@/types/user';
+import wrapper from '@/store';
 
 export default function Transactions() {
-  const token = useTypeSelector((state) => state.user.token);
-  const { data } = useSuspendedQuery<Response<TransactionsType>>(
-    [`user/transactions`],
-    () =>
-      api
-        .get(`auth/transactions/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .json<Response<TransactionsType>>(),
-    { enabled: !!token }
-  );
-
   return (
     <div>
       <section className="flex w-full items-center gap-2.5 px-10 py-4 text-center">
@@ -30,8 +16,16 @@ export default function Transactions() {
       </section>
       <hr className="border-1 mb-2 border-grey" />
       <main className="flex justify-center p-4">
-        <TransactionTable printAllData={true} border={true} data={data?.data.result} />
+        <Suspense fallback={<p>로딩...</p>}>
+          <TransactionTable printAllData={true} border={true} />
+        </Suspense>
       </main>
     </div>
   );
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(() => async () => {
+  return {
+    props: {},
+  };
+});

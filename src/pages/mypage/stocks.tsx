@@ -1,24 +1,10 @@
+import { Suspense } from 'react';
+
 import Icon from '@/components/common/Icons';
 import StockTable from '@/components/mypage/StockTable';
-import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import { useTypeSelector } from '@/store';
-import { Response } from '@/types/response';
-import { StocksType } from '@/types/user';
+import wrapper from '@/store';
 
 export default function Cahoots() {
-  const token = useTypeSelector((state) => state.user.token);
-  const { data } = useSuspendedQuery<Response<StocksType>>(
-    [`user/stock`],
-    () =>
-      api
-        .get(`auth/stocks/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .json<Response<StocksType>>(),
-    { enabled: !!token }
-  );
-
   return (
     <div>
       <section className="flex w-full items-center gap-2.5 px-10 py-4 text-center">
@@ -30,8 +16,16 @@ export default function Cahoots() {
       </section>
       <hr className="border-1 mb-2 border-grey" />
       <main className="flex justify-center p-4">
-      <StockTable printAllData={true} border={true} data={data?.data.result} />
+        <Suspense fallback={<p>로딩...</p>}>
+          <StockTable printAllData={true} border={true} />
+        </Suspense>
       </main>
     </div>
   );
 }
+
+export const getServerSideProps = wrapper.getServerSideProps(() => async () => {
+  return {
+    props: {},
+  };
+});

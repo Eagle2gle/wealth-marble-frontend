@@ -1,16 +1,31 @@
 import Link from 'next/link';
 
-import { ContestType } from '@/types/user';
+import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { api } from '@/libs/client/api';
+import { useTypeSelector } from '@/store';
+import { Response } from '@/types/response';
+import { ParticipatedContestType } from '@/types/user';
 
 interface PropsType {
   printAllData: boolean;
-  data: ContestType[] | undefined;
   border?: boolean;
 }
 
 // 공모 내역 테이블
-const ContestTable = ({ printAllData, data, border }: PropsType) => {
-  if (!data || data.length === 0) {
+const ContestTable = ({ printAllData, border }: PropsType) => {
+  const token = useTypeSelector((state) => state.user.token);
+  const { data } = useSuspendedQuery<Response<ParticipatedContestType>>(
+    [`user/contest`],
+    () =>
+      api
+        .get(`auth/contestParticipation/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .json<Response<ParticipatedContestType>>(),
+    { enabled: !!token }
+  );
+
+  if (!data || data?.data.result.length === 0) {
     return <div className="ml-auto mr-auto w-48 py-8 font-bold">아직 참여한 공모가 없어요!</div>;
   }
 
@@ -32,7 +47,7 @@ const ContestTable = ({ printAllData, data, border }: PropsType) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((item, idx) => {
+            {data?.data.result.map((item, idx) => {
               if (printAllData || (!printAllData && idx < 3)) {
                 return (
                   <tr key={idx}>
@@ -52,7 +67,7 @@ const ContestTable = ({ printAllData, data, border }: PropsType) => {
           </tbody>
         </table>
       </div>
-      {!printAllData && data.length > 3 && (
+      {!printAllData && data && data?.data.result.length > 3 && (
         <Link href="/mypage/cahoots" className="font-medium">
           <button className="btn-primary btn-block btn-sm btn">More</button>
         </Link>
