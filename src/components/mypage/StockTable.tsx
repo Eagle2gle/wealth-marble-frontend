@@ -53,8 +53,8 @@ const StockTable = ({ printAllData, border }: PropsType) => {
                   <tr key={idx}>
                     <td className="w-full truncate">{item.title}</td>
                     <td>{item.profitRate}</td>
-                    <td>{item.pricePerStock.toLocaleString()}</td>
                     <td>{item.currentPrice.toLocaleString()}</td>
+                    <td>{item.pricePerStock.toLocaleString()}</td>
                     <td>{item.totalAmount}</td>
                   </tr>
                 );
