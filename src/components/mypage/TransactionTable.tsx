@@ -1,10 +1,12 @@
 import Link from 'next/link';
 
+import { TRANSACTION_TYPE } from '@/constants/mypage';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
 import { Response } from '@/types/response';
 import { TransactionsType } from '@/types/user';
+import classNames from '@/utils/classnames';
 
 interface PropsType {
   printAllData: boolean;
@@ -56,8 +58,17 @@ const TransactionTable = ({ printAllData, border }: PropsType) => {
                     <td>{item.price.toLocaleString()}</td>
                     <td>{item.amount.toLocaleString()}</td>
                     <td>
-                      <div className="badge w-full border-transparent bg-main text-white">
-                        {item.transactionType}
+                      <div
+                        className={classNames(
+                          'badge w-full border-transparent text-white',
+                          TRANSACTION_TYPE[item.transactionType as keyof typeof TRANSACTION_TYPE]
+                            .COLOR
+                        )}
+                      >
+                        {
+                          TRANSACTION_TYPE[item.transactionType as keyof typeof TRANSACTION_TYPE]
+                            .TEXT
+                        }
                       </div>
                     </td>
                   </tr>

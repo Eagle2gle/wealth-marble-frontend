@@ -1,6 +1,7 @@
 import Link from 'next/link';
 
 import Icon from '@/components/common/Icons';
+import { PROVIDER_TYPE, ROLE } from '@/constants/mypage';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
@@ -43,13 +44,17 @@ const UserInfo = () => {
             <span className="w-20">Email:</span>
             <div className="flex flex-col gap-1">
               <span className="">{data?.data.email}</span>
-              <span className="">{data?.data.providerType} 연동</span>
+              <span className="">
+                {data
+                  ? PROVIDER_TYPE[data?.data.providerType as keyof typeof PROVIDER_TYPE].TEXT
+                  : '소셜'}{' '}
+                연동
+              </span>
             </div>
           </div>
           <p className="flex gap-6 text-sm">
             <span className="w-20">권한:</span>
-            {/* TODO: 들어올 수 있는 값 확인 후 한글로 변환 */}
-            <span className="">{data?.data.role}</span>
+            <span className="">{data ? ROLE[data?.data.role as keyof typeof ROLE].TEXT : ''}</span>
             <button className="btn-primary btn-xs btn ml-auto">운영자 신청</button>
           </p>
         </div>
