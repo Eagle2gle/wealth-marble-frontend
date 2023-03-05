@@ -1,7 +1,9 @@
+import { Suspense } from 'react';
+
 import Link from 'next/link';
 
 import Icon from '@/components/common/Icons';
-import Table from '@/components/common/Table';
+import StockTable from '@/components/mypage/StockTable';
 
 const Stocks = () => {
   return (
@@ -11,7 +13,9 @@ const Stocks = () => {
         <p className="text-lg font-bold text-main">자산 현황</p>
         <hr className="border-1 my-2 border-grey"></hr>
         <div className="flex flex-col gap-3">
-          <Table printAllData={false} />
+          <Suspense fallback={<p>로딩...</p>}>
+            <StockTable printAllData={false} />
+          </Suspense>
         </div>
       </div>
       {/* only mobile */}
