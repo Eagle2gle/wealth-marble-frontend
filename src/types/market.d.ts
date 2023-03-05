@@ -10,3 +10,11 @@ export type MarketType = {
 export type MarketListType = {
   result: MarketType[];
 };
+
+export type MarketDetailType = Omit<MarketType, 'picture' | 'country' | 'priceStatus'> & {
+  title: string;
+  location: string;
+  expectedRateOfReturn: number;
+  pictures: string[];
+  userIds: number[];
+};

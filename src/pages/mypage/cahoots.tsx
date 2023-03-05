@@ -1,5 +1,8 @@
+import { Suspense } from 'react';
+
 import Icon from '@/components/common/Icons';
-import Table from '@/components/common/Table';
+import ContestTable from '@/components/mypage/ContestTable';
+import wrapper from '@/store';
 
 export default function Cahoots() {
   return (
@@ -13,8 +16,25 @@ export default function Cahoots() {
       </section>
       <hr className="border-1 mb-2 border-grey" />
       <main className="flex justify-center p-4">
-        <Table printAllData={true} border={true} />
+        <Suspense fallback={<p>로딩...</p>}>
+          <ContestTable printAllData={true} border={true} />
+        </Suspense>
       </main>
     </div>
   );
 }
+
+export const getServerSideProps = wrapper.getServerSideProps((state) => async () => {
+  const { id } = state.getState().user;
+  if (!id) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
+  return {
+    props: {},
+  };
+});

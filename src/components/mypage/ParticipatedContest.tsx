@@ -1,9 +1,11 @@
+import { Suspense } from 'react';
+
 import Link from 'next/link';
 
 import Icon from '@/components/common/Icons';
-import Table from '@/components/common/Table';
+import ContestTable from '@/components/mypage/ContestTable';
 
-const ParticapatedContest = () => {
+const ParticipatedContest = () => {
   return (
     <>
       {/* only desktop */}
@@ -11,7 +13,9 @@ const ParticapatedContest = () => {
         <p className="text-lg font-bold text-main">공모 내역</p>
         <hr className="border-1 my-2 border-grey"></hr>
         <div className="flex flex-col gap-3">
-          <Table printAllData={false} />
+          <Suspense fallback={<p>로딩...</p>}>
+            <ContestTable printAllData={false} />
+          </Suspense>
         </div>
       </div>
       {/* only mobile */}
@@ -33,4 +37,4 @@ const ParticapatedContest = () => {
   );
 };
 
-export default ParticapatedContest;
+export default ParticipatedContest;
