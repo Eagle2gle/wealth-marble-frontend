@@ -40,3 +40,21 @@ export const TRANSACTION_TYPE = {
     TEXT: '매도',
   },
 };
+
+export const RANK = {
+  NAMJAK: {
+    TEXT: '남작',
+  },
+  JAJAK: {
+    TEXT: '자작',
+  },
+  BAEKJAK: {
+    TEXT: '백작',
+  },
+  WHOJAK: {
+    TEXT: '후작',
+  },
+  GONGJAK: {
+    TEXT: '공작',
+  },
+};

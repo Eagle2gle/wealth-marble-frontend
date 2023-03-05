@@ -5,6 +5,7 @@ export type UserInfoType = {
   email: string;
   providerType: string;
   role: string;
+  rank: string;
 };
 
 type ContestType = {

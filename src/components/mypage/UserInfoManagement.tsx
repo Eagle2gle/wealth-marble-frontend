@@ -1,6 +1,6 @@
 import Image from 'next/image';
 
-import { PROVIDER_TYPE, ROLE } from '@/constants/mypage';
+import { PROVIDER_TYPE, ROLE, RANK } from '@/constants/mypage';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
@@ -60,6 +60,15 @@ const UserInfoManagement = () => {
                 : '소셜'}{' '}
               연동
             </span>
+          </p>
+        </div>
+        {/* 등급 */}
+        <div>
+          <label className="label">
+            <span className="label-text text-xs">등급</span>
+          </label>
+          <p className="rounded-lg border border-black/10 bg-black/5 py-2 px-4 text-dark-grey">
+            {data ? RANK[data?.data.rank as keyof typeof RANK].TEXT : '남작'}
           </p>
         </div>
         <h2 className="mt-4 text-base font-bold">권한 관리</h2>
