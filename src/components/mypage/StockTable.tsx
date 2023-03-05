@@ -1,16 +1,31 @@
 import Link from 'next/link';
 
-import { StockType } from '@/types/user';
+import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { api } from '@/libs/client/api';
+import { useTypeSelector } from '@/store';
+import { Response } from '@/types/response';
+import { StocksType } from '@/types/user';
 
 interface PropsType {
   printAllData: boolean;
-  data: StockType[] | undefined;
   border?: boolean;
 }
 
 // 자산 현황 테이블
-const StockTable = ({ printAllData, data, border }: PropsType) => {
-  if (!data || data.length === 0) {
+const StockTable = ({ printAllData, border }: PropsType) => {
+  const token = useTypeSelector((state) => state.user.token);
+  const { data } = useSuspendedQuery<Response<StocksType>>(
+    [`user/stock`],
+    () =>
+      api
+        .get(`auth/stocks/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .json<Response<StocksType>>(),
+    { enabled: !!token }
+  );
+
+  if (!data || data?.data.result.length === 0) {
     return <div className="ml-auto mr-auto w-48 py-8 font-bold">아직 보유한 자산이 없어요!</div>;
   }
 
@@ -32,7 +47,7 @@ const StockTable = ({ printAllData, data, border }: PropsType) => {
             </tr>
           </thead>
           <tbody>
-            {data.map((item, idx) => {
+            {data?.data.result.map((item, idx) => {
               if (printAllData || (!printAllData && idx < 3)) {
                 return (
                   <tr key={idx}>
@@ -48,7 +63,7 @@ const StockTable = ({ printAllData, data, border }: PropsType) => {
           </tbody>
         </table>
       </div>
-      {!printAllData && data.length > 3 && (
+      {!printAllData && data && data?.data.result.length > 3 && (
         <Link href="/mypage/stocks" className="font-medium">
           <button className="btn-primary btn-block btn-sm btn">More</button>
         </Link>

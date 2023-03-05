@@ -7,7 +7,7 @@ export type UserInfoType = {
   role: string;
 };
 
-export type ContestType = {
+type ContestType = {
   title: string;
   createdAt: string;
   price: number;
@@ -15,7 +15,7 @@ export type ContestType = {
   status: string;
 };
 
-export type TransactionType = {
+type TransactionType = {
   vacationName: string;
   transactionTime: string;
   price: number;
@@ -23,7 +23,7 @@ export type TransactionType = {
   transactionType: string;
 };
 
-export type StockType = {
+type StockType = {
   title: string;
   profitRate: number;
   currentPrice: number;
@@ -41,4 +41,4 @@ export type TransactionsType = {
 
 export type StocksType = {
   result: StockType[];
-}
+};

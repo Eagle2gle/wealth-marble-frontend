@@ -2,27 +2,8 @@ import Link from 'next/link';
 
 import Icon from '@/components/common/Icons';
 import TransactionTable from '@/components/mypage/TransactionTable';
-import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import { Response } from '@/types/response';
-import { TransactionsType } from '@/types/user';
 
-interface PropsType {
-  token: string | undefined;
-}
-
-const Transactions = ({ token }: PropsType) => {
-  const { data } = useSuspendedQuery<Response<TransactionsType>>(
-    [`user/transactions`],
-    () =>
-      api
-        .get(`auth/transactions/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .json<Response<TransactionsType>>(),
-    { enabled: !!token }
-  );
-
+const Transactions = () => {
   return (
     <>
       {/* only desktop */}
@@ -30,7 +11,7 @@ const Transactions = ({ token }: PropsType) => {
         <p className="text-lg font-bold text-main">거래 현황</p>
         <hr className="border-1 my-2 border-grey"></hr>
         <div className="flex flex-col gap-3">
-          <TransactionTable printAllData={false} data={data?.data.result} />
+          <TransactionTable printAllData={false} />
         </div>
       </div>
       {/* only mobile */}
