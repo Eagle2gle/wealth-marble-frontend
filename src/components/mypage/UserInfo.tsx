@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import Icon from '@/components/common/Icons';
-import { PROVIDER_TYPE, ROLE } from '@/constants/mypage';
+import { PROVIDER_TYPE, ROLE, RANK } from '@/constants/mypage';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
@@ -55,8 +55,16 @@ const UserInfo = () => {
           <p className="flex gap-6 text-sm">
             <span className="w-20">권한:</span>
             <span className="">{data ? ROLE[data?.data.role as keyof typeof ROLE].TEXT : ''}</span>
-            <button className="btn-primary btn-xs btn ml-auto">운영자 신청</button>
+            <span className="ml-auto rounded-lg bg-main px-4 py-1 text-white">
+              등급: {data ? RANK[data?.data.rank as keyof typeof RANK].TEXT : '남작'}
+            </span>
           </p>
+          {/* <p className="flex gap-6 text-sm">
+            <span className="w-20">등급:</span>
+            <span className="">
+              {data ? RANK[data?.data.rank as keyof typeof RANK].TEXT : '남작'}
+            </span>
+          </p> */}
         </div>
       </div>
       {/* only mobile */}
