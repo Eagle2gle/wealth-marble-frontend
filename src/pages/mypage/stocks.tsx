@@ -24,7 +24,16 @@ export default function Cahoots() {
   );
 }
 
-export const getServerSideProps = wrapper.getServerSideProps(() => async () => {
+export const getServerSideProps = wrapper.getServerSideProps((state) => async () => {
+  const { id } = state.getState().user;
+  if (!id) {
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+  }
   return {
     props: {},
   };
