@@ -14,6 +14,10 @@ const moduleExports = {
         protocol: 'https',
         hostname: 'wealth-marble-image.s3.ap-northeast-2.amazonaws.com',
       },
+      {
+        protocol: 'https',
+        hostname: '**',
+      },
     ],
   },
 
