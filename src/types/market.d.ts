@@ -18,3 +18,18 @@ export type MarketDetailType = Omit<MarketType, 'picture' | 'country' | 'priceSt
   pictures: string[];
   userIds: number[];
 };
+
+export type MarketPriceInfoOrder = 'up' | 'down';
+export type MarketPriceInfoType = 'PRICE' | 'PRICE_RATE';
+
+export type MarketPriceInfo = {
+  result: {
+    pictureUrl: string;
+    title: string;
+    currentPrice: number;
+    gap: number;
+    gapRate: number;
+    dividend: number;
+    dividendRate: number;
+  }[];
+};
