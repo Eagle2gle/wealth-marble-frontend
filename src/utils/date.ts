@@ -17,3 +17,14 @@ export const formatTimeWithoutSecond = (date: string) =>
     minute: '2-digit',
     hour12: false,
   }).format(new Date(date || 0));
+
+export const getDayDiff = (endDateString: string) => {
+  const now = new Date();
+  const [endYear, endMonth, endDate] = endDateString.split('-');
+  const [year, month, date] = [now.getFullYear(), now.getMonth(), now.getDate()];
+  return (
+    (new Date(+endYear, +endMonth - 1, +endDate).getTime() -
+      new Date(year, month, date).getTime()) /
+    (24 * 60 * 60 * 1000)
+  );
+};

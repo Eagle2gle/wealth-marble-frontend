@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import type { CahootDeadlineType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
+import { getDayDiff } from '@/utils/date';
 
 import Carousel from '../common/Carousel';
 
@@ -38,13 +39,7 @@ const DeadlineCarousel = () => {
               {title}
             </div>
             <span className="text-xs font-semibold text-black/60">
-              <span className="text-main">
-                {Math.floor(
-                  (new Date(stockEnd).getTime() - new Date().getTime()) / (24 * 60 * 60 * 1000)
-                )}
-                일
-              </span>{' '}
-              남았습니다.
+              <span className="text-main">{getDayDiff(stockEnd)}일</span> 남았습니다.
             </span>
           </Link>
         ))}
