@@ -1,9 +1,6 @@
 <div align="center">
   <br />
   <h2>🌴 부의 마블 - Frontend 🌴</h2>
-  <p>
-    프론트엔드 레포입니다.
-  </p>
   <div>
   우리가 어렸을 때 한 번쯤은 부루마블 게임을 하면서 해외에 땅을 사고 집을 짓고 호텔을 지은 적이 많이 있습니다. <br />
   즐겁게 게임을 했던 그 순간을 현실에서 진행하며 꿈을 이루어 가는 것은 어떨까요? <br /> 휴양지에 투자하여 이익도 얻고 내가 원할 때는 휴양도 즐기는 YOLO의 삶을 저희와 함께 이루어가요.
@@ -14,7 +11,6 @@
   <p>
       <a href="http://wealth-marble.kro.kr/" target="_blank">부의 마블 서비스 바로가기</a>
   </p>
-  <hr />
   <br />
   <img src="https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=Next.js&logoColor=white"/>
   <img src="https://img.shields.io/badge/Typescript-3178C6?style=flat-square&logo=Typescript&logoColor=white"/>
@@ -41,9 +37,8 @@
   </p>
 </div>
 <br />
-<hr />
 
-## 주요기능
+## ⭐ 주요 기능
 1. 부동산 공모 등록 기능
     - 해외에 휴양지를 짓고 싶은 사람이 부동산 공모를 등록할 수 있는 기능
 2. 부동산 공모 참여 기능
@@ -53,12 +48,12 @@
 
 <br />
 
-## 시스템 아키텍처
+## ⚙️ 시스템 아키텍처
 <img width="828" alt="부의마블 프론트엔드 시스템 아키텍처" src="https://user-images.githubusercontent.com/55318618/225216191-ff3738ca-a8f0-4b63-a983-f260b8c48460.png">
 
 <br />
 
-## 프로젝트 중점 사항
+## 🔎 프로젝트 중점 사항
 - GitHub Actions를 활용한 CI/CD 환경 구축
 - Nginx의 reverse proxy와 virtual host를 활용한 개발 빌드와 프로덕션 빌드 배포
 - React query와 Intersection Observer API를 활용한 검색 목록 무한 스크롤 기능 구현
@@ -67,7 +62,7 @@
 
 <br />
 
-## 팀원
+## 👥 팀원
 
 <table>
   <tbody>
