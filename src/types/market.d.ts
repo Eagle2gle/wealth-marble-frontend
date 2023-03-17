@@ -33,3 +33,14 @@ export type MarketPriceInfo = {
     dividendRate: number;
   }[];
 };
+
+export type MarketOrder = {
+  marketId: number;
+  price: number;
+  amount: number;
+  orderType: 'SELL' | 'BUY';
+};
+
+export type MarketOrderList = {
+  result: Omit<MarketOrder, 'marketId'>[];
+};
