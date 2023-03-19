@@ -1,33 +1,22 @@
 import { useRef, useState } from 'react';
 
+import Image from 'next/image';
 import Link from 'next/link';
 
-import ButtonGroup from '@/components/common/ButtonGroup';
+// import ButtonGroup from '@/components/common/ButtonGroup';
 import SelectBox from '@/components/common/SelectBox';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { CountriesType } from '@/types/cahoot';
+import { RecommendedListType } from '@/types/market';
 import { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
-import { useQuery } from '@tanstack/react-query';
 
 import Icon from './common/Icons';
 
-interface MockDataType {
-  id: number;
-  title: string;
-  deadline: string;
-  price: number;
-  amount: number;
-  competitiveRate: number;
-  location: string;
-  bookmarked: boolean;
-}
-
-const RecommendedCountryList = ['대만', '일본', '파푸아뉴기니'] as const;
-
 const RecommendedList = () => {
   const selectBoxContainer = useRef<HTMLDivElement>(null);
-  const [selectedCountry, setSelectedCountry] = useState('장소');
+  // TODO: 전체 나라 추천 휴양지 API가 없어서 임시로 초기값을 대한민국으로 지정
+  const [selectedCountry, setSelectedCountry] = useState('대한민국');
   const {
     data: {
       data: { result: countries },
@@ -36,11 +25,19 @@ const RecommendedList = () => {
     fetch(`${process.env.NEXT_PUBLIC_HOST}/api/markets/countries`).then((res) => res.json())
   );
 
-  const { data } = useQuery<MockDataType[]>({
-    queryKey: ['cahootListData'],
-    queryFn: () =>
-      fetch(`${process.env.NEXT_PUBLIC_HOST}/cahootListData.json`).then((res) => res.json()),
-  });
+  const {
+    data: {
+      data: { result },
+    },
+  } = useSuspendedQuery<Response<RecommendedListType>>(['RecommendListData', selectedCountry], () =>
+    fetch(
+      `${process.env.NEXT_PUBLIC_HOST}/api/markets/recommend?country=${encodeURIComponent(
+        selectedCountry
+      )}`
+    )
+      .then((res) => res.json())
+      .catch((e) => console.log(e))
+  );
 
   const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
@@ -49,15 +46,7 @@ const RecommendedList = () => {
   // SelectBox, ButtonGroup을 통해 나라 변경 시 동작
   const changeCountry = (country: string) => {
     setSelectedCountry(country);
-    // console.log(country);
   };
-
-  const selectItems = [
-    { index: 1, item: '대만' },
-    { index: 2, item: '일본' },
-    { index: 3, item: '파푸아뉴기니' },
-    { index: 4, item: '미국' },
-  ];
 
   return (
     <div
@@ -75,14 +64,16 @@ const RecommendedList = () => {
           changeItem={changeCountry}
           size="small"
         />
-        <ButtonGroup
+        {/* TODO: RecommendedCountryList API가 없어서 임시 숨김 처리 */}
+        {/* <ButtonGroup
           items={RecommendedCountryList}
           currentItem={selectedCountry}
           changeItem={changeCountry}
-        />
+          buttonSize="small"
+        /> */}
       </div>
-      <div className="grid w-full grid-cols-6 gap-2 gap-y-6 max-md:carousel md:grid-cols-3 ">
-        {data?.map(({ id, bookmarked, title }) => (
+      <div className="grid w-full grid-cols-6 gap-4 gap-y-4 max-md:carousel md:grid-cols-3 ">
+        {result?.map(({ id, isInterest, title, expectedRateOfReturn, image }) => (
           <Link
             href={`/cahoots/detail/${id}`}
             key={id}
@@ -90,13 +81,23 @@ const RecommendedList = () => {
           >
             {/* 이미지 */}
             <div className="avatar">
-              <div className="w-full rounded-t bg-dark-grey"></div>
+              <div className="w-full rounded-t bg-grey">
+                {image && (
+                  <Image
+                    src={image}
+                    alt={title}
+                    className="rounded-l-lg md:rounded-lg"
+                    fill
+                    sizes="128px"
+                  />
+                )}
+              </div>
               <div className="absolute right-2 top-2">
                 <button
                   onClick={onBookmarkClick}
                   className={classNames(
                     'btn-ghost btn-xs btn-circle btn',
-                    bookmarked ? 'fill-main text-main' : 'fill-none'
+                    isInterest ? 'fill-main text-main' : 'fill-none'
                   )}
                 >
                   <Icon.Bookmark />
@@ -111,7 +112,7 @@ const RecommendedList = () => {
               <div className="flex flex-col gap-1 gap-4"></div>
               <div className="text-right">
                 <span className="text-[6px] text-black/60">
-                  예상 수익률 <span className="text-main">120%</span>
+                  예상 수익률 <span className="text-main">{expectedRateOfReturn}%</span>
                 </span>
               </div>
             </div>
