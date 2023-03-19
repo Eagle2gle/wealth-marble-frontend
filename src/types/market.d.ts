@@ -33,3 +33,15 @@ export type MarketPriceInfo = {
     dividendRate: number;
   }[];
 };
+
+export type RecommendedItemType = {
+  id: number;
+  title: string;
+  expectedRateOfReturn: number;
+  image: string;
+  isInterest: boolean;
+};
+
+export type RecommendedListType = {
+  result: RecommendedItemType[];
+};

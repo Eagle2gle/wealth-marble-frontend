@@ -6,14 +6,15 @@ import Link from 'next/link';
 // import ButtonGroup from '@/components/common/ButtonGroup';
 import SelectBox from '@/components/common/SelectBox';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { useTypeSelector } from '@/store';
 import { CountriesType } from '@/types/cahoot';
 import { RecommendedListType } from '@/types/market';
 import { Response } from '@/types/response';
-import classNames from '@/utils/classnames';
 
-import Icon from './common/Icons';
+import InterestButton from './common/InterestButton';
 
 const RecommendedList = () => {
+  const userId = useTypeSelector((state) => state.user.id);
   const selectBoxContainer = useRef<HTMLDivElement>(null);
   // TODO: 전체 나라 추천 휴양지 API가 없어서 임시로 초기값을 대한민국으로 지정
   const [selectedCountry, setSelectedCountry] = useState('대한민국');
@@ -33,15 +34,11 @@ const RecommendedList = () => {
     fetch(
       `${process.env.NEXT_PUBLIC_HOST}/api/markets/recommend?country=${encodeURIComponent(
         selectedCountry
-      )}`
+      )}${userId ? `&userId=${userId}` : ''}`
     )
       .then((res) => res.json())
       .catch((e) => console.log(e))
   );
-
-  const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
-    e.preventDefault();
-  };
 
   // SelectBox, ButtonGroup을 통해 나라 변경 시 동작
   const changeCountry = (country: string) => {
@@ -86,22 +83,14 @@ const RecommendedList = () => {
                   <Image
                     src={image}
                     alt={title}
-                    className="rounded-l-lg md:rounded-lg"
+                    className="rounded-t md:rounded-lg"
                     fill
                     sizes="128px"
                   />
                 )}
               </div>
               <div className="absolute right-2 top-2">
-                <button
-                  onClick={onBookmarkClick}
-                  className={classNames(
-                    'btn-ghost btn-xs btn-circle btn',
-                    isInterest ? 'fill-main text-main' : 'fill-none'
-                  )}
-                >
-                  <Icon.Bookmark />
-                </button>
+                <InterestButton id={id} size="small" isInterest={isInterest} type="market" />
               </div>
             </div>
             <div className="relative flex w-full flex-col justify-center overflow-hidden py-1 px-2 text-[8px]">

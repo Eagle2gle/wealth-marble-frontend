@@ -39,6 +39,7 @@ const InterestButton = ({
     queryClient.invalidateQueries({ queryKey: ['market/list'] });
     queryClient.invalidateQueries({ queryKey: ['market/detail', `${id}`] });
     queryClient.invalidateQueries({ queryKey: ['market/interests'] });
+    queryClient.invalidateQueries({ queryKey: ['RecommendListData'] });
   };
   const { mutate: addInterest } = useMutation<Response, Error, MutationBody>({
     mutationFn: (body) =>
