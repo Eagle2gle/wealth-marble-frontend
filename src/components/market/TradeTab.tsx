@@ -52,7 +52,7 @@ const TradeTab = ({ id }: TradeTabProps) => {
     });
     setIsError(false);
     publish({
-      destination: type === 'buy' ? '/order/purchase' : '/order/sell',
+      destination: type === 'buy' ? '/order/purchase' : '/order/sale',
       body,
     });
     setIsLoading(true);
@@ -195,8 +195,11 @@ const TradeTab = ({ id }: TradeTabProps) => {
                 </div>
               </>
             ) : (
-              <div>
-                잔액이 부족하여 주문 요청에 <span className="text-red">실패</span> 하였어요
+              <div className="flex flex-col">
+                <span>잔액 또는 보유 수량이 부족하여</span>
+                <div>
+                  주문 요청에 <span className="text-red">실패</span> 하였어요
+                </div>
               </div>
             )}
           </div>
