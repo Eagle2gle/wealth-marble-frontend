@@ -6,8 +6,10 @@ import Layout from '@/components/common/Layout';
 import List from '@/components/market/List';
 import PriceInfo from '@/components/market/PriceInfo';
 import RecentTrade from '@/components/market/RecentTrade';
+import { api } from '@/libs/client/api';
 import wrapper from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 const Markets = () => {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -47,9 +49,36 @@ const Markets = () => {
   );
 };
 
-export const getServerSideProps = wrapper.getServerSideProps(() => async () => {
+export const getServerSideProps = wrapper.getServerSideProps((state) => async () => {
+  const queryClient = new QueryClient();
+  const { token } = state.getState().user;
+  const promises: Promise<unknown>[] = [
+    queryClient.fetchQuery(['market/price', 'PRICE', 'up'], () =>
+      api.get(`markets/rank?type=PRICE&up=TRUE`).json()
+    ),
+    queryClient.fetchInfiniteQuery(['market/list', ''], ({ pageParam = 0 }) =>
+      api.get(`markets?page=${pageParam}&keyword=&size=10`).json()
+    ),
+  ];
+  if (token)
+    promises.push(
+      queryClient.prefetchQuery([`markets/interests`], () =>
+        api
+          .get(`auth/interests/me?page=0&size=10type=market`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .json()
+      )
+    );
+  try {
+    await Promise.all(promises);
+  } catch (e) {
+    return {
+      notFound: true,
+    };
+  }
   return {
-    props: {},
+    props: { dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))) },
   };
 });
 
