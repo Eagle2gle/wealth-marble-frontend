@@ -44,3 +44,11 @@ export type MarketOrder = {
 export type MarketOrderList = {
   result: Omit<MarketOrder, 'marketId'>[];
 };
+
+export type MarketTransactionHistory = {
+  result: {
+    date: 'string';
+    price: number;
+    amount: number;
+  }[];
+};

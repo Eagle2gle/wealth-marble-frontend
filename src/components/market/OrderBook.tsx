@@ -5,8 +5,9 @@ import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import { useTypeDispatch, useTypeSelector } from '@/store';
 import { setBuyPriceByNumber, setSellPriceByNumber } from '@/store/modules/marketOrder';
-import type { MarketOrder, MarketOrderList } from '@/types/market';
+import type { MarketOrder, MarketOrderList, MarketTransactionHistory } from '@/types/market';
 import type { Response } from '@/types/response';
+import { getWeekDuration } from '@/utils/date';
 import { useQueryClient } from '@tanstack/react-query';
 
 interface OrderBookProps {
@@ -32,6 +33,28 @@ const OrderBook = ({ id }: OrderBookProps) => {
       staleTime: Infinity,
     }
   );
+  const [weekStart, weekEnd] = getWeekDuration(new Date());
+  const [lastWeekStart, lastWeekEnd] = getWeekDuration(
+    new Date(new Date().setDate(new Date().getDate() - 7))
+  );
+  const {
+    data: {
+      data: { result: thisWeek },
+    },
+  } = useSuspendedQuery<Response<MarketTransactionHistory>>(
+    ['transaction', 'history', `${id}`, 'this'],
+    () => api.get(`transactions/${id}?page=0&startDate=${weekStart}&endDate=${weekEnd}`).json()
+  );
+  const {
+    data: {
+      data: { result: lastWeek },
+    },
+  } = useSuspendedQuery<Response<MarketTransactionHistory>>(
+    ['transaction', 'history', `${id}`, 'last'],
+    () =>
+      api.get(`transactions/${id}?page=0&startDate=${lastWeekStart}&endDate=${lastWeekEnd}`).json()
+  );
+
   const sell = result.filter(({ orderType }) => orderType === 'SELL');
   const buy = result.filter(({ orderType }) => orderType === 'BUY');
 
@@ -71,6 +94,8 @@ const OrderBook = ({ id }: OrderBookProps) => {
           data: { result: refinedResult },
         };
       });
+      queryClient.invalidateQueries({ queryKey: ['transaction', 'history', `${id}`] });
+      queryClient.invalidateQueries({ queryKey: ['market/detail', `${id}`] });
     });
     return () => {
       unsubscribe(`/topic/market/${id}`);
@@ -115,11 +140,15 @@ const OrderBook = ({ id }: OrderBookProps) => {
               <span className="font-bold">최근 1주일</span>
               <div className="flex justify-between">
                 최고가
-                <span className="font-bold text-red">224,600</span>
+                <span className="font-bold text-red">
+                  {Math.max(...thisWeek.map(({ price }) => price)).toLocaleString()}
+                </span>
               </div>
               <div className="flex justify-between">
                 최저가
-                <span className="font-bold text-blue">201,700</span>
+                <span className="font-bold text-blue">
+                  {Math.min(...thisWeek.map(({ price }) => price)).toLocaleString()}
+                </span>
               </div>
             </div>
           </div>
@@ -154,10 +183,16 @@ const OrderBook = ({ id }: OrderBookProps) => {
             <div className="flex w-full flex-col gap-3 p-2 text-xs text-grey-middle">
               <span className="font-bold">최근 거래량</span>
               <div className="flex justify-between">
-                이번 주<span className="font-bold text-black">7</span>
+                이번 주
+                <span className="font-bold text-black">
+                  {thisWeek.reduce((sum, { amount }) => sum + amount, 0).toLocaleString()}
+                </span>
               </div>
               <div className="flex justify-between">
-                지난 주<span className="font-bold text-black">16</span>
+                지난 주
+                <span className="font-bold text-black">
+                  {lastWeek.reduce((sum, { amount }) => sum + amount, 0).toLocaleString()}
+                </span>
               </div>
             </div>
           </div>
