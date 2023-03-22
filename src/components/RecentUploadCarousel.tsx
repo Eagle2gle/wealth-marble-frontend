@@ -2,6 +2,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { api } from '@/libs/client/api';
 import { RecentCahootListType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
 
@@ -13,7 +14,7 @@ const RecentUploadCarousel = () => {
       data: { result },
     },
   } = useSuspendedQuery<Response<RecentCahootListType>>(['RecentUploadCarouselData'], () =>
-    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/recent`).then((res) => res.json())
+    api.get('cahoots/recent').json()
   );
   return (
     <div className="flex flex-col gap-2 px-3 md:px-0">
