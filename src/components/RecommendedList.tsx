@@ -6,6 +6,7 @@ import Link from 'next/link';
 // import ButtonGroup from '@/components/common/ButtonGroup';
 import SelectBox from '@/components/common/SelectBox';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
 import { CountriesType } from '@/types/cahoot';
 import { RecommendedListType } from '@/types/market';
@@ -23,21 +24,23 @@ const RecommendedList = () => {
       data: { result: countries },
     },
   } = useSuspendedQuery<Response<CountriesType>>(['MarketCountries'], () =>
-    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/markets/countries`).then((res) => res.json())
+    api.get('markets/countries').json()
   );
 
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<RecommendedListType>>(['RecommendListData', selectedCountry], () =>
-    fetch(
-      `${process.env.NEXT_PUBLIC_HOST}/api/markets/recommend?country=${encodeURIComponent(
-        selectedCountry
-      )}${userId ? `&userId=${userId}` : ''}`
-    )
-      .then((res) => res.json())
-      .catch((e) => console.log(e))
+  } = useSuspendedQuery<Response<RecommendedListType>>(
+    ['RecommendListData', selectedCountry],
+    () =>
+      api
+        .get(
+          `markets/recommend?country=${encodeURIComponent(selectedCountry)}${
+            userId ? `&userId=${userId}` : ''
+          }`
+        )
+        .json()
   );
 
   // SelectBox, ButtonGroup을 통해 나라 변경 시 동작
