@@ -60,3 +60,22 @@ export type Top5ItemType = {
 export type Top5ListType = {
   result: Top5ItemType[];
 };
+
+export type MarketOrder = {
+  marketId: number;
+  price: number;
+  amount: number;
+  orderType: 'SELL' | 'BUY';
+};
+
+export type MarketOrderList = {
+  result: Omit<MarketOrder, 'marketId'>[];
+};
+
+export type MarketTransactionHistory = {
+  result: {
+    date: 'string';
+    price: number;
+    amount: number;
+  }[];
+};
