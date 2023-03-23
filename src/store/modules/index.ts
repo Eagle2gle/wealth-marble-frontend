@@ -2,11 +2,13 @@ import { HYDRATE } from 'next-redux-wrapper';
 import { combineReducers } from 'redux';
 
 import cahootOrderSlice from './cahootOrder';
+import marketOrderSlice from './marketOrder';
 import userSlice from './user';
 
 const combinedReducer = combineReducers({
   [cahootOrderSlice.name]: cahootOrderSlice.reducer,
   [userSlice.name]: userSlice.reducer,
+  [marketOrderSlice.name]: marketOrderSlice.reducer,
 });
 
 const rootReducer: typeof combinedReducer = (state, action) => {

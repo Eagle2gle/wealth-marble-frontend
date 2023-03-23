@@ -18,3 +18,64 @@ export type MarketDetailType = Omit<MarketType, 'picture' | 'country' | 'priceSt
   pictures: string[];
   userIds: number[];
 };
+
+export type MarketPriceInfoOrder = 'up' | 'down';
+export type MarketPriceInfoType = 'PRICE' | 'PRICE_RATE';
+
+export type MarketPriceInfo = {
+  result: {
+    pictureUrl: string;
+    title: string;
+    currentPrice: number;
+    gap: number;
+    gapRate: number;
+    dividend: number;
+    dividendRate: number;
+  }[];
+};
+
+export type RecommendedItemType = {
+  id: number;
+  title: string;
+  expectedRateOfReturn: number;
+  image: string;
+  isInterest: boolean;
+};
+
+export type RecommendedListType = {
+  result: RecommendedItemType[];
+};
+
+export type Top5ItemType = {
+  vacationId: number;
+  pictureUrl: string;
+  title: string;
+  currentPrice: number;
+  gap: number;
+  gapRate: number;
+  dividend: number;
+  dividendRate: number;
+};
+
+export type Top5ListType = {
+  result: Top5ItemType[];
+};
+
+export type MarketOrder = {
+  marketId: number;
+  price: number;
+  amount: number;
+  orderType: 'SELL' | 'BUY';
+};
+
+export type MarketOrderList = {
+  result: Omit<MarketOrder, 'marketId'>[];
+};
+
+export type MarketTransactionHistory = {
+  result: {
+    date: 'string';
+    price: number;
+    amount: number;
+  }[];
+};

@@ -12,8 +12,12 @@ import RadioBtn from '@/components/common/RadioBtn';
 import SelectBox from '@/components/common/SelectBox';
 import TextArea from '@/components/common/TextArea';
 import TextInput from '@/components/common/TextInput';
+import HeaderWithBackButton from '@/components/mypage/HeaderWithBackButton';
 import PlaceSearchBar from '@/components/PlaceSearchBar';
+import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import wrapper from '@/store';
+import { CountriesType } from '@/types/cahoot';
+import { Response } from '@/types/response';
 // import Map from '@/components/Map';
 
 const positionOption = [
@@ -45,11 +49,6 @@ export interface FormDataType {
   stockNum: number;
   expectedRateOfReturn: number;
 }
-
-const selectItems = [
-  { index: 1, item: '대한민국' },
-  { index: 2, item: '미국' },
-];
 
 export default function CreateCahoot() {
   const router = useRouter();
@@ -92,6 +91,14 @@ export default function CreateCahoot() {
     console.log(errors);
   };
 
+  const {
+    data: {
+      data: { result: countries },
+    },
+  } = useSuspendedQuery<Response<CountriesType>>(['MarketCountries'], () =>
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/markets/countries`).then((res) => res.json())
+  );
+
   const changeCountry = (country: string) => {
     setSelectedCountry(country);
   };
@@ -104,6 +111,9 @@ export default function CreateCahoot() {
           공모를 위한 휴양지 건설 계획서를 상세하게 작성해주세요.
         </p>
       </section>
+      <div className="md:hidden">
+        <HeaderWithBackButton title="공모 생성" />
+      </div>
       <article className="w-full p-5">
         <form className="flex flex-col gap-8" onSubmit={handleSubmit(onSubmit, onErrors)}>
           {/* 휴양지명 */}
@@ -201,7 +211,7 @@ export default function CreateCahoot() {
                 })}
               />
               <SelectBox
-                items={selectItems}
+                items={countries}
                 containerRef={selectBoxContainer}
                 currentItem={selectedCountry}
                 changeItem={changeCountry}
