@@ -34,6 +34,33 @@ export type MarketPriceInfo = {
   }[];
 };
 
+export type RecommendedItemType = {
+  id: number;
+  title: string;
+  expectedRateOfReturn: number;
+  image: string;
+  isInterest: boolean;
+};
+
+export type RecommendedListType = {
+  result: RecommendedItemType[];
+};
+
+export type Top5ItemType = {
+  vacationId: number;
+  pictureUrl: string;
+  title: string;
+  currentPrice: number;
+  gap: number;
+  gapRate: number;
+  dividend: number;
+  dividendRate: number;
+};
+
+export type Top5ListType = {
+  result: Top5ItemType[];
+};
+
 export type MarketOrder = {
   marketId: number;
   price: number;
