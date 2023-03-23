@@ -4,9 +4,10 @@ interface PropsType {
   items: readonly string[];
   currentItem: string;
   changeItem: (item: string) => void;
+  buttonSize: 'large' | 'small';
 }
 
-const ButtonGroup = ({ items, currentItem, changeItem }: PropsType) => {
+const ButtonGroup = ({ items, currentItem, changeItem, buttonSize }: PropsType) => {
   const onClickButton = (item: string) => {
     changeItem(item);
   };
@@ -18,7 +19,8 @@ const ButtonGroup = ({ items, currentItem, changeItem }: PropsType) => {
           key={index}
           title={item}
           className={classNames(
-            'w-12 truncate rounded-lg px-1 text-[10px]',
+            'truncate rounded-lg px-1 text-[10px]',
+            buttonSize === 'large' ? 'w-24' : 'w-12',
             currentItem === item
               ? 'bg-main text-white'
               : 'btn-secondary border border-grey bg-white font-medium text-black/60'

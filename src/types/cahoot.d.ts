@@ -42,3 +42,15 @@ export type CahootHistoryType = {
     stocks: number;
   }[];
 };
+
+type RecentCahootType = Pick<CahootType, 'id' | 'title' | 'stockStart' | 'images'> & {
+  expectedRateOfReturn: number;
+};
+
+export type RecentCahootListType = {
+  result: RecentCahootType[];
+};
+
+export type CountriesType = {
+  result: string[];
+};

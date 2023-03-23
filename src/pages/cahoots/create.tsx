@@ -14,7 +14,10 @@ import TextArea from '@/components/common/TextArea';
 import TextInput from '@/components/common/TextInput';
 import HeaderWithBackButton from '@/components/mypage/HeaderWithBackButton';
 import PlaceSearchBar from '@/components/PlaceSearchBar';
+import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import wrapper from '@/store';
+import { CountriesType } from '@/types/cahoot';
+import { Response } from '@/types/response';
 // import Map from '@/components/Map';
 
 const positionOption = [
@@ -46,11 +49,6 @@ export interface FormDataType {
   stockNum: number;
   expectedRateOfReturn: number;
 }
-
-const selectItems = [
-  { index: 1, item: '대한민국' },
-  { index: 2, item: '미국' },
-];
 
 export default function CreateCahoot() {
   const router = useRouter();
@@ -92,6 +90,14 @@ export default function CreateCahoot() {
   const onErrors = (errors: FieldErrors) => {
     console.log(errors);
   };
+
+  const {
+    data: {
+      data: { result: countries },
+    },
+  } = useSuspendedQuery<Response<CountriesType>>(['MarketCountries'], () =>
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/markets/countries`).then((res) => res.json())
+  );
 
   const changeCountry = (country: string) => {
     setSelectedCountry(country);
@@ -205,7 +211,7 @@ export default function CreateCahoot() {
                 })}
               />
               <SelectBox
-                items={selectItems}
+                items={countries}
                 containerRef={selectBoxContainer}
                 currentItem={selectedCountry}
                 changeItem={changeCountry}
