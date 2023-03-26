@@ -10,6 +10,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@ant-design/charts": "^1.4.2",
     "@next/eslint-plugin-next": "^13.1.2",
     "@next/font": "13.1.2",
     "@reduxjs/toolkit": "^1.9.1",
