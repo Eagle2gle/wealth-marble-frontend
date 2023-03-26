@@ -35,7 +35,7 @@ const DeadlineCarousel = () => {
                 <Image src={images[0]} alt="" className="rounded-full" fill sizes="96px" />
               )}
             </div>
-            <div className="w-32 overflow-hidden overflow-ellipsis whitespace-nowrap text-sm">
+            <div className="w-32 overflow-hidden overflow-ellipsis whitespace-nowrap text-center text-sm">
               {title}
             </div>
             <span className="text-xs font-semibold text-black/60">
