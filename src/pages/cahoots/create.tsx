@@ -16,6 +16,7 @@ import HeaderWithBackButton from '@/components/mypage/HeaderWithBackButton';
 import PlaceSearchBar from '@/components/PlaceSearchBar';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import wrapper from '@/store';
+import { useTypeSelector } from '@/store';
 import { CountriesType } from '@/types/cahoot';
 import { Response } from '@/types/response';
 // import Map from '@/components/Map';
@@ -51,6 +52,7 @@ export interface FormDataType {
 }
 
 export default function CreateCahoot() {
+  const token = useTypeSelector((state) => state.user.token);
   const router = useRouter();
   const selectBoxContainer = useRef<HTMLDivElement>(null);
   const [selectedCountry, setSelectedCountry] = useState('국가'); // 휴양지 위치
@@ -75,6 +77,7 @@ export default function CreateCahoot() {
 
     fetch(`${process.env.NEXT_PUBLIC_HOST}/api/auth/cahoots`, {
       method: 'POST',
+      headers: { Authorization: `Bearer ${token}` },
       body: formData,
     })
       .then((response) => response.json())
