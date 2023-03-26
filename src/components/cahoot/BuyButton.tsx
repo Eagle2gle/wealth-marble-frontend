@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { api } from '@/libs/client/api';
 import { fetcher } from '@/libs/client/fetcher';
 import { useTypeSelector } from '@/store';
 import type { CahootDetailType } from '@/types/cahoot';
@@ -24,17 +25,21 @@ const BuyButton = () => {
     fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=detail`)
   );
   const quantity = useTypeSelector(({ cahootOrder }) => cahootOrder.quantity);
+  const token = useTypeSelector((state) => state.user.token);
   const {
     mutate,
     isLoading,
     data: response,
   } = useMutation<Response, Error, { stocks: number }>({
     mutationFn: (data) =>
-      fetch(`/api/cahoots/${router.query.id}`, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      }).then((res) => res.json()),
+      api
+        .post(`auth/cahoots/${router.query.id}`, {
+          json: data,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .json(),
   });
   const modalOpenRef = useRef<HTMLLabelElement>(null);
 
