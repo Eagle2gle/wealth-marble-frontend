@@ -73,7 +73,7 @@ export default function CreateCahoot() {
       }
     }
 
-    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots`, {
+    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/auth/cahoots`, {
       method: 'POST',
       body: formData,
     })
