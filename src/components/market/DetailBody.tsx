@@ -1,5 +1,7 @@
 import { useState } from 'react';
 
+import DetailStatus from '@/components/market/DetailStatus';
+// import TransactionChart from '@/components/market/TransactionChart';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
@@ -41,7 +43,7 @@ const DetailBody = ({ id }: DetailBodyProps) => {
       )}
       <TabButton tabs={TABS} currentTab={tab} onTabClick={onTabClick} />
       <div className={classNames(tab === '차트' ? 'flex flex-col' : 'hidden', 'gap-[inherit]')}>
-        차트
+        {/* <TransactionChart id={id} /> */}
       </div>
       <div className={classNames(tab === '거래' ? 'flex flex-col' : 'hidden', 'gap-[inherit]')}>
         <div className="mb-96 flex justify-between gap-4 md:mb-0">
@@ -50,7 +52,7 @@ const DetailBody = ({ id }: DetailBodyProps) => {
         </div>
       </div>
       <div className={classNames(tab === '시세' ? 'flex flex-col' : 'hidden', 'gap-[inherit]')}>
-        시세
+        <DetailStatus />
       </div>
       <div className={classNames(tab === '정보' ? 'flex flex-col' : 'hidden', 'gap-[inherit]')}>
         정보
