@@ -7,6 +7,7 @@ import { useTypeDispatch, useTypeSelector } from '@/store';
 import { setBuyPriceByNumber, setSellPriceByNumber } from '@/store/modules/marketOrder';
 import type { MarketOrder, MarketOrderList, MarketTransactionHistory } from '@/types/market';
 import type { Response } from '@/types/response';
+import classNames from '@/utils/classnames';
 import { getWeekDuration } from '@/utils/date';
 import { useQueryClient } from '@tanstack/react-query';
 
@@ -57,6 +58,9 @@ const OrderBook = ({ id }: OrderBookProps) => {
 
   const sell = result.filter(({ orderType }) => orderType === 'SELL');
   const buy = result.filter(({ orderType }) => orderType === 'BUY');
+  const thisWeekPrices = thisWeek.map(({ price }) => price);
+  const weekHigh = Math.max(...thisWeekPrices);
+  const weekLow = Math.min(...thisWeekPrices);
 
   const onPriceClick = (price: number) => () => {
     if (!userId) return;
@@ -140,14 +144,24 @@ const OrderBook = ({ id }: OrderBookProps) => {
               <span className="font-bold">최근 1주일</span>
               <div className="flex justify-between">
                 최고가
-                <span className="font-bold text-red">
-                  {Math.max(...thisWeek.map(({ price }) => price)).toLocaleString()}
+                <span
+                  className={classNames(
+                    'font-bold',
+                    weekHigh === -Infinity ? 'text-black' : 'text-red'
+                  )}
+                >
+                  {weekHigh === -Infinity ? '-' : weekHigh.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between">
                 최저가
-                <span className="font-bold text-blue">
-                  {Math.min(...thisWeek.map(({ price }) => price)).toLocaleString()}
+                <span
+                  className={classNames(
+                    'font-bold',
+                    weekLow === Infinity ? 'text-black' : 'text-blue'
+                  )}
+                >
+                  {weekLow === Infinity ? '-' : weekLow.toLocaleString()}
                 </span>
               </div>
             </div>
