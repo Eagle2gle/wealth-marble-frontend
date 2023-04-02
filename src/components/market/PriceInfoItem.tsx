@@ -42,11 +42,13 @@ const PriceInfoItem = ({ order, type }: PriceInfoItemProps) => {
                 <span className="text-black/70">{currentPrice.toLocaleString()}</span>
                 <span className={gap < 0 ? 'text-blue' : 'text-red'}>{`${
                   gap < 0 ? '▼' : '▲'
-                }  ${gap.toLocaleString()}(${gapRate}%)`}</span>
+                }  ${Math.floor(gap).toLocaleString()}(${gapRate.toFixed(3)}%)`}</span>
               </div>
               <div className="flex justify-between text-black/50">
                 <span>1주</span>
-                <span>{`${dividend.toLocaleString()}(${dividendRate}%)`}</span>
+                <span>{`${Math.floor(dividend).toLocaleString()}(${dividendRate.toFixed(
+                  3
+                )}%)`}</span>
               </div>
             </div>
           </div>
