@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { fetcher } from '@/libs/client/fetcher';
+import { api } from '@/libs/client/api';
 import type { CahootDetailType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
 import { formatDate } from '@/utils/date';
@@ -10,7 +10,9 @@ import { formatDate } from '@/utils/date';
 import Carousel from '../common/Carousel';
 
 const DetailInfo = () => {
-  const router = useRouter();
+  const {
+    query: { id },
+  } = useRouter();
   const {
     data: {
       data: {
@@ -23,9 +25,8 @@ const DetailInfo = () => {
         description,
       },
     },
-  } = useSuspendedQuery<Response<CahootDetailType>>(
-    ['cahoot/detail', router.query.id],
-    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=detail`)
+  } = useSuspendedQuery<Response<CahootDetailType>>(['cahoot/detail', id], () =>
+    api.get(`cahoots/${id}?info=detail`).json()
   );
   return (
     <>

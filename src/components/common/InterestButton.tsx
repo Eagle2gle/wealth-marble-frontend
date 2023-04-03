@@ -78,33 +78,26 @@ const InterestButton = ({
   };
 
   return userId ? (
-    size === 'small' ? (
-      <button
-        onClick={onBookmarkClick}
-        className={classNames(
-          'btn-ghost btn-xs btn-circle btn',
-          isInterest ? 'fill-main text-main' : 'fill-none'
-        )}
-      >
-        <Icon.Bookmark />
-      </button>
-    ) : (
-      <button
-        className={classNames(
-          'btn-ghost btn mx-4 gap-1 border-grey md:mx-0',
-          isInterest ? 'fill-main text-main' : 'fill-none',
-          hideOnMobile ? 'hidden md:flex' : 'md:hidden'
-        )}
-        onClick={onBookmarkClick}
-      >
-        <Icon.Bookmark />
-        <span className="font-medium text-black">관심상품</span>
-        <span className="text-black">
-          {cahootDetailData?.data.interestCount.toLocaleString() ??
-            marketDetailData?.data.userIds.length.toLocaleString()}
-        </span>
-      </button>
-    )
+    <button
+      onClick={onBookmarkClick}
+      className={classNames(
+        'btn-ghost btn',
+        isInterest ? 'fill-main text-main' : 'fill-none',
+        size === 'large' ? (hideOnMobile ? 'hidden md:flex' : 'md:hidden') : '',
+        size === 'small' ? 'btn-xs btn-circle' : 'mx-4 gap-1 border-grey md:mx-0'
+      )}
+    >
+      <Icon.Bookmark />
+      {size === 'large' && (
+        <>
+          <span className="font-medium text-black">관심상품</span>
+          <span className="text-black">
+            {cahootDetailData?.data.interestCount.toLocaleString() ??
+              marketDetailData?.data.userIds.length.toLocaleString()}
+          </span>
+        </>
+      )}
+    </button>
   ) : null;
 };
 

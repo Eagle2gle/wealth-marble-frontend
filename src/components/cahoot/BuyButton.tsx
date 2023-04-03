@@ -5,7 +5,6 @@ import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
-import { fetcher } from '@/libs/client/fetcher';
 import { useTypeSelector } from '@/store';
 import type { CahootDetailType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
@@ -15,14 +14,15 @@ import { useMutation } from '@tanstack/react-query';
 import Modal from '../common/Modal';
 
 const BuyButton = () => {
-  const router = useRouter();
+  const {
+    query: { id },
+  } = useRouter();
   const {
     data: {
       data: { images, title, stockPrice },
     },
-  } = useSuspendedQuery<Response<CahootDetailType>>(
-    ['cahoot/detail', router.query.id],
-    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=detail`)
+  } = useSuspendedQuery<Response<CahootDetailType>>(['cahoot/detail', id], () =>
+    api.get(`cahoots/${id}?info=detail`).json()
   );
   const quantity = useTypeSelector(({ cahootOrder }) => cahootOrder.quantity);
   const token = useTypeSelector((state) => state.user.token);
@@ -33,7 +33,7 @@ const BuyButton = () => {
   } = useMutation<Response, Error, { stocks: number }>({
     mutationFn: (data) =>
       api
-        .post(`auth/cahoots/${router.query.id}`, {
+        .post(`auth/cahoots/${id}`, {
           json: data,
           headers: {
             Authorization: `Bearer ${token}`,

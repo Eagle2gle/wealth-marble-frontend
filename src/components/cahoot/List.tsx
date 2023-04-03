@@ -1,7 +1,10 @@
 import { Suspense, useState } from 'react';
 
+import { ErrorBoundary } from '@sentry/nextjs';
+
 import ListItems from './ListItems';
 
+import ErrorFallback from '../common/ErrorFallback';
 import Search from '../common/Search';
 
 interface ListProps {
@@ -31,9 +34,11 @@ const List = ({ scrollRef }: ListProps) => {
           <Search />
         </form>
       </div>
-      <Suspense fallback={<p>로딩...</p>}>
-        <ListItems keyword={keyword} />
-      </Suspense>
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <Suspense>
+          <ListItems keyword={keyword} />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };
