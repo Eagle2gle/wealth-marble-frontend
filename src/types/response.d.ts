@@ -19,3 +19,10 @@ export type Interests = {
     } | null;
   }[];
 };
+
+export type ServerError =
+  | {
+      statusCode: number;
+      title: string;
+    }
+  | false;
