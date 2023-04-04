@@ -1,10 +1,13 @@
 import { Suspense, useState } from 'react';
 
+import ErrorFallback from '@/components/common/ErrorFallback';
 import type { MarketPriceInfoOrder, MarketPriceInfoType } from '@/types/market';
 import classNames from '@/utils/classnames';
+import { ErrorBoundary } from '@sentry/nextjs';
 
-import PriceInfoItem from './PriceInfoItem';
-import PriceInfoUpdate from './PriceInfoUpdate';
+import PriceInfoItem from './Item';
+import Skeleton from './Skeleton';
+import PriceInfoUpdate from './Update';
 
 type TabType = {
   name: string;
@@ -46,9 +49,11 @@ const PriceInfo = () => {
           </button>
         ))}
       </div>
-      <Suspense fallback={<p>로딩...</p>}>
-        <PriceInfoItem order={tab.order} type={tab.type} />
-      </Suspense>
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <Suspense fallback={<Skeleton />}>
+          <PriceInfoItem order={tab.order} type={tab.type} />
+        </Suspense>
+      </ErrorBoundary>
     </div>
   );
 };

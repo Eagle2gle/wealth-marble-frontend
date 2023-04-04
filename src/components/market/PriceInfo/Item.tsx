@@ -1,6 +1,7 @@
 import Image from 'next/image';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { api } from '@/libs/client/api';
 import type { MarketPriceInfoType, MarketPriceInfoOrder, MarketPriceInfo } from '@/types/market';
 import type { Response } from '@/types/response';
 
@@ -15,9 +16,7 @@ const PriceInfoItem = ({ order, type }: PriceInfoItemProps) => {
       data: { result },
     },
   } = useSuspendedQuery<Response<MarketPriceInfo>>(['market/price', type, order], () =>
-    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/markets/rank?type=${type}&${order}=TRUE`).then(
-      (res) => res.json()
-    )
+    api.get(`markets/rank?type=${type}&${order}=TRUE`).then((res) => res.json())
   );
 
   return (
