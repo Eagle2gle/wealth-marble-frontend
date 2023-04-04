@@ -1,40 +1,20 @@
-import { Suspense } from 'react';
-
 import Link from 'next/link';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
 import { Interests, Response } from '@/types/response';
-import { ErrorBoundary } from '@sentry/nextjs';
 
-import Carousel from './Carousel';
-import ErrorFallback from './ErrorFallback';
-import Icon from './Icons';
-import InterestButton from './InterestButton';
+import { InterestsProps } from './types';
 
-interface InterestsProps {
-  type: 'cahoot' | 'market';
-  scrollRef: React.RefObject<HTMLDivElement>;
-}
+import Carousel from '../Carousel';
+import Icon from '../Icons';
+import InterestButton from '../InterestButton';
 
 const TypeUrlPathMap = {
   cahoot: 'cahoots',
   market: 'markets',
 } as const;
-
-const Interests: React.FC<InterestsProps> = (props) => {
-  return (
-    <div className="flex flex-col gap-2 px-3 md:px-0">
-      <label className="font-bold">관심가는 휴양지</label>
-      <ErrorBoundary fallback={<ErrorFallback />}>
-        <Suspense>
-          <InterestsCarousel {...props} />
-        </Suspense>
-      </ErrorBoundary>
-    </div>
-  );
-};
 
 const InterestsCarousel: React.FC<InterestsProps> = ({ scrollRef, type }) => {
   const token = useTypeSelector((state) => state.user.token);
@@ -83,4 +63,4 @@ const InterestsCarousel: React.FC<InterestsProps> = ({ scrollRef, type }) => {
   );
 };
 
-export default Interests;
+export default InterestsCarousel;
