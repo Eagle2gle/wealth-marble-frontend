@@ -37,7 +37,7 @@ const RecommendedListItems: React.FC<RecommendedListItemsProps> = ({ selectedCou
         >
           {/* 이미지 */}
           <div className="avatar">
-            <div className="w-full rounded-t bg-grey">
+            <div className="w-32 rounded-t bg-grey">
               {image && (
                 <Image
                   src={image}
