@@ -2,21 +2,28 @@ import { Suspense, useState } from 'react';
 
 import { ErrorBoundary } from '@sentry/nextjs';
 
-import ListItems from './ListItems';
+import CahootItems from './CahootItems';
+import MarketItems from './MarketItems';
+import ItemSkeleton from './Skeleton';
 
-import ErrorFallback from '../common/ErrorFallback';
-import Search from '../common/Search';
+import ErrorFallback from '../ErrorFallback';
+import Search from '../Search';
 
 interface ListProps {
   scrollRef: React.RefObject<HTMLDivElement>;
+  type: 'market' | 'cahoot';
 }
 
-const List = ({ scrollRef }: ListProps) => {
+const typeMap = {
+  market: '마켓 목록',
+  cahoot: '공모 목록',
+};
+
+const List = ({ scrollRef, type }: ListProps) => {
   const [keyword, setKeyword] = useState('');
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
-    console.log('submitted');
     const target = e.target as typeof e.target & {
       search: { value: string };
     };
@@ -26,18 +33,22 @@ const List = ({ scrollRef }: ListProps) => {
     window.scrollTo({ top });
   };
 
+  const itemsMap = {
+    market: <MarketItems keyword={keyword} />,
+    cahoot: <CahootItems keyword={keyword} />,
+  };
+
   return (
     <div className="flex min-h-list flex-col gap-4 px-4 md:px-0">
       <div className="flex items-center justify-between">
-        <label className="font-bold">공모 목록</label>
+        <label className="font-bold">{typeMap[type]}</label>
         <form onSubmit={onSubmit}>
           <Search />
         </form>
       </div>
       <ErrorBoundary fallback={<ErrorFallback />}>
-        <Suspense>
-          <ListItems keyword={keyword} />
-        </Suspense>
+        {/** @todo 스켈레톤 ui 추가 */}
+        <Suspense fallback={<ItemSkeleton type={type} />}>{itemsMap[type]}</Suspense>
       </ErrorBoundary>
     </div>
   );

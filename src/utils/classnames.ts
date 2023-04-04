@@ -1,3 +1,4 @@
-const classNames = (...classnames: string[]) => classnames.join(' ');
+const classNames = (...classnames: (string | false)[]) =>
+  classnames.filter(Boolean).join(' ').trim();
 
 export default classNames;

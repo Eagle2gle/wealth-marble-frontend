@@ -5,10 +5,10 @@ import Error from 'next/error';
 
 import DeadlineBanner from '@/components/cahoot/DeadlineBanner';
 import DeadlineCarousel from '@/components/cahoot/DeadlineCarousel';
-import List from '@/components/cahoot/List';
 import Recap from '@/components/cahoot/Recap';
 import Interests from '@/components/common/Interests';
 import Layout from '@/components/common/Layout';
+import SearchList from '@/components/common/SearchList';
 import { api } from '@/libs/client/api';
 import wrapper from '@/store';
 import { ServerError } from '@/types/response';
@@ -23,12 +23,11 @@ const Cahoots: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> 
     <Layout>
       <div className="space-y-4">
         <DeadlineBanner />
-
         <Interests type="cahoot" scrollRef={scrollRef} />
         <DeadlineCarousel />
         <Recap />
         <div ref={scrollRef}></div>
-        <List scrollRef={scrollRef} />
+        <SearchList scrollRef={scrollRef} type="cahoot" />
       </div>
     </Layout>
   );
@@ -58,7 +57,7 @@ export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerErro
       promises.push(
         queryClient.fetchQuery([`cahoots/interests`], () =>
           api
-            .get(`auth/interests/me?page=0&size=10`, {
+            .get(`auth/interests/me?page=0&size=10&type=cahoot`, {
               headers: { Authorization: `Bearer ${token}` },
             })
             .json()

@@ -9,13 +9,11 @@ import type { Response } from '@/types/response';
 import { formatDate } from '@/utils/date';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import InterestButton from '../common/InterestButton';
+import type { ListItemsProps } from './type';
 
-interface ListItemsProps {
-  keyword: string;
-}
+import InterestButton from '../InterestButton';
 
-const ListItems: React.FC<ListItemsProps> = ({ keyword }) => {
+const CahootItems: React.FC<ListItemsProps> = ({ keyword }) => {
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery<Response<CahootListType>>({
     queryKey: ['cahoot/list', keyword],
     queryFn: ({ pageParam = 0 }) =>
@@ -122,4 +120,4 @@ const ListItems: React.FC<ListItemsProps> = ({ keyword }) => {
   );
 };
 
-export default ListItems;
+export default CahootItems;
