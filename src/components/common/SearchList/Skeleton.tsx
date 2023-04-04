@@ -20,7 +20,7 @@ const ItemSkeleton: React.FC<SkeletonProps> = ({ type }) => {
             <div className="avatar">
               <div
                 className={classNames(
-                  type === 'cahoot' ? 'w-32' : 'w-24',
+                  type === 'cahoot' ? 'w-32' : 'w-24 md:w-32',
                   'animate-pulse rounded-l-lg bg-grey md:rounded-lg'
                 )}
               ></div>
