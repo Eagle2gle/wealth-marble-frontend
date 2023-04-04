@@ -28,7 +28,7 @@ const PriceInfo = () => {
   const onTabClick = (selectedTab: TabType) => () => setTab(selectedTab);
 
   return (
-    <div className="flex w-full flex-col gap-4 px-4 md:px-0">
+    <div className="flex min-h-[30rem] w-full flex-col gap-4 px-4 md:px-0">
       <div className="flex items-center gap-3 md:flex-col md:items-start md:gap-1">
         <label className="font-bold">가격 정보</label>
         <PriceInfoUpdate />
