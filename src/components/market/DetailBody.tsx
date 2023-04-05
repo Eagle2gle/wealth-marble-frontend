@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import DetailInfo from '@/components/market/DetailInfo';
 import DetailStatus from '@/components/market/DetailStatus';
 // import TransactionChart from '@/components/market/TransactionChart';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
@@ -55,7 +56,7 @@ const DetailBody = ({ id }: DetailBodyProps) => {
         <DetailStatus />
       </div>
       <div className={classNames(tab === '정보' ? 'flex flex-col' : 'hidden', 'gap-[inherit]')}>
-        정보
+        <DetailInfo />
       </div>
     </>
   );
