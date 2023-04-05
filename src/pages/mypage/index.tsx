@@ -14,7 +14,7 @@ import Transactions from '@/components/mypage/Transactions';
 import type { InferGetServerSidePropsType, NextPage } from 'next';
 
 import UserInfo from '@/components/mypage/UserInfo';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import wrapper, { useTypeDispatch } from '@/store';
 import { logout } from '@/store/modules/user';
 import type { ServerError } from '@/types/response';
@@ -120,34 +120,10 @@ export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerErro
     }
     const queryClient = new QueryClient();
     const promises: Promise<unknown>[] = [
-      queryClient.fetchQuery([`user/info`], () =>
-        api
-          .get(`auth/users/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .json()
-      ),
-      queryClient.fetchQuery([`user/contest`], () =>
-        api
-          .get(`auth/contestParticipation/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .json()
-      ),
-      queryClient.fetchQuery([`user/transactions`], () =>
-        api
-          .get(`auth/transactions/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .json()
-      ),
-      queryClient.fetchQuery([`user/stock`], () =>
-        api
-          .get(`auth/stocks/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .json()
-      ),
+      queryClient.fetchQuery(queries.users.info(token)),
+      queryClient.fetchQuery(queries.users.contest(token)),
+      queryClient.fetchQuery(queries.users.transaction(token)),
+      queryClient.fetchQuery(queries.users.stock(token)),
     ];
     try {
       await Promise.all(promises);

@@ -1,10 +1,8 @@
 import { MAX_AMOUNT } from '@/constants/cahoot';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeDispatch, useTypeSelector } from '@/store';
 import { marketDecreaseMap, marketIncreaseMap, marketSetMap } from '@/store/modules/marketOrder';
-import { Response } from '@/types/response';
-import { UserInfoType } from '@/types/user';
 
 import Icon from '../common/Icons';
 
@@ -21,18 +19,12 @@ const labelMap = {
 const OrderInput = ({ amountType, tabType }: OrderInputProps) => {
   const dispatch = useTypeDispatch();
   const amount = useTypeSelector((state) => state.marketOrder[tabType][amountType]);
-  const token = useTypeSelector((state) => state.user.token);
+  const token = useTypeSelector((state) => state.user.token) ?? '';
   const price = useTypeSelector((state) => state.marketOrder[tabType].price);
-  const { data } = useSuspendedQuery<Response<UserInfoType>>(
-    [`user/info`],
-    () =>
-      api
-        .get(`auth/users/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .json<Response<UserInfoType>>(),
-    { enabled: !!token && amountType === 'quantity' }
-  );
+  const { queryFn, queryKey } = queries.users.info(token);
+  const { data } = useSuspendedQuery(queryKey, queryFn, {
+    enabled: !!token && amountType === 'quantity',
+  });
 
   const onDecrease = () => {
     if (amount <= 0) return;
