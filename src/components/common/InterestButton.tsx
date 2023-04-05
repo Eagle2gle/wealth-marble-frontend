@@ -1,8 +1,6 @@
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeSelector } from '@/store';
-import type { CahootDetailType } from '@/types/cahoot';
-import type { MarketDetailType } from '@/types/market';
 import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -29,42 +27,34 @@ const InterestButton = ({
   hideOnMobile = false,
   type,
 }: InterestButtonProps) => {
-  const token = useTypeSelector((state) => state.user.token);
+  const token = useTypeSelector((state) => state.user.token) ?? '';
   const userId = useTypeSelector((state) => state.user.id);
   const queryClient = useQueryClient();
   const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: ['cahoot/list'] });
-    queryClient.invalidateQueries({ queryKey: ['cahoot/interests'] });
-    queryClient.invalidateQueries({ queryKey: ['cahoot/detail', `${id}`] });
-    queryClient.invalidateQueries({ queryKey: ['market/list'] });
-    queryClient.invalidateQueries({ queryKey: ['market/detail', `${id}`] });
-    queryClient.invalidateQueries({ queryKey: ['market/interests'] });
-    queryClient.invalidateQueries({ queryKey: ['RecommendListData'] });
+    queryClient.invalidateQueries({ queryKey: queries.cahoots.list.queryKey });
+    queryClient.invalidateQueries({ queryKey: queries.interests.all.queryKey });
+    queryClient.invalidateQueries({ queryKey: queries.cahoots.detail(String(id)).queryKey });
+    queryClient.invalidateQueries({ queryKey: queries.markets.list.queryKey });
+    queryClient.invalidateQueries({ queryKey: queries.markets.detail(String(id)).queryKey });
+    queryClient.invalidateQueries({ queryKey: queries.markets.recommend.queryKey });
   };
+
   const { mutate: addInterest } = useMutation<Response, Error, MutationBody>({
-    mutationFn: (body) =>
-      api
-        .post(`auth/interests`, { json: body, headers: { Authorization: `Bearer ${token}` } })
-        .json(),
+    ...queries.interests.add(token),
     onSuccess,
   });
   const { mutate: deleteInterest } = useMutation<Response, Error, MutationBody>({
-    mutationFn: (body) =>
-      api
-        .delete(`auth/interests`, { json: body, headers: { Authorization: `Bearer ${token}` } })
-        .json(),
+    ...queries.interests.delete(token),
     onSuccess,
   });
-  const { data: cahootDetailData } = useSuspendedQuery<Response<CahootDetailType>>(
-    ['cahoot/detail', `${id}`],
-    () => api.get(`cahoots/${id}?info=detail`).json(),
-    { enabled: size === 'large' && type === 'cahoot' }
-  );
-  const { data: marketDetailData } = useSuspendedQuery<Response<MarketDetailType>>(
-    ['market/detail', `${id}`],
-    () => api.get(`markets/${id}`).json(),
-    { enabled: size === 'large' && type === 'market' }
-  );
+  const { queryFn: cahootQueryFn, queryKey: cahootQueryKey } = queries.cahoots.detail(String(id));
+  const { queryFn: marketQueryFn, queryKey: marketQueryKey } = queries.markets.detail(String(id));
+  const { data: cahootDetailData } = useSuspendedQuery(cahootQueryKey, cahootQueryFn, {
+    enabled: size === 'large' && type === 'cahoot',
+  });
+  const { data: marketDetailData } = useSuspendedQuery(marketQueryKey, marketQueryFn, {
+    enabled: size === 'large' && type === 'market',
+  });
 
   const onBookmarkClick: React.MouseEventHandler<HTMLButtonElement> = (e) => {
     e.preventDefault();
