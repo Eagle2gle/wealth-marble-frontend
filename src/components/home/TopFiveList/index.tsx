@@ -4,15 +4,16 @@ import ButtonGroup from '@/components/common/ButtonGroup';
 import ErrorFallback from '@/components/common/ErrorFallback';
 import { ErrorBoundary } from '@sentry/nextjs';
 
+import { CRITERIA_LIST } from './constants';
 import TopFiveListItems from './Items';
 import ItemsSkeleton from './Skeleton';
 
-const CriteriaList = ['거래가 많은(전일)', '보상이 많은(전일)'] as const;
+import type { Criteria } from './types';
 
 const TopFiveList = () => {
-  const [criteria, setCriteria] = useState('거래가 많은(전일)');
+  const [criteria, setCriteria] = useState<Criteria>('거래가 많은(전일)');
 
-  const changeCriteria = (criteria: string) => {
+  const changeCriteria = (criteria: Criteria) => {
     setCriteria(criteria);
   };
 
@@ -22,7 +23,7 @@ const TopFiveList = () => {
         <label className="font-bold">휴양지 Top 5</label>
       </div>
       <ButtonGroup
-        items={CriteriaList}
+        items={CRITERIA_LIST}
         currentItem={criteria}
         changeItem={changeCriteria}
         buttonSize="large"
