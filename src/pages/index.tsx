@@ -7,23 +7,28 @@ import Thumbnail from '@/components/Thumbnail';
 import { queries } from '@/queries';
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
+
+import type { NextPageWithLayout } from './_app';
+
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 
-export default function Home() {
+const Home: NextPageWithLayout = () => {
   return (
-    <Layout>
-      <div className="space-y-6 ">
-        <Thumbnail />
-        <DeadlineBanner />
-        <RecentUploadCarousel />
-        <div className="flex flex-col md:flex-row md:space-x-12">
-          <RecommendedList />
-          <TopFiveList />
-        </div>
+    <div className="space-y-6">
+      <Thumbnail />
+      <DeadlineBanner />
+      <RecentUploadCarousel />
+      <div className="flex flex-col md:flex-row md:space-x-12">
+        <RecommendedList />
+        <TopFiveList />
       </div>
-    </Layout>
+    </div>
   );
-}
+};
+
+Home.getLayout = (page) => <Layout>{page}</Layout>;
+
+export default Home;
 
 export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerError }>(
   (state) => async () => {

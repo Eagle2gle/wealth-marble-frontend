@@ -6,15 +6,16 @@ import Layout from '@/components/common/Layout';
 import DetailBody from '@/components/market/DetailBody';
 import DetailHeader from '@/components/market/DetailHeader';
 import { useStomp } from '@/hooks/useStomp';
+import type { NextPageWithLayout } from '@/pages/_app';
 import { queries } from '@/queries';
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
 
-import type { InferGetServerSidePropsType, NextPage } from 'next';
+import type { InferGetServerSidePropsType } from 'next';
 
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 
-const MarketDetail: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
+const MarketDetail: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   error,
 }) => {
   const { connect, disconnect } = useStomp({
@@ -32,14 +33,14 @@ const MarketDetail: NextPage<InferGetServerSidePropsType<typeof getServerSidePro
   if (error) return <Error statusCode={error.statusCode} title={error.title} />;
 
   return (
-    <Layout>
-      <div className="flex flex-col gap-6 md:mb-0">
-        <DetailHeader />
-        <DetailBody />
-      </div>
-    </Layout>
+    <div className="flex flex-col gap-6 md:mb-0">
+      <DetailHeader />
+      <DetailBody />
+    </div>
   );
 };
+
+MarketDetail.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default MarketDetail;
 
