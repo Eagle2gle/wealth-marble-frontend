@@ -12,7 +12,7 @@ interface RecommendedListItemsProps {
 
 const RecommendedListItems: React.FC<RecommendedListItemsProps> = ({ selectedCountry }) => {
   const userId = useTypeSelector((state) => state.user.id) ?? '';
-  const { queryFn, queryKey } = queries.markets.recommend._ctx.country(selectedCountry, userId);
+  const { queryFn, queryKey } = queries.markets.recommend(selectedCountry, userId);
   const {
     data: {
       data: { result },

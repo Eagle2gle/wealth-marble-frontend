@@ -50,10 +50,9 @@ export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerErro
     const promises: Promise<unknown>[] = [
       queryClient.fetchQuery(queries.cahoots.deadline._ctx.mini),
       queryClient.fetchQuery(queries.markets.price({ type: 'PRICE', order: 'up' })),
-      queryClient.fetchInfiniteQuery(queries.markets.list._ctx.keyword('')),
+      queryClient.fetchInfiniteQuery(queries.markets.list('')),
     ];
-    if (token)
-      promises.push(queryClient.fetchQuery(queries.interests.all._ctx.type('market', token)));
+    if (token) promises.push(queryClient.fetchQuery(queries.interests.all('market', token)));
     try {
       await Promise.all(promises);
     } catch (e) {

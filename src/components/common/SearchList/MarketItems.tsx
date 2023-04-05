@@ -12,7 +12,7 @@ import type { ListItemsProps } from './type';
 
 const MarketItems: React.FC<ListItemsProps> = ({ keyword }) => {
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    ...queries.markets.list._ctx.keyword(keyword),
+    ...queries.markets.list(keyword),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.data.result.length ? allPages.length : false,
   });

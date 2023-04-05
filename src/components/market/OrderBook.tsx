@@ -36,12 +36,12 @@ const OrderBook = () => {
   const [lastWeekStart, lastWeekEnd] = getWeekDuration(
     new Date(new Date().setDate(new Date().getDate() - 7))
   );
-  const { queryFn: thisWeekQueryFn, queryKey: thisWeekQueryKey } = queries.markets.transaction._ctx
-    .history(String(id))
-    ._ctx.week(weekStart, weekEnd);
-  const { queryFn: lastWeekQueryFn, queryKey: lastWeekQueryKey } = queries.markets.transaction._ctx
-    .history(String(id))
-    ._ctx.week(lastWeekStart, lastWeekEnd);
+  const { queryFn: thisWeekQueryFn, queryKey: thisWeekQueryKey } = queries.markets
+    .transaction(String(id))
+    ._ctx.history(weekStart, weekEnd);
+  const { queryFn: lastWeekQueryFn, queryKey: lastWeekQueryKey } = queries.markets
+    .transaction(String(id))
+    ._ctx.history(lastWeekStart, lastWeekEnd);
   const {
     data: {
       data: { result: thisWeek },
@@ -99,7 +99,7 @@ const OrderBook = () => {
         }
       );
       queryClient.invalidateQueries({
-        queryKey: queries.markets.transaction._ctx.history(String(id)).queryKey,
+        queryKey: queries.markets.transaction(String(id)).queryKey,
       });
       queryClient.invalidateQueries({ queryKey: queries.markets.detail(String(id)).queryKey });
     });

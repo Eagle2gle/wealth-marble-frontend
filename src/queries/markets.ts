@@ -16,19 +16,13 @@ import type { Response } from '@/types/response';
 import { createQueryKeys } from '@lukemorales/query-key-factory';
 
 export const markets = createQueryKeys('markets', {
-  list: {
-    queryKey: null,
-    queryFn: null,
-    contextQueries: {
-      keyword: (keyword: string) => ({
-        queryKey: [keyword],
-        queryFn: ({ pageParam = 0 }) =>
-          api
-            .get(`markets?page=${pageParam ?? 0}&keyword=${encodeURIComponent(keyword)}&size=10`)
-            .json<Response<MarketListType>>(),
-      }),
-    },
-  },
+  list: (keyword: string) => ({
+    queryKey: [keyword],
+    queryFn: ({ pageParam = 0 }) =>
+      api
+        .get(`markets?page=${pageParam ?? 0}&keyword=${encodeURIComponent(keyword)}&size=10`)
+        .json<Response<MarketListType>>(),
+  }),
   detail: (id: string) => ({
     queryKey: [id],
     queryFn: () => api.get(`markets/${id}`).json<Response<MarketDetailType>>(),
@@ -37,25 +31,19 @@ export const markets = createQueryKeys('markets', {
     queryKey: [id],
     queryFn: () => api.get(`orders/${id}/list`).json<Response<MarketOrderList>>(),
   }),
-  transaction: {
-    queryKey: null,
+  transaction: (id: string) => ({
+    queryKey: [id],
     queryFn: null,
     contextQueries: {
-      history: (id: string) => ({
-        queryKey: [id],
-        queryFn: null,
-        contextQueries: {
-          week: (weekStart: string, weekEnd: string) => ({
-            queryKey: [weekStart, weekEnd],
-            queryFn: () =>
-              api
-                .get(`transactions/${id}?page=0&startDate=${weekStart}&endDate=${weekEnd}`)
-                .json<Response<MarketTransactionHistory>>(),
-          }),
-        },
+      history: (weekStart: string, weekEnd: string) => ({
+        queryKey: [weekStart, weekEnd],
+        queryFn: () =>
+          api
+            .get(`transactions/${id}?page=0&startDate=${weekStart}&endDate=${weekEnd}`)
+            .json<Response<MarketTransactionHistory>>(),
       }),
     },
-  },
+  }),
   price: ({ type, order }: { type: MarketPriceInfoType; order: MarketPriceInfoOrder }) => ({
     queryKey: [type, order],
     queryFn: () =>
@@ -65,19 +53,13 @@ export const markets = createQueryKeys('markets', {
     queryKey: null,
     queryFn: () => api.get('markets/countries').json<Response<CountriesType>>(),
   },
-  recommend: {
-    queryKey: null,
-    queryFn: null,
-    contextQueries: {
-      country: (country: string, userId: number | '') => ({
-        queryKey: [country, userId],
-        queryFn: () =>
-          api
-            .get(`markets/recommend?country=${encodeURIComponent(country)}&userId=${userId}`)
-            .json<Response<RecommendedListType>>(),
-      }),
-    },
-  },
+  recommend: (country: string, userId: number | '') => ({
+    queryKey: [country, userId],
+    queryFn: () =>
+      api
+        .get(`markets/recommend?country=${encodeURIComponent(country)}&userId=${userId}`)
+        .json<Response<RecommendedListType>>(),
+  }),
   top5: (criteria: Criteria) => ({
     queryKey: [criteria],
     queryFn: () =>

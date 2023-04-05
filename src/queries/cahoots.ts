@@ -34,21 +34,13 @@ export const cahoots = createQueryKeys('cahoots', {
     queryKey: null,
     queryFn: () => api.get(`cahoots?status=ended`).json<Response<CahootListType>>(),
   },
-  list: {
-    queryKey: null,
-    queryFn: null,
-    contextQueries: {
-      keyword: (keyword: string) => ({
-        queryKey: [keyword],
-        queryFn: ({ pageParam = 0 }) =>
-          api
-            .get(
-              `cahoots?status=ongoing&page=${pageParam ?? 0}&keyword=${encodeURIComponent(keyword)}`
-            )
-            .json<Response<CahootListType>>(),
-      }),
-    },
-  },
+  list: (keyword: string) => ({
+    queryKey: [keyword],
+    queryFn: ({ pageParam = 0 }) =>
+      api
+        .get(`cahoots?status=ongoing&page=${pageParam ?? 0}&keyword=${encodeURIComponent(keyword)}`)
+        .json<Response<CahootListType>>(),
+  }),
   recent: {
     queryKey: null,
     queryFn: () => api.get('cahoots/recent').json<Response<RecentCahootListType>>(),

@@ -33,7 +33,7 @@ export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerErro
       queryClient.fetchQuery(queries.cahoots.deadline._ctx.mini),
       queryClient.fetchQuery(queries.cahoots.recent),
       queryClient.fetchQuery(queries.markets.countries),
-      queryClient.fetchQuery(queries.markets.recommend._ctx.country('대한민국', userId)),
+      queryClient.fetchQuery(queries.markets.recommend('대한민국', userId)),
       queryClient.fetchQuery(queries.markets.top5('거래가 많은(전일)')),
     ];
 

@@ -31,12 +31,12 @@ const InterestButton = ({
   const userId = useTypeSelector((state) => state.user.id);
   const queryClient = useQueryClient();
   const onSuccess = () => {
-    queryClient.invalidateQueries({ queryKey: queries.cahoots.list.queryKey });
-    queryClient.invalidateQueries({ queryKey: queries.interests.all.queryKey });
+    queryClient.invalidateQueries({ queryKey: queries.cahoots.list._def });
+    queryClient.invalidateQueries({ queryKey: queries.interests.all._def });
     queryClient.invalidateQueries({ queryKey: queries.cahoots.detail(String(id)).queryKey });
-    queryClient.invalidateQueries({ queryKey: queries.markets.list.queryKey });
+    queryClient.invalidateQueries({ queryKey: queries.markets.list._def });
     queryClient.invalidateQueries({ queryKey: queries.markets.detail(String(id)).queryKey });
-    queryClient.invalidateQueries({ queryKey: queries.markets.recommend.queryKey });
+    queryClient.invalidateQueries({ queryKey: queries.markets.recommend._def });
   };
 
   const { mutate: addInterest } = useMutation<Response, Error, MutationBody>({

@@ -42,11 +42,11 @@ export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerErro
       queryClient.fetchQuery(queries.cahoots.deadline._ctx.mini),
       queryClient.fetchQuery(queries.cahoots.deadline),
       queryClient.fetchQuery(queries.cahoots.recap),
-      queryClient.fetchInfiniteQuery(queries.cahoots.list._ctx.keyword('')),
+      queryClient.fetchInfiniteQuery(queries.cahoots.list('')),
     ];
     const { token } = state.getState().user;
     if (token) {
-      promises.push(queryClient.fetchQuery(queries.interests.all._ctx.type('cahoot', token)));
+      promises.push(queryClient.fetchQuery(queries.interests.all('cahoot', token)));
     }
     try {
       await Promise.all(promises);

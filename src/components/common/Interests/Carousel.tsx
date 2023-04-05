@@ -17,7 +17,7 @@ const TypeUrlPathMap = {
 
 const InterestsCarousel: React.FC<InterestsProps> = ({ scrollRef, type }) => {
   const token = useTypeSelector((state) => state.user.token) ?? '';
-  const { queryFn, queryKey } = queries.interests.all._ctx.type(type, token);
+  const { queryFn, queryKey } = queries.interests.all(type, token);
   const { data } = useSuspendedQuery(queryKey, queryFn, { enabled: !!token });
 
   const onAddClick = () => {

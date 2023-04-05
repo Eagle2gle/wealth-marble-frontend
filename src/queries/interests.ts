@@ -20,19 +20,13 @@ export const interestsMutations = createMutationKeys('interests', {
 });
 
 export const interests = createQueryKeys('interests', {
-  all: {
-    queryKey: null,
-    queryFn: null,
-    contextQueries: {
-      type: (type: 'cahoot' | 'market', token: string) => ({
-        queryKey: [type],
-        queryFn: () =>
-          api
-            .get(`auth/interests/me?page=0&size=10&type=${type}`, {
-              headers: { Authorization: `Bearer ${token}` },
-            })
-            .json<Response<Interests>>(),
-      }),
-    },
-  },
+  all: (type: 'cahoot' | 'market', token: string) => ({
+    queryKey: [type],
+    queryFn: () =>
+      api
+        .get(`auth/interests/me?page=0&size=10&type=${type}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        })
+        .json<Response<Interests>>(),
+  }),
 });

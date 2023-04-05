@@ -13,7 +13,7 @@ import InterestButton from '../InterestButton';
 
 const CahootItems: React.FC<ListItemsProps> = ({ keyword }) => {
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    ...queries.cahoots.list._ctx.keyword(keyword),
+    ...queries.cahoots.list(keyword),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.data.result.length ? allPages.length : false,
   });
