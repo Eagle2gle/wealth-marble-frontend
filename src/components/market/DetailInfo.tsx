@@ -14,7 +14,7 @@ const DetailInfo = () => {
     data: {
       data: { title, location, description, pictures },
     },
-  } = useSuspendedQuery<Response<MarketInfoType>>(['market/detail', router.query.id], () =>
+  } = useSuspendedQuery<Response<MarketInfoType>>(['market/info', router.query.id], () =>
     api.get(`markets/info/${router.query.id}`).json()
   );
 
@@ -43,7 +43,7 @@ const DetailInfo = () => {
       </div>
       <div className="mx-4 flex flex-col gap-2 md:mx-0">
         <p className="text-lg font-bold">휴양지 소개</p>
-        <div className="text-xs">{description}</div>
+        <div className="text-sm">{description}</div>
       </div>
     </>
   );
