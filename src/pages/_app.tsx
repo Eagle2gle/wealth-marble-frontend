@@ -8,11 +8,21 @@ import { logout } from '@/store/modules/user';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
+import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
 
 import wrapper from '../store';
 
-const App = ({ Component, ...rest }: AppProps) => {
+// eslint-disable-next-line @typescript-eslint/ban-types
+export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {
+  getLayout?: (page: React.ReactElement) => React.ReactNode;
+};
+
+type AppPropsWithLayout = AppProps & {
+  Component: NextPageWithLayout;
+};
+
+const App = ({ Component, ...rest }: AppPropsWithLayout) => {
   const [queryClient] = useState(
     () =>
       new QueryClient({
@@ -21,6 +31,8 @@ const App = ({ Component, ...rest }: AppProps) => {
   );
   const { store, props } = wrapper.useWrappedStore(rest);
   const { pageProps } = props;
+  const getLayout = Component.getLayout ?? ((page) => page);
+
   useEffect(() => {
     const token = store.getState().user.token;
     if (token) {
@@ -29,11 +41,12 @@ const App = ({ Component, ...rest }: AppProps) => {
         .catch(() => store.dispatch(logout()));
     }
   }, [store]);
+
   return (
     <Provider store={store}>
       <QueryClientProvider client={queryClient}>
         <Hydrate state={pageProps.dehydratedState}>
-          <Component {...pageProps} />
+          {getLayout(<Component {...pageProps} />)}
         </Hydrate>
         <ReactQueryDevtools />
       </QueryClientProvider>
