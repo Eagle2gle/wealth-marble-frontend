@@ -1,6 +1,5 @@
+import Icon from '@/components/common/Icons';
 import { formatTimeWithoutSecond } from '@/utils/date';
-
-import Icon from '../common/Icons';
 
 const PriceInfoUpdate = () => {
   return (

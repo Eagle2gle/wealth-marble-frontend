@@ -1,14 +1,18 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
+
+import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
 import type { CahootDetailType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
+import { ErrorBoundary } from '@sentry/nextjs';
 
 import DetailInfo from './DetailInfo';
 import DetailStatus from './DetailStatus';
 
+import ErrorFallback from '../common/ErrorFallback';
 import InterestButton from '../common/InterestButton';
 import TabButton from '../common/TabButton';
 
@@ -16,17 +20,26 @@ const TABS = ['정보', '공모 현황'] as const;
 
 type TabElements = (typeof TABS)[number];
 
-interface DetailBodyProps {
-  id: number;
-}
+const DetailBodyWrapper = () => {
+  return (
+    <ErrorBoundary fallback={<ErrorFallback />}>
+      <Suspense>
+        <DetailBody />
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
 
-const DetailBody = ({ id }: DetailBodyProps) => {
+const DetailBody = () => {
+  const {
+    query: { id },
+  } = useRouter();
   const [tab, setTab] = useState<TabElements>(TABS[0]);
   const {
     data: {
       data: { isInterest },
     },
-  } = useSuspendedQuery<Response<CahootDetailType>>(['cahoot/detail', `${id}`], () =>
+  } = useSuspendedQuery<Response<CahootDetailType>>(['cahoot/detail', id], () =>
     api.get(`cahoots/${id}?info=detail`).json()
   );
 
@@ -34,7 +47,13 @@ const DetailBody = ({ id }: DetailBodyProps) => {
 
   return (
     <>
-      <InterestButton type="cahoot" id={id} size="large" isInterest={isInterest} />
+      <InterestButton
+        type="cahoot"
+        id={parseInt(String(id))}
+        size="large"
+        isInterest={isInterest}
+      />
+
       <TabButton tabs={TABS} currentTab={tab} onTabClick={onTabClick} />
       <div className={classNames(tab === '정보' ? 'flex flex-col' : 'hidden', 'gap-[inherit]')}>
         <DetailInfo />
@@ -48,4 +67,4 @@ const DetailBody = ({ id }: DetailBodyProps) => {
   );
 };
 
-export default DetailBody;
+export default DetailBodyWrapper;

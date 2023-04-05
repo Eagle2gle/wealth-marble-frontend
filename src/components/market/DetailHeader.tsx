@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
@@ -6,8 +8,20 @@ import { api } from '@/libs/client/api';
 import { useTypeSelector } from '@/store';
 import type { MarketDetailType } from '@/types/market';
 import type { Response } from '@/types/response';
+import { ErrorBoundary } from '@sentry/nextjs';
 
+import ErrorFallback from '../common/ErrorFallback';
 import InterestButton from '../common/InterestButton';
+
+const DetailHeaderWrapper = () => {
+  return (
+    <ErrorBoundary fallback={<ErrorFallback />}>
+      <Suspense>
+        <DetailHeader />
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
 
 const DetailHeader = () => {
   const {
@@ -77,4 +91,4 @@ const DetailHeader = () => {
   );
 };
 
-export default DetailHeader;
+export default DetailHeaderWrapper;

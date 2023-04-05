@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
@@ -7,11 +7,23 @@ import { api } from '@/libs/client/api';
 import type { CahootDeadlineMiniType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
+import { ErrorBoundary } from '@sentry/nextjs';
 
+import ErrorFallback from '../common/ErrorFallback';
 import Icon from '../common/Icons';
 
 const INTERVAL_DURATION = 3000;
 const TRANSITION_DURATION = 300;
+
+const DeadlineBannerWrapper = () => {
+  return (
+    <ErrorBoundary fallback={<ErrorFallback />}>
+      <Suspense>
+        <DeadlineBanner />
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
 
 const DeadlineBanner = () => {
   const {
@@ -108,4 +120,4 @@ const DeadlineBanner = () => {
   );
 };
 
-export default DeadlineBanner;
+export default DeadlineBannerWrapper;

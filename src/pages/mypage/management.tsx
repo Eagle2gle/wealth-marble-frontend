@@ -1,31 +1,74 @@
 import { Suspense } from 'react';
 
+import Error from 'next/error';
+
+import ErrorFallback from '@/components/common/ErrorFallback';
 import HeaderWithBackButton from '@/components/mypage/HeaderWithBackButton';
 import UserInfoManagement from '@/components/mypage/UserInfoManagement';
+import { api } from '@/libs/client/api';
 import wrapper from '@/store';
+import type { ServerError } from '@/types/response';
+import { ErrorBoundary } from '@sentry/nextjs';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 
-export default function Management() {
+import type { InferGetServerSidePropsType, NextPage } from 'next';
+
+const Management: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
+  error,
+}) => {
+  if (error) return <Error statusCode={error.statusCode} title={error.title} />;
+
   return (
-    <div>
+    <>
       <HeaderWithBackButton title="개인정보 관리" />
-      <Suspense fallback={<p>로딩...</p>}>
-        <UserInfoManagement />
-      </Suspense>
-    </div>
+      <ErrorBoundary fallback={<ErrorFallback />}>
+        <Suspense>
+          <UserInfoManagement />
+        </Suspense>
+      </ErrorBoundary>
+    </>
   );
-}
+};
 
-export const getServerSideProps = wrapper.getServerSideProps((state) => async () => {
-  const { id } = state.getState().user;
-  if (!id) {
+export default Management;
+
+export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerError }>(
+  (state) => async () => {
+    const { token } = state.getState().user;
+    if (!token) {
+      return {
+        redirect: {
+          destination: '/login',
+          permanent: false,
+        },
+      };
+    }
+    const queryClient = new QueryClient();
+    const promises: Promise<unknown>[] = [
+      queryClient.fetchQuery([`user/info`], () =>
+        api
+          .get(`auth/users/me`, {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .json()
+      ),
+    ];
+    try {
+      await Promise.all(promises);
+    } catch (e) {
+      console.error(e);
+      const error = {
+        statusCode: 500,
+        title: 'Internal Server Error',
+      };
+      return {
+        props: {
+          error,
+        },
+      };
+    }
     return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
+      props: { error: false, dehydratedState: JSON.parse(JSON.stringify(dehydrate(queryClient))) },
     };
   }
-  return {
-    props: {},
-  };
-});
+);

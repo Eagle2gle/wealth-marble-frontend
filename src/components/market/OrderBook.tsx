@@ -1,5 +1,7 @@
 import { useEffect } from 'react';
 
+import { useRouter } from 'next/router';
+
 import { useStomp } from '@/hooks/useStomp';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { api } from '@/libs/client/api';
@@ -11,11 +13,10 @@ import classNames from '@/utils/classnames';
 import { getWeekDuration } from '@/utils/date';
 import { useQueryClient } from '@tanstack/react-query';
 
-interface OrderBookProps {
-  id: number;
-}
-
-const OrderBook = ({ id }: OrderBookProps) => {
+const OrderBook = () => {
+  const {
+    query: { id },
+  } = useRouter();
   const { subscribe, unsubscribe, isConnected } = useStomp({
     config: { brokerURL: process.env.NEXT_PUBLIC_WS_URL },
     onConnect: (frame) => console.log(frame),
@@ -43,7 +44,7 @@ const OrderBook = ({ id }: OrderBookProps) => {
       data: { result: thisWeek },
     },
   } = useSuspendedQuery<Response<MarketTransactionHistory>>(
-    ['transaction', 'history', `${id}`, 'this'],
+    ['transaction', 'history', id, 'this'],
     () => api.get(`transactions/${id}?page=0&startDate=${weekStart}&endDate=${weekEnd}`).json()
   );
   const {
@@ -51,7 +52,7 @@ const OrderBook = ({ id }: OrderBookProps) => {
       data: { result: lastWeek },
     },
   } = useSuspendedQuery<Response<MarketTransactionHistory>>(
-    ['transaction', 'history', `${id}`, 'last'],
+    ['transaction', 'history', id, 'last'],
     () =>
       api.get(`transactions/${id}?page=0&startDate=${lastWeekStart}&endDate=${lastWeekEnd}`).json()
   );

@@ -1,14 +1,28 @@
+import { Suspense } from 'react';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { fetcher } from '@/libs/client/fetcher';
+import { api } from '@/libs/client/api';
 import type { CahootDetailType } from '@/types/cahoot';
 import type { Response } from '@/types/response';
+import { ErrorBoundary } from '@sentry/nextjs';
 
 import Order from './Order';
 
+import ErrorFallback from '../common/ErrorFallback';
 import InterestButton from '../common/InterestButton';
+
+const DetailHeaderWrapper = () => {
+  return (
+    <ErrorBoundary fallback={<ErrorFallback />}>
+      <Suspense>
+        <DetailHeader />
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
 
 const DetailHeader = () => {
   const {
@@ -18,9 +32,8 @@ const DetailHeader = () => {
     data: {
       data: { images, title, location, competitionRate, stockPrice, status, isInterest },
     },
-  } = useSuspendedQuery<Response<CahootDetailType>>(
-    ['cahoot/detail', id],
-    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${id}?info=detail`)
+  } = useSuspendedQuery<Response<CahootDetailType>>(['cahoot/detail', id], () =>
+    api.get(`cahoots/${id}?info=detail`).json()
   );
 
   return (
@@ -76,4 +89,4 @@ const DetailHeader = () => {
   );
 };
 
-export default DetailHeader;
+export default DetailHeaderWrapper;

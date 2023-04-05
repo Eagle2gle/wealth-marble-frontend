@@ -5,20 +5,20 @@ import Link from 'next/link';
 
 import { PRICE_STATUS_MAP } from '@/constants/market';
 import { api } from '@/libs/client/api';
-import { MarketListType } from '@/types/market';
+import type { MarketListType } from '@/types/market';
 import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-interface ListItemsProps {
-  keyword: string;
-}
+import type { ListItemsProps } from './type';
 
-const ListItems = ({ keyword }: ListItemsProps) => {
+const MarketItems: React.FC<ListItemsProps> = ({ keyword }) => {
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery<Response<MarketListType>>({
     queryKey: ['market/list', keyword],
     queryFn: ({ pageParam = 0 }) =>
-      api.get(`markets?page=${pageParam}&keyword=${encodeURIComponent(keyword)}&size=10`).json(),
+      api
+        .get(`markets?page=${pageParam ?? 0}&keyword=${encodeURIComponent(keyword)}&size=10`)
+        .json(),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.data.result.length ? allPages.length : false,
   });
@@ -89,4 +89,4 @@ const ListItems = ({ keyword }: ListItemsProps) => {
   );
 };
 
-export default ListItems;
+export default MarketItems;

@@ -15,8 +15,7 @@ import TextInput from '@/components/common/TextInput';
 import HeaderWithBackButton from '@/components/mypage/HeaderWithBackButton';
 import PlaceSearchBar from '@/components/PlaceSearchBar';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import wrapper from '@/store';
-import { useTypeSelector } from '@/store';
+import wrapper, { useTypeSelector } from '@/store';
 import { CountriesType } from '@/types/cahoot';
 import { Response } from '@/types/response';
 // import Map from '@/components/Map';
@@ -54,7 +53,6 @@ export interface FormDataType {
 export default function CreateCahoot() {
   const token = useTypeSelector((state) => state.user.token);
   const router = useRouter();
-  const selectBoxContainer = useRef<HTMLDivElement>(null);
   const [selectedCountry, setSelectedCountry] = useState('국가'); // 휴양지 위치
   const {
     register,
@@ -205,7 +203,7 @@ export default function CreateCahoot() {
           </FormItem>
           {/* 위치 */}
           <FormItem id="location" label="위치" required={true}>
-            <div ref={selectBoxContainer} className="relative flex gap-4 px-2">
+            <div className="relative flex gap-4 px-2">
               <input
                 id="country"
                 type="hidden"
@@ -215,7 +213,6 @@ export default function CreateCahoot() {
               />
               <SelectBox
                 items={countries}
-                containerRef={selectBoxContainer}
                 currentItem={selectedCountry}
                 changeItem={changeCountry}
                 size="large"
