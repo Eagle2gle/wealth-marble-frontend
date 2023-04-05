@@ -1,28 +1,26 @@
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import type { CahootDetailType, CahootHistoryType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 
 const DetailStatus = () => {
   const {
     query: { id },
   } = useRouter();
+  const { queryFn: detailQueryFn, queryKey: detailQueryKey } = queries.cahoots.detail(String(id));
+  const { queryFn: historyQueryFn, queryKey: historyQueryKey } = queries.cahoots.history(
+    String(id)
+  );
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<CahootHistoryType>>(['cahoot/history', id], () =>
-    api.get(`cahoots/${id}?info=history`).json()
-  );
+  } = useSuspendedQuery(historyQueryKey, historyQueryFn);
   const {
     data: {
       data: { stockPrice },
     },
-  } = useSuspendedQuery<Response<CahootDetailType>>(['cahoot/detail', id], () =>
-    api.get(`cahoots/${id}?info=detail`).json()
-  );
+  } = useSuspendedQuery(detailQueryKey, detailQueryFn);
   return (
     <table className="border-separate border-spacing-0 border-y border-grey md:rounded-lg md:border-x">
       <thead className="h-12">

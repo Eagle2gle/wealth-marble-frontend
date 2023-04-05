@@ -6,9 +6,7 @@ import Link from 'next/link';
 import Carousel from '@/components/common/Carousel';
 import ErrorFallback from '@/components/common/ErrorFallback';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import { RecentCahootListType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 import { ErrorBoundary } from '@sentry/nextjs';
 
 const RecentUploadCarouselWrapper = () => {
@@ -30,13 +28,12 @@ const RecentUploadCarouselWrapper = () => {
 };
 
 const RecentUploadCarousel = () => {
+  const { queryFn, queryKey } = queries.cahoots.recent;
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<RecentCahootListType>>(['RecentUploadCarouselData'], () =>
-    api.get('cahoots/recent').json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
   return (
     <Carousel itemCount={result?.length ?? 0}>
       {result?.map(({ id, title, images, expectedRateOfReturn }) => (
@@ -47,7 +44,7 @@ const RecentUploadCarousel = () => {
         >
           <div className="avatar -z-10">
             {/* 이미지 */}
-            <div className="w-24 rounded-full bg-grey">
+            <div className="relative w-24 rounded-full bg-grey">
               {images[0] && (
                 <Image
                   alt="공모 이미지"

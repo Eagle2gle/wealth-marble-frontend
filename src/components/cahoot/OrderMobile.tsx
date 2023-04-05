@@ -3,9 +3,7 @@ import { Suspense, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import type { CahootDetailType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 import { ErrorBoundary } from '@sentry/nextjs';
 
 import BuyButton from './BuyButton';
@@ -30,13 +28,12 @@ const OrderMobile = () => {
   const {
     query: { id },
   } = useRouter();
+  const { queryKey, queryFn } = queries.cahoots.detail(String(id));
   const {
     data: {
       data: { stockPrice, status },
     },
-  } = useSuspendedQuery<Response<CahootDetailType>>(['cahoot/detail', id], () =>
-    api.get(`cahoots/${id}?info=detail`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
 
   return (
     <div className="md:hidden">

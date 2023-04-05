@@ -3,9 +3,7 @@ import { Suspense, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import type { CahootDetailType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 import classNames from '@/utils/classnames';
 import { ErrorBoundary } from '@sentry/nextjs';
 
@@ -35,13 +33,12 @@ const DetailBody = () => {
     query: { id },
   } = useRouter();
   const [tab, setTab] = useState<TabElements>(TABS[0]);
+  const { queryFn, queryKey } = queries.cahoots.detail(String(id));
   const {
     data: {
       data: { isInterest },
     },
-  } = useSuspendedQuery<Response<CahootDetailType>>(['cahoot/detail', id], () =>
-    api.get(`cahoots/${id}?info=detail`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
 
   const onTabClick = (tab: TabElements) => () => setTab(tab);
 

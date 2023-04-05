@@ -4,9 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import type { CahootDetailType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 import { ErrorBoundary } from '@sentry/nextjs';
 
 import Order from './Order';
@@ -28,13 +26,12 @@ const DetailHeader = () => {
   const {
     query: { id },
   } = useRouter();
+  const { queryFn, queryKey } = queries.cahoots.detail(String(id));
   const {
     data: {
       data: { images, title, location, competitionRate, stockPrice, status, isInterest },
     },
-  } = useSuspendedQuery<Response<CahootDetailType>>(['cahoot/detail', id], () =>
-    api.get(`cahoots/${id}?info=detail`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
 
   return (
     <div className="mx-4 mt-4 flex gap-3 md:mx-0 md:gap-5">

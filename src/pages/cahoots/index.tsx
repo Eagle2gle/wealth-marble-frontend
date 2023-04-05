@@ -9,7 +9,7 @@ import Recap from '@/components/cahoot/Recap';
 import Interests from '@/components/common/Interests';
 import Layout from '@/components/common/Layout';
 import SearchList from '@/components/common/SearchList';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import wrapper from '@/store';
 import { ServerError } from '@/types/response';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
@@ -39,30 +39,14 @@ export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerErro
   (state) => async () => {
     const queryClient = new QueryClient();
     const promises: Promise<unknown>[] = [
-      queryClient.fetchQuery(['cahoot/deadline-mini'], () =>
-        api.get(`cahoots/mini?status=ending-soon`).json()
-      ),
-      queryClient.fetchQuery(['cahoot/deadline'], () =>
-        api.get(`cahoots?status=ending-soon`).json()
-      ),
-      queryClient.fetchQuery(['cahoot/recap'], () => api.get(`cahoots?status=ended`).json()),
-      queryClient.fetchInfiniteQuery({
-        queryKey: ['cahoot/list', ''],
-        queryFn: ({ pageParam = 0 }) =>
-          api.get(`cahoots?status=ongoing&page=${pageParam}&keyword=`).json(),
-      }),
+      queryClient.fetchQuery(queries.cahoots.deadline._ctx.mini),
+      queryClient.fetchQuery(queries.cahoots.deadline),
+      queryClient.fetchQuery(queries.cahoots.recap),
+      queryClient.fetchInfiniteQuery(queries.cahoots.list._ctx.keyword('')),
     ];
     const { token } = state.getState().user;
     if (token) {
-      promises.push(
-        queryClient.fetchQuery([`cahoots/interests`], () =>
-          api
-            .get(`auth/interests/me?page=0&size=10&type=cahoot`, {
-              headers: { Authorization: `Bearer ${token}` },
-            })
-            .json()
-        )
-      );
+      promises.push(queryClient.fetchQuery(queries.interests.all._ctx.type('cahoot', token)));
     }
     try {
       await Promise.all(promises);

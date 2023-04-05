@@ -4,9 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import type { CahootDeadlineType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 import { getDayDiff } from '@/utils/date';
 import { ErrorBoundary } from '@sentry/nextjs';
 
@@ -27,13 +25,12 @@ const Deadline = () => {
 };
 
 const DeadlineCarousel = () => {
+  const { queryFn, queryKey } = queries.cahoots.deadline;
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<CahootDeadlineType>>(['cahoot/deadline'], () =>
-    api.get(`cahoots?status=ending-soon`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
 
   return (
     <Carousel itemCount={result.length}>
