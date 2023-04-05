@@ -4,10 +4,10 @@ import { useRouter } from 'next/router';
 
 import { useStomp } from '@/hooks/useStomp';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeDispatch, useTypeSelector } from '@/store';
 import { setBuyPriceByNumber, setSellPriceByNumber } from '@/store/modules/marketOrder';
-import type { MarketOrder, MarketOrderList, MarketTransactionHistory } from '@/types/market';
+import type { MarketOrder, MarketOrderList } from '@/types/market';
 import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
 import { getWeekDuration } from '@/utils/date';
@@ -24,38 +24,34 @@ const OrderBook = () => {
   const dispatch = useTypeDispatch();
   const userId = useTypeSelector((state) => state.user.id);
   const queryClient = useQueryClient();
+  const { queryFn: tradeQueryFn, queryKey: tradeQueryKey } = queries.markets.trade(String(id));
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<MarketOrderList>>(
-    ['market/trade', id],
-    () => api.get(`orders/${id}/list`).json(),
-    {
-      staleTime: Infinity,
-    }
-  );
+  } = useSuspendedQuery(tradeQueryKey, tradeQueryFn, {
+    staleTime: Infinity,
+  });
   const [weekStart, weekEnd] = getWeekDuration(new Date());
   const [lastWeekStart, lastWeekEnd] = getWeekDuration(
     new Date(new Date().setDate(new Date().getDate() - 7))
   );
+  const { queryFn: thisWeekQueryFn, queryKey: thisWeekQueryKey } = queries.markets.transaction._ctx
+    .history(String(id))
+    ._ctx.week(weekStart, weekEnd);
+  const { queryFn: lastWeekQueryFn, queryKey: lastWeekQueryKey } = queries.markets.transaction._ctx
+    .history(String(id))
+    ._ctx.week(lastWeekStart, lastWeekEnd);
   const {
     data: {
       data: { result: thisWeek },
     },
-  } = useSuspendedQuery<Response<MarketTransactionHistory>>(
-    ['transaction', 'history', id, 'this'],
-    () => api.get(`transactions/${id}?page=0&startDate=${weekStart}&endDate=${weekEnd}`).json()
-  );
+  } = useSuspendedQuery(thisWeekQueryKey, thisWeekQueryFn);
   const {
     data: {
       data: { result: lastWeek },
     },
-  } = useSuspendedQuery<Response<MarketTransactionHistory>>(
-    ['transaction', 'history', id, 'last'],
-    () =>
-      api.get(`transactions/${id}?page=0&startDate=${lastWeekStart}&endDate=${lastWeekEnd}`).json()
-  );
+  } = useSuspendedQuery(lastWeekQueryKey, lastWeekQueryFn);
 
   const sell = result.filter(({ orderType }) => orderType === 'SELL');
   const buy = result.filter(({ orderType }) => orderType === 'BUY');
@@ -76,31 +72,36 @@ const OrderBook = () => {
       const { marketId: _, ...newData }: MarketOrder = JSON.parse(message.body);
       console.log(newData);
       if (newData.amount === 0) {
-        queryClient.invalidateQueries(['market/trade', id]);
+        queryClient.invalidateQueries(queries.markets.trade(String(id)).queryKey);
         return;
       }
 
-      queryClient.setQueryData<Response<MarketOrderList>>(['market/trade', id], (oldData) => {
-        if (!oldData) return oldData;
-        const newResult = [
-          ...oldData.data.result.filter(({ price }) => price !== newData.price),
-          newData,
-        ].sort((a, b) => b.price - a.price);
-        const sell = newResult.filter(({ orderType }) => orderType === 'SELL');
-        const buy = newResult.filter(({ orderType }) => orderType === 'BUY');
-        const refinedResult: Omit<MarketOrder, 'marketId'>[] = [];
-        sell.length > 5
-          ? refinedResult.push(...sell.slice(sell.length - 5, sell.length))
-          : refinedResult.push(...sell);
-        buy.length > 5 ? refinedResult.push(...buy.slice(0, 5)) : refinedResult.push(...buy);
+      queryClient.setQueryData<Response<MarketOrderList>>(
+        queries.markets.trade(String(id)).queryKey,
+        (oldData) => {
+          if (!oldData) return oldData;
+          const newResult = [
+            ...oldData.data.result.filter(({ price }) => price !== newData.price),
+            newData,
+          ].sort((a, b) => b.price - a.price);
+          const sell = newResult.filter(({ orderType }) => orderType === 'SELL');
+          const buy = newResult.filter(({ orderType }) => orderType === 'BUY');
+          const refinedResult: Omit<MarketOrder, 'marketId'>[] = [];
+          sell.length > 5
+            ? refinedResult.push(...sell.slice(sell.length - 5, sell.length))
+            : refinedResult.push(...sell);
+          buy.length > 5 ? refinedResult.push(...buy.slice(0, 5)) : refinedResult.push(...buy);
 
-        return {
-          ...oldData,
-          data: { result: refinedResult },
-        };
+          return {
+            ...oldData,
+            data: { result: refinedResult },
+          };
+        }
+      );
+      queryClient.invalidateQueries({
+        queryKey: queries.markets.transaction._ctx.history(String(id)).queryKey,
       });
-      queryClient.invalidateQueries({ queryKey: ['transaction', 'history', `${id}`] });
-      queryClient.invalidateQueries({ queryKey: ['market/detail', `${id}`] });
+      queryClient.invalidateQueries({ queryKey: queries.markets.detail(String(id)).queryKey });
     });
     return () => {
       unsubscribe(`/topic/market/${id}`);

@@ -3,30 +3,21 @@ import Link from 'next/link';
 
 import InterestButton from '@/components/common/InterestButton';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeSelector } from '@/store';
-import type { RecommendedListType } from '@/types/market';
-import type { Response } from '@/types/response';
 
 interface RecommendedListItemsProps {
   selectedCountry: string;
 }
 
 const RecommendedListItems: React.FC<RecommendedListItemsProps> = ({ selectedCountry }) => {
-  const userId = useTypeSelector((state) => state.user.id);
+  const userId = useTypeSelector((state) => state.user.id) ?? '';
+  const { queryFn, queryKey } = queries.markets.recommend._ctx.country(selectedCountry, userId);
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<RecommendedListType>>(['RecommendListData', selectedCountry], () =>
-    api
-      .get(
-        `markets/recommend?country=${encodeURIComponent(selectedCountry)}${
-          userId ? `&userId=${userId}` : ''
-        }`
-      )
-      .json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
   return (
     <div className="grid w-full grid-cols-6 gap-4 gap-y-4 max-md:carousel md:grid-cols-3 ">
       {result?.map(({ id, isInterest, title, expectedRateOfReturn, image }) => (
@@ -37,7 +28,7 @@ const RecommendedListItems: React.FC<RecommendedListItemsProps> = ({ selectedCou
         >
           {/* 이미지 */}
           <div className="avatar">
-            <div className="w-32 rounded-t bg-grey">
+            <div className="relative w-32 rounded-t bg-grey">
               {image && (
                 <Image
                   src={image}

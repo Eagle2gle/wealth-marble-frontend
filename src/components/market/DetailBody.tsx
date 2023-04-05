@@ -3,10 +3,8 @@ import { Suspense, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeSelector } from '@/store';
-import type { MarketDetailType } from '@/types/market';
-import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
 import { ErrorBoundary } from '@sentry/nextjs';
 
@@ -36,13 +34,12 @@ const DetailBody = () => {
     query: { id },
   } = useRouter();
   const [tab, setTab] = useState<TabElements>(TABS[0]);
+  const { queryFn, queryKey } = queries.markets.detail(String(id));
   const {
     data: {
       data: { userIds },
     },
-  } = useSuspendedQuery<Response<MarketDetailType>>(['market/detail', id], () =>
-    api.get(`markets/${id}`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
   const userId = useTypeSelector((state) => state.user.id);
 
   const onTabClick = (tab: TabElements) => () => setTab(tab);

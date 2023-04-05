@@ -1,8 +1,6 @@
 import SelectBox from '@/components/common/SelectBox';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import type { CountriesType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 
 interface RecommendedSelectBoxProps {
   currentItem: string;
@@ -10,13 +8,12 @@ interface RecommendedSelectBoxProps {
 }
 
 const RecommededSelectBox: React.FC<RecommendedSelectBoxProps> = ({ changeItem, currentItem }) => {
+  const { queryFn, queryKey } = queries.markets.countries;
   const {
     data: {
       data: { result: countries },
     },
-  } = useSuspendedQuery<Response<CountriesType>>(['MarketCountries'], () =>
-    api.get('markets/countries').json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
   return (
     <SelectBox items={countries} currentItem={currentItem} changeItem={changeItem} size="small" />
   );

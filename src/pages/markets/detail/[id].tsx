@@ -6,12 +6,13 @@ import Layout from '@/components/common/Layout';
 import DetailBody from '@/components/market/DetailBody';
 import DetailHeader from '@/components/market/DetailHeader';
 import { useStomp } from '@/hooks/useStomp';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
-import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 import type { InferGetServerSidePropsType, NextPage } from 'next';
+
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 const MarketDetail: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   error,
@@ -50,19 +51,10 @@ export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerErro
     const token = state.getState().user.token;
     const queryClient = new QueryClient();
     const promises: Promise<unknown>[] = [
-      queryClient.fetchQuery(['market/detail', id], () => api.get(`markets/${id}`).json()),
-      queryClient.fetchQuery(['market/trade', id], () => api.get(`orders/${id}/list`).json()),
+      queryClient.fetchQuery(queries.markets.detail(id)),
+      queryClient.fetchQuery(queries.markets.trade(id)),
     ];
-    if (token)
-      promises.push(
-        queryClient.fetchQuery([`user/info`], () =>
-          api
-            .get(`auth/users/me`, {
-              headers: { Authorization: `Bearer ${token}` },
-            })
-            .json()
-        )
-      );
+    if (token) promises.push(queryClient.fetchQuery(queries.users.info(token)));
     try {
       await Promise.all(promises);
     } catch (e) {

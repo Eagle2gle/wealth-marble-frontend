@@ -2,24 +2,21 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import type { Top5ListType } from '@/types/market';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
+
+import type { Criteria } from './types';
 
 interface TopFiveListItemsProps {
-  criteria: string;
+  criteria: Criteria;
 }
 
 const TopFiveListItems: React.FC<TopFiveListItemsProps> = ({ criteria }) => {
+  const { queryFn, queryKey } = queries.markets.top5(criteria);
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<Top5ListType>>(['Top5ListData', criteria], () =>
-    api
-      .get(`markets/top?property=${criteria === '거래가 많은(전일)' ? 'TRANSACTION' : 'REWARD'}`)
-      .json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
   return (
     <div className="flex flex-col gap-1">
       {result?.map(
@@ -30,7 +27,7 @@ const TopFiveListItems: React.FC<TopFiveListItemsProps> = ({ criteria }) => {
             className="flex gap-4 md:p-1"
           >
             <div className="avatar min-w-[76px] md:w-1/5">
-              <div className="w-full rounded-lg bg-dark-grey">
+              <div className="relative w-full rounded-lg bg-dark-grey">
                 {pictureUrl && (
                   <Image
                     alt={title}
