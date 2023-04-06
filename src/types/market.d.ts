@@ -19,6 +19,14 @@ export type MarketDetailType = Omit<MarketType, 'picture' | 'country' | 'priceSt
   userIds: number[];
 };
 
+export type MarketInfoType = {
+  vacationId: number;
+  title: string;
+  location: string;
+  description: string;
+  pictures: string[];
+}
+
 export type MarketPriceInfoOrder = 'up' | 'down';
 export type MarketPriceInfoType = 'PRICE' | 'PRICE_RATE';
 

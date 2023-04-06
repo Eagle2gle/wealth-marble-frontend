@@ -37,6 +37,9 @@ module.exports = {
       minHeight: {
         list: 'calc(100vh - 70px)',
       },
+      objectPosition: {
+        'center-7/10': 'center 70%',
+      },
     },
   },
   daisyui: {
