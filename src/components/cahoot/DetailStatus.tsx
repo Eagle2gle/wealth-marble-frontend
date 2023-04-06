@@ -1,28 +1,26 @@
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { fetcher } from '@/libs/client/fetcher';
-import type { CahootDetailType, CahootHistoryType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 
 const DetailStatus = () => {
-  const router = useRouter();
+  const {
+    query: { id },
+  } = useRouter();
+  const { queryFn: detailQueryFn, queryKey: detailQueryKey } = queries.cahoots.detail(String(id));
+  const { queryFn: historyQueryFn, queryKey: historyQueryKey } = queries.cahoots.history(
+    String(id)
+  );
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<CahootHistoryType>>(
-    ['cahoot/history', router.query.id],
-    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=history`)
-  );
+  } = useSuspendedQuery(historyQueryKey, historyQueryFn);
   const {
     data: {
       data: { stockPrice },
     },
-  } = useSuspendedQuery<Response<CahootDetailType>>(
-    ['cahoot/detail', router.query.id],
-    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=detail`)
-  );
+  } = useSuspendedQuery(detailQueryKey, detailQueryFn);
   return (
     <table className="border-separate border-spacing-0 border-y border-grey md:rounded-lg md:border-x">
       <thead className="h-12">

@@ -3,27 +3,17 @@ import { Fragment, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { fetcher } from '@/libs/client/fetcher';
-import type { CahootListType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 import { formatDate } from '@/utils/date';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import InterestButton from '../common/InterestButton';
+import type { ListItemsProps } from './type';
 
-interface ListItemsProps {
-  keyword: string;
-}
+import InterestButton from '../InterestButton';
 
-const ListItems = ({ keyword }: ListItemsProps) => {
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery<Response<CahootListType>>({
-    queryKey: ['cahoot/list', keyword],
-    queryFn: ({ pageParam = 0 }) =>
-      fetcher(
-        `${
-          process.env.NEXT_PUBLIC_HOST
-        }/api/cahoots?status=ongoing&page=${pageParam}&keyword=${encodeURIComponent(keyword)}`
-      )(),
+const CahootItems: React.FC<ListItemsProps> = ({ keyword }) => {
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    ...queries.cahoots.list(keyword),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.data.result.length ? allPages.length : false,
   });
@@ -124,4 +114,4 @@ const ListItems = ({ keyword }: ListItemsProps) => {
   );
 };
 
-export default ListItems;
+export default CahootItems;

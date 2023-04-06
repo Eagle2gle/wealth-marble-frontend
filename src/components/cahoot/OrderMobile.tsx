@@ -1,29 +1,39 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { fetcher } from '@/libs/client/fetcher';
-import type { CahootDetailType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
+import { ErrorBoundary } from '@sentry/nextjs';
 
 import BuyButton from './BuyButton';
 import QuantityButtons from './QuantityButtons';
 import QuantityInput from './QuantityInput';
 
 import BottomSheet from '../common/BottomSheet';
+import ErrorFallback from '../common/ErrorFallback';
+
+const OrderMobileWrapper = () => {
+  return (
+    <ErrorBoundary fallback={<ErrorFallback />}>
+      <Suspense>
+        <OrderMobile />
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
 
 const OrderMobile = () => {
   const [open, setOpen] = useState(false);
-  const router = useRouter();
+  const {
+    query: { id },
+  } = useRouter();
+  const { queryKey, queryFn } = queries.cahoots.detail(String(id));
   const {
     data: {
       data: { stockPrice, status },
     },
-  } = useSuspendedQuery<Response<CahootDetailType>>(
-    ['cahoot/detail', router.query.id],
-    fetcher(`${process.env.NEXT_PUBLIC_HOST}/api/cahoots/${router.query.id}?info=detail`)
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
 
   return (
     <div className="md:hidden">
@@ -56,4 +66,4 @@ const OrderMobile = () => {
   );
 };
 
-export default OrderMobile;
+export default OrderMobileWrapper;

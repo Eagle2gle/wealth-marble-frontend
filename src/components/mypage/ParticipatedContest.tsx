@@ -4,6 +4,9 @@ import Link from 'next/link';
 
 import Icon from '@/components/common/Icons';
 import ContestTable from '@/components/mypage/ContestTable';
+import { ErrorBoundary } from '@sentry/nextjs';
+
+import ErrorFallback from '../common/ErrorFallback';
 
 const ParticipatedContest = () => {
   return (
@@ -13,14 +16,16 @@ const ParticipatedContest = () => {
         <p className="text-lg font-bold text-main">공모 내역</p>
         <hr className="border-1 my-2 border-grey"></hr>
         <div className="flex flex-col gap-3">
-          <Suspense fallback={<p>로딩...</p>}>
-            <ContestTable printAllData={false} />
-          </Suspense>
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <Suspense>
+              <ContestTable printAllData={false} />
+            </Suspense>
+          </ErrorBoundary>
         </div>
       </div>
       {/* only mobile */}
       <Link href={`/mypage/cahoots`}>
-        <div className="my-2 mx-12 block flex items-center justify-start gap-4 rounded-md border border-grey px-6 py-4 md:hidden">
+        <div className="my-2 mx-12 flex items-center justify-start gap-4 rounded-md border border-grey px-6 py-4 md:hidden">
           <div>
             <Icon.Gavel />
           </div>

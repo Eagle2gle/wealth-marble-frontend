@@ -1,25 +1,36 @@
+import { Suspense } from 'react';
+
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeSelector } from '@/store';
-import type { MarketDetailType } from '@/types/market';
-import type { Response } from '@/types/response';
+import { ErrorBoundary } from '@sentry/nextjs';
 
+import ErrorFallback from '../common/ErrorFallback';
 import InterestButton from '../common/InterestButton';
+
+const DetailHeaderWrapper = () => {
+  return (
+    <ErrorBoundary fallback={<ErrorFallback />}>
+      <Suspense>
+        <DetailHeader />
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
 
 const DetailHeader = () => {
   const {
     query: { id },
   } = useRouter();
+  const { queryFn, queryKey } = queries.markets.detail(String(id));
   const {
     data: {
       data: { title, location, expectedRateOfReturn, pictures, price, shortDescription, userIds },
     },
-  } = useSuspendedQuery<Response<MarketDetailType>>(['market/detail', id], () =>
-    api.get(`markets/${id}`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
   const userId = useTypeSelector((state) => state.user.id);
 
   return (
@@ -77,4 +88,4 @@ const DetailHeader = () => {
   );
 };
 
-export default DetailHeader;
+export default DetailHeaderWrapper;

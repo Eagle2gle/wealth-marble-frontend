@@ -2,10 +2,8 @@ import Link from 'next/link';
 
 import { STATUS } from '@/constants/mypage';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeSelector } from '@/store';
-import { Response } from '@/types/response';
-import { ParticipatedContestType } from '@/types/user';
 import classNames from '@/utils/classnames';
 
 interface PropsType {
@@ -15,17 +13,9 @@ interface PropsType {
 
 // 공모 내역 테이블
 const ContestTable = ({ printAllData, border }: PropsType) => {
-  const token = useTypeSelector((state) => state.user.token);
-  const { data } = useSuspendedQuery<Response<ParticipatedContestType>>(
-    [`user/contest`],
-    () =>
-      api
-        .get(`auth/contestParticipation/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .json<Response<ParticipatedContestType>>(),
-    { enabled: !!token }
-  );
+  const token = useTypeSelector((state) => state.user.token) ?? '';
+  const { queryFn, queryKey } = queries.users.contest(token);
+  const { data } = useSuspendedQuery(queryKey, queryFn, { enabled: !!token });
 
   if (!data || data?.data.result.length === 0) {
     return <div className="ml-auto mr-auto w-48 py-8 font-bold">아직 참여한 공모가 없어요!</div>;

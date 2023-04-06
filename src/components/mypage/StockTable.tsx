@@ -1,10 +1,8 @@
 import Link from 'next/link';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeSelector } from '@/store';
-import { Response } from '@/types/response';
-import { StocksType } from '@/types/user';
 
 interface PropsType {
   printAllData: boolean;
@@ -13,17 +11,9 @@ interface PropsType {
 
 // 자산 현황 테이블
 const StockTable = ({ printAllData, border }: PropsType) => {
-  const token = useTypeSelector((state) => state.user.token);
-  const { data } = useSuspendedQuery<Response<StocksType>>(
-    [`user/stock`],
-    () =>
-      api
-        .get(`auth/stocks/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .json<Response<StocksType>>(),
-    { enabled: !!token }
-  );
+  const token = useTypeSelector((state) => state.user.token) ?? '';
+  const { queryFn, queryKey } = queries.users.stock(token);
+  const { data } = useSuspendedQuery(queryKey, queryFn, { enabled: !!token });
 
   if (!data || data?.data.result.length === 0) {
     return <div className="ml-auto mr-auto w-48 py-8 font-bold">아직 보유한 자산이 없어요!</div>;

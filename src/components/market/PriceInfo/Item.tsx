@@ -1,24 +1,21 @@
 import Image from 'next/image';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import type { MarketPriceInfoType, MarketPriceInfoOrder, MarketPriceInfo } from '@/types/market';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
+import type { MarketPriceInfoType, MarketPriceInfoOrder } from '@/types/market';
 
 interface PriceInfoItemProps {
   type: MarketPriceInfoType;
   order: MarketPriceInfoOrder;
 }
 
-const PriceInfoItem = ({ order, type }: PriceInfoItemProps) => {
+const PriceInfoItem = (props: PriceInfoItemProps) => {
+  const { queryFn, queryKey } = queries.markets.price(props);
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<MarketPriceInfo>>(['market/price', type, order], () =>
-    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/markets/rank?type=${type}&${order}=TRUE`).then(
-      (res) => res.json()
-    )
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
 
   return (
     <div className="flex flex-col gap-4">
@@ -42,11 +39,13 @@ const PriceInfoItem = ({ order, type }: PriceInfoItemProps) => {
                 <span className="text-black/70">{currentPrice.toLocaleString()}</span>
                 <span className={gap < 0 ? 'text-blue' : 'text-red'}>{`${
                   gap < 0 ? '▼' : '▲'
-                }  ${gap.toLocaleString()}(${gapRate}%)`}</span>
+                }  ${Math.floor(gap).toLocaleString()}(${gapRate.toFixed(3)}%)`}</span>
               </div>
               <div className="flex justify-between text-black/50">
                 <span>1주</span>
-                <span>{`${dividend.toLocaleString()}(${dividendRate}%)`}</span>
+                <span>{`${Math.floor(dividend).toLocaleString()}(${dividendRate.toFixed(
+                  3
+                )}%)`}</span>
               </div>
             </div>
           </div>

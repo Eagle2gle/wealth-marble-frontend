@@ -1,27 +1,36 @@
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
+import { queries } from '@/queries';
 import type { CahootDeadlineMiniType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
+import { ErrorBoundary } from '@sentry/nextjs';
 
+import ErrorFallback from '../common/ErrorFallback';
 import Icon from '../common/Icons';
 
 const INTERVAL_DURATION = 3000;
 const TRANSITION_DURATION = 300;
 
+const DeadlineBannerWrapper = () => {
+  return (
+    <ErrorBoundary fallback={<ErrorFallback />}>
+      <Suspense>
+        <DeadlineBanner />
+      </Suspense>
+    </ErrorBoundary>
+  );
+};
+
 const DeadlineBanner = () => {
+  const { queryFn, queryKey } = queries.cahoots.deadline._ctx.mini;
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<CahootDeadlineMiniType>>(['cahoot/deadline-mini'], () =>
-    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/mock/cahoots/mini?status=ending-soon`).then((res) =>
-      res.json()
-    )
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [isTransition, setIsTransition] = useState(true);
@@ -109,4 +118,4 @@ const DeadlineBanner = () => {
   );
 };
 
-export default DeadlineBanner;
+export default DeadlineBannerWrapper;

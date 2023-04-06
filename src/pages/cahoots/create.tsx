@@ -1,24 +1,20 @@
-import { useRef, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useForm, FieldErrors } from 'react-hook-form';
 
 import { useRouter } from 'next/router';
 
+import CountrySelectBox from '@/components/cahoot/CountrySelectBox';
 import DateRangeInput from '@/components/common/DateRangeInput';
 import FormItem from '@/components/common/FormItem';
 import ImageUpload from '@/components/common/ImageUpload';
 import Layout from '@/components/common/Layout';
 import NumberInput from '@/components/common/NumberInput';
 import RadioBtn from '@/components/common/RadioBtn';
-import SelectBox from '@/components/common/SelectBox';
 import TextArea from '@/components/common/TextArea';
 import TextInput from '@/components/common/TextInput';
 import HeaderWithBackButton from '@/components/mypage/HeaderWithBackButton';
 import PlaceSearchBar from '@/components/PlaceSearchBar';
-import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import wrapper from '@/store';
-import { useTypeSelector } from '@/store';
-import { CountriesType } from '@/types/cahoot';
-import { Response } from '@/types/response';
+import wrapper, { useTypeSelector } from '@/store';
 // import Map from '@/components/Map';
 
 const positionOption = [
@@ -52,10 +48,9 @@ export interface FormDataType {
 }
 
 export default function CreateCahoot() {
+  const [selectedCountry, setSelectedCountry] = useState('국가'); // 휴양지 위치
   const token = useTypeSelector((state) => state.user.token);
   const router = useRouter();
-  const selectBoxContainer = useRef<HTMLDivElement>(null);
-  const [selectedCountry, setSelectedCountry] = useState('국가'); // 휴양지 위치
   const {
     register,
     handleSubmit,
@@ -92,18 +87,6 @@ export default function CreateCahoot() {
 
   const onErrors = (errors: FieldErrors) => {
     console.log(errors);
-  };
-
-  const {
-    data: {
-      data: { result: countries },
-    },
-  } = useSuspendedQuery<Response<CountriesType>>(['MarketCountries'], () =>
-    fetch(`${process.env.NEXT_PUBLIC_HOST}/api/markets/countries`).then((res) => res.json())
-  );
-
-  const changeCountry = (country: string) => {
-    setSelectedCountry(country);
   };
 
   return (
@@ -205,7 +188,7 @@ export default function CreateCahoot() {
           </FormItem>
           {/* 위치 */}
           <FormItem id="location" label="위치" required={true}>
-            <div ref={selectBoxContainer} className="relative flex gap-4 px-2">
+            <div className="relative flex gap-4 px-2">
               <input
                 id="country"
                 type="hidden"
@@ -213,17 +196,14 @@ export default function CreateCahoot() {
                   required: true,
                 })}
               />
-              <SelectBox
-                items={countries}
-                containerRef={selectBoxContainer}
-                currentItem={selectedCountry}
-                changeItem={changeCountry}
-                size="large"
-                name="country"
-                setValue={setValue}
-                trigger={trigger}
-              />
-              {/* TODO: Loading 일 때 처리 */}
+              <Suspense>
+                <CountrySelectBox
+                  currentItem={selectedCountry}
+                  selectItem={setSelectedCountry}
+                  setValue={setValue}
+                  trigger={trigger}
+                />
+              </Suspense>
               <input
                 id="location"
                 type="hidden"

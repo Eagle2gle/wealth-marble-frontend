@@ -2,10 +2,8 @@ import Link from 'next/link';
 
 import { TRANSACTION_TYPE } from '@/constants/mypage';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeSelector } from '@/store';
-import { Response } from '@/types/response';
-import { TransactionsType } from '@/types/user';
 import classNames from '@/utils/classnames';
 
 interface PropsType {
@@ -15,17 +13,9 @@ interface PropsType {
 
 // 거래 현황 테이블
 const TransactionTable = ({ printAllData, border }: PropsType) => {
-  const token = useTypeSelector((state) => state.user.token);
-  const { data } = useSuspendedQuery<Response<TransactionsType>>(
-    [`user/transactions`],
-    () =>
-      api
-        .get(`auth/transactions/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .json<Response<TransactionsType>>(),
-    { enabled: !!token }
-  );
+  const token = useTypeSelector((state) => state.user.token) ?? '';
+  const { queryFn, queryKey } = queries.users.transaction(token);
+  const { data } = useSuspendedQuery(queryKey, queryFn, { enabled: !!token });
 
   if (!data || data?.data.result.length === 0) {
     return <div className="ml-auto mr-auto w-48 py-8 font-bold">아직 참여한 거래가 없어요!</div>;

@@ -1,7 +1,12 @@
+import { Suspense } from 'react';
+
 import Link from 'next/link';
 
 import Icon from '@/components/common/Icons';
 import TransactionTable from '@/components/mypage/TransactionTable';
+import { ErrorBoundary } from '@sentry/nextjs';
+
+import ErrorFallback from '../common/ErrorFallback';
 
 const Transactions = () => {
   return (
@@ -11,12 +16,16 @@ const Transactions = () => {
         <p className="text-lg font-bold text-main">거래 현황</p>
         <hr className="border-1 my-2 border-grey"></hr>
         <div className="flex flex-col gap-3">
-          <TransactionTable printAllData={false} />
+          <ErrorBoundary fallback={<ErrorFallback />}>
+            <Suspense>
+              <TransactionTable printAllData={false} />
+            </Suspense>
+          </ErrorBoundary>
         </div>
       </div>
       {/* only mobile */}
       <Link href={`/mypage/transactions`}>
-        <div className="my-2 mx-12 block flex items-center justify-start gap-4 rounded-md border border-grey px-6 py-4 md:hidden">
+        <div className="my-2 mx-12 flex items-center justify-start gap-4 rounded-md border border-grey px-6 py-4 md:hidden">
           <div>
             <Icon.Market />
           </div>

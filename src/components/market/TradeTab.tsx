@@ -2,13 +2,12 @@ import { useEffect, useRef, useState } from 'react';
 
 import Image from 'next/image';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import { useStomp } from '@/hooks/useStomp';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeSelector } from '@/store';
-import type { MarketDetailType } from '@/types/market';
-import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
 
 import OrderInput from './OrderInput';
@@ -18,11 +17,10 @@ import Modal from '../common/Modal';
 
 const TRADE_TABS = ['구매', '판매', '정정', '체결'] as const;
 
-interface TradeTabProps {
-  id: number;
-}
-
-const TradeTab = ({ id }: TradeTabProps) => {
+const TradeTab = () => {
+  const {
+    query: { id },
+  } = useRouter();
   const [tradeTab, setTradeTab] = useState<'구매' | '판매' | '정정' | '체결'>(TRADE_TABS[0]);
   const { publish, subscribe, unsubscribe, isConnected } = useStomp({
     config: { brokerURL: process.env.NEXT_PUBLIC_WS_URL },
@@ -31,13 +29,12 @@ const TradeTab = ({ id }: TradeTabProps) => {
   const token = useTypeSelector((state) => state.user.token);
   const order = useTypeSelector((state) => state.marketOrder);
   const [open, setOpen] = useState(false);
+  const { queryFn, queryKey } = queries.markets.detail(String(id));
   const {
     data: {
       data: { title, pictures },
     },
-  } = useSuspendedQuery<Response<MarketDetailType>>(['market/detail', id], () =>
-    api.get(`markets/${id}`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
   const modalOpenRef = useRef<HTMLLabelElement>(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
@@ -45,7 +42,7 @@ const TradeTab = ({ id }: TradeTabProps) => {
   const onOrderClick = (type: 'buy' | 'sell') => () => {
     if (!order[type].quantity || !order[type].price) return;
     const body = JSON.stringify({
-      marketId: id,
+      marketId: parseInt(String(id)),
       price: order[type].price,
       amount: order[type].quantity,
       token,
