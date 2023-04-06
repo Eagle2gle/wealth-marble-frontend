@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { Suspense, useState } from 'react';
 import { useForm, FieldErrors } from 'react-hook-form';
 
 import { useRouter } from 'next/router';
@@ -196,12 +196,14 @@ export default function CreateCahoot() {
                   required: true,
                 })}
               />
-              <CountrySelectBox
-                currentItem={selectedCountry}
-                selectItem={setSelectedCountry}
-                setValue={setValue}
-                trigger={trigger}
-              />
+              <Suspense>
+                <CountrySelectBox
+                  currentItem={selectedCountry}
+                  selectItem={setSelectedCountry}
+                  setValue={setValue}
+                  trigger={trigger}
+                />
+              </Suspense>
               <input
                 id="location"
                 type="hidden"
