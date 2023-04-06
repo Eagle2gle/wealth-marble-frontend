@@ -5,13 +5,14 @@ import Error from 'next/error';
 import ErrorFallback from '@/components/common/ErrorFallback';
 import HeaderWithBackButton from '@/components/mypage/HeaderWithBackButton';
 import StockTable from '@/components/mypage/StockTable';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
 import { ErrorBoundary } from '@sentry/nextjs';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
 
 import type { InferGetServerSidePropsType, NextPage } from 'next';
+
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 
 const Stocks: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ error }) => {
   if (error) return <Error statusCode={error.statusCode} title={error.title} />;
@@ -44,15 +45,7 @@ export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerErro
       };
     }
     const queryClient = new QueryClient();
-    const promises: Promise<unknown>[] = [
-      queryClient.fetchQuery([`user/stock`], () =>
-        api
-          .get(`auth/stocks/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .json()
-      ),
-    ];
+    const promises: Promise<unknown>[] = [queryClient.fetchQuery(queries.users.stock(token))];
     try {
       await Promise.all(promises);
     } catch (e) {

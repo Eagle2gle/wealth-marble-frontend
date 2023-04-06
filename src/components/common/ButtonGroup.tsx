@@ -1,14 +1,19 @@
 import classNames from '@/utils/classnames';
 
-interface PropsType {
-  items: readonly string[];
-  currentItem: string;
-  changeItem: (item: string) => void;
+interface PropsType<T> {
+  items: readonly T[];
+  currentItem: T;
+  changeItem: (item: T) => void;
   buttonSize: 'large' | 'small';
 }
 
-const ButtonGroup = ({ items, currentItem, changeItem, buttonSize }: PropsType) => {
-  const onClickButton = (item: string) => {
+const ButtonGroup = <T extends string>({
+  items,
+  currentItem,
+  changeItem,
+  buttonSize,
+}: PropsType<T>) => {
+  const onClickButton = (item: T) => {
     changeItem(item);
   };
 

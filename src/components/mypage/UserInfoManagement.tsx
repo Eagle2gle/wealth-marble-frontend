@@ -2,23 +2,13 @@ import Image from 'next/image';
 
 import { PROVIDER_TYPE, ROLE, RANK } from '@/constants/mypage';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeSelector } from '@/store';
-import { Response } from '@/types/response';
-import { UserInfoType } from '@/types/user';
 
 const UserInfoManagement = () => {
-  const token = useTypeSelector((state) => state.user.token);
-  const { data } = useSuspendedQuery<Response<UserInfoType>>(
-    [`user/info`],
-    () =>
-      api
-        .get(`auth/users/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .json<Response<UserInfoType>>(),
-    { enabled: !!token }
-  );
+  const token = useTypeSelector((state) => state.user.token) ?? '';
+  const { queryFn, queryKey } = queries.users.info(token);
+  const { data } = useSuspendedQuery(queryKey, queryFn, { enabled: !!token });
 
   return (
     <main className="flex items-center justify-center p-4">

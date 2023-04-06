@@ -3,9 +3,8 @@ import { Suspense, useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import type { CahootDeadlineMiniType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
 import { ErrorBoundary } from '@sentry/nextjs';
 
@@ -26,13 +25,12 @@ const DeadlineBannerWrapper = () => {
 };
 
 const DeadlineBanner = () => {
+  const { queryFn, queryKey } = queries.cahoots.deadline._ctx.mini;
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<CahootDeadlineMiniType>>(['cahoot/deadline-mini'], () =>
-    api.get(`cahoots/mini?status=ending-soon`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isMouseOver, setIsMouseOver] = useState(false);
   const [isTransition, setIsTransition] = useState(true);

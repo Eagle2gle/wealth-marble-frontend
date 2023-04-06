@@ -5,13 +5,14 @@ import Error from 'next/error';
 import ErrorFallback from '@/components/common/ErrorFallback';
 import HeaderWithBackButton from '@/components/mypage/HeaderWithBackButton';
 import TransactionTable from '@/components/mypage/TransactionTable';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
 import { ErrorBoundary } from '@sentry/nextjs';
-import { QueryClient, dehydrate } from '@tanstack/react-query';
 
 import type { InferGetServerSidePropsType, NextPage } from 'next';
+
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 
 const Transactions: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   error,
@@ -46,15 +47,7 @@ export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerErro
       };
     }
     const queryClient = new QueryClient();
-    const promises: Promise<unknown>[] = [
-      queryClient.fetchQuery([`user/transactions`], () =>
-        api
-          .get(`auth/transactions/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .json()
-      ),
-    ];
+    const promises: Promise<unknown>[] = [queryClient.fetchQuery(queries.users.transaction(token))];
     try {
       await Promise.all(promises);
     } catch (e) {

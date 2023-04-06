@@ -4,7 +4,7 @@ import RecentUploadCarousel from '@/components/home/RecentUploadCarousel';
 import RecommendedList from '@/components/home/RecommendedList';
 import TopFiveList from '@/components/home/TopFiveList';
 import Thumbnail from '@/components/Thumbnail';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
@@ -28,25 +28,13 @@ export default function Home() {
 export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerError }>(
   (state) => async () => {
     const queryClient = new QueryClient();
-    const userId = state.getState().user.id;
+    const userId = state.getState().user.id ?? '';
     const promises: Promise<unknown>[] = [
-      queryClient.fetchQuery(['cahoot/deadline-mini'], () =>
-        api.get(`cahoots/mini?status=ending-soon`).json()
-      ),
-      queryClient.fetchQuery(['RecentUploadCarouselData'], () => api.get('cahoots/recent').json()),
-      queryClient.fetchQuery(['MarketCountries'], () => api.get('markets/countries').json()),
-      queryClient.fetchQuery(['RecommendListData', '대한민국'], () =>
-        api
-          .get(
-            `markets/recommend?country=${encodeURIComponent('대한민국')}${
-              userId ? `&userId=${userId}` : ''
-            }`
-          )
-          .json()
-      ),
-      queryClient.fetchQuery(['Top5ListData', '거래가 많은(전일)'], () =>
-        api.get(`markets/top?property=TRANSACTION`).json()
-      ),
+      queryClient.fetchQuery(queries.cahoots.deadline._ctx.mini),
+      queryClient.fetchQuery(queries.cahoots.recent),
+      queryClient.fetchQuery(queries.markets.countries),
+      queryClient.fetchQuery(queries.markets.recommend('대한민국', userId)),
+      queryClient.fetchQuery(queries.markets.top5('거래가 많은(전일)')),
     ];
 
     try {

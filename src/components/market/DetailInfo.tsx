@@ -2,21 +2,20 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import type { MarketInfoType } from '@/types/market';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 
 import Carousel from '../common/Carousel';
 
 const DetailInfo = () => {
-  const router = useRouter();
+  const {
+    query: { id },
+  } = useRouter();
+  const { queryFn, queryKey } = queries.markets.info(String(id));
   const {
     data: {
       data: { title, location, description, pictures },
     },
-  } = useSuspendedQuery<Response<MarketInfoType>>(['market/info', router.query.id], () =>
-    api.get(`markets/info/${router.query.id}`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
 
   return (
     <>

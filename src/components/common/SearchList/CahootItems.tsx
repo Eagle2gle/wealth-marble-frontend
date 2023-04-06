@@ -3,9 +3,7 @@ import { Fragment, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { api } from '@/libs/client/api';
-import type { CahootListType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 import { formatDate } from '@/utils/date';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
@@ -14,12 +12,8 @@ import type { ListItemsProps } from './type';
 import InterestButton from '../InterestButton';
 
 const CahootItems: React.FC<ListItemsProps> = ({ keyword }) => {
-  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery<Response<CahootListType>>({
-    queryKey: ['cahoot/list', keyword],
-    queryFn: ({ pageParam = 0 }) =>
-      api
-        .get(`cahoots?status=ongoing&page=${pageParam ?? 0}&keyword=${encodeURIComponent(keyword)}`)
-        .json(),
+  const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
+    ...queries.cahoots.list(keyword),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.data.result.length ? allPages.length : false,
   });

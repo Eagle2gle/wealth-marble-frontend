@@ -6,10 +6,8 @@ import { useRouter } from 'next/router';
 
 import { useStomp } from '@/hooks/useStomp';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeSelector } from '@/store';
-import type { MarketDetailType } from '@/types/market';
-import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
 
 import OrderInput from './OrderInput';
@@ -31,13 +29,12 @@ const TradeTab = () => {
   const token = useTypeSelector((state) => state.user.token);
   const order = useTypeSelector((state) => state.marketOrder);
   const [open, setOpen] = useState(false);
+  const { queryFn, queryKey } = queries.markets.detail(String(id));
   const {
     data: {
       data: { title, pictures },
     },
-  } = useSuspendedQuery<Response<MarketDetailType>>(['market/detail', id], () =>
-    api.get(`markets/${id}`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
   const modalOpenRef = useRef<HTMLLabelElement>(null);
   const [isError, setIsError] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

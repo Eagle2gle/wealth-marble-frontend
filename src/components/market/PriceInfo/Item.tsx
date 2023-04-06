@@ -1,23 +1,21 @@
 import Image from 'next/image';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import type { MarketPriceInfoType, MarketPriceInfoOrder, MarketPriceInfo } from '@/types/market';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
+import type { MarketPriceInfoType, MarketPriceInfoOrder } from '@/types/market';
 
 interface PriceInfoItemProps {
   type: MarketPriceInfoType;
   order: MarketPriceInfoOrder;
 }
 
-const PriceInfoItem = ({ order, type }: PriceInfoItemProps) => {
+const PriceInfoItem = (props: PriceInfoItemProps) => {
+  const { queryFn, queryKey } = queries.markets.price(props);
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<MarketPriceInfo>>(['market/price', type, order], () =>
-    api.get(`markets/rank?type=${type}&${order}=TRUE`).then((res) => res.json())
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
 
   return (
     <div className="flex flex-col gap-4">

@@ -5,7 +5,7 @@ import Error from 'next/error';
 import ErrorFallback from '@/components/common/ErrorFallback';
 import HeaderWithBackButton from '@/components/mypage/HeaderWithBackButton';
 import UserInfoManagement from '@/components/mypage/UserInfoManagement';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
 import { ErrorBoundary } from '@sentry/nextjs';
@@ -44,15 +44,7 @@ export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerErro
       };
     }
     const queryClient = new QueryClient();
-    const promises: Promise<unknown>[] = [
-      queryClient.fetchQuery([`user/info`], () =>
-        api
-          .get(`auth/users/me`, {
-            headers: { Authorization: `Bearer ${token}` },
-          })
-          .json()
-      ),
-    ];
+    const promises: Promise<unknown>[] = [queryClient.fetchQuery(queries.users.info(token))];
     try {
       await Promise.all(promises);
     } catch (e) {

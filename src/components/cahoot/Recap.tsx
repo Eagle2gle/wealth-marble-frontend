@@ -4,9 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import type { CahootListType } from '@/types/cahoot';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 import { formatDate } from '@/utils/date';
 import { ErrorBoundary } from '@sentry/nextjs';
 
@@ -27,13 +25,12 @@ const Recap = () => {
 };
 
 const RecapCarousel = () => {
+  const { queryFn, queryKey } = queries.cahoots.recap;
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<CahootListType>>(['cahoot/recap'], () =>
-    api.get(`cahoots?status=ended`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
 
   return (
     <Carousel itemCount={result.length}>

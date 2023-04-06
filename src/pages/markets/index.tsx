@@ -8,11 +8,11 @@ import Layout from '@/components/common/Layout';
 import SearchList from '@/components/common/SearchList';
 import PriceInfo from '@/components/market/PriceInfo';
 import RecentTrade from '@/components/market/RecentTrade';
-import { api } from '@/libs/client/api';
-import wrapper from '@/store';
+import { queries } from '@/queries';
 
 import type { InferGetServerSidePropsType, NextPage } from 'next';
 
+import wrapper from '@/store';
 import { ServerError } from '@/types/response';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 
@@ -48,26 +48,11 @@ export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerErro
     const queryClient = new QueryClient();
     const { token } = state.getState().user;
     const promises: Promise<unknown>[] = [
-      queryClient.fetchQuery(['cahoot/deadline-mini'], () =>
-        api.get(`cahoots/mini?status=ending-soon`).json()
-      ),
-      queryClient.fetchQuery(['market/price', 'PRICE', 'up'], () =>
-        api.get(`markets/rank?type=PRICE&up=TRUE`).json()
-      ),
-      queryClient.fetchInfiniteQuery(['market/list', ''], ({ pageParam = 0 }) =>
-        api.get(`markets?page=${pageParam}&keyword=&size=10`).json()
-      ),
+      queryClient.fetchQuery(queries.cahoots.deadline._ctx.mini),
+      queryClient.fetchQuery(queries.markets.price({ type: 'PRICE', order: 'up' })),
+      queryClient.fetchInfiniteQuery(queries.markets.list('')),
     ];
-    if (token)
-      promises.push(
-        queryClient.fetchQuery([`markets/interests`], () =>
-          api
-            .get(`auth/interests/me?page=0&size=10&type=market`, {
-              headers: { Authorization: `Bearer ${token}` },
-            })
-            .json()
-        )
-      );
+    if (token) promises.push(queryClient.fetchQuery(queries.interests.all('market', token)));
     try {
       await Promise.all(promises);
     } catch (e) {

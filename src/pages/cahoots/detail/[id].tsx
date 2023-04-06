@@ -4,7 +4,7 @@ import DetailBody from '@/components/cahoot/DetailBody';
 import DetailHeader from '@/components/cahoot/DetailHeader';
 import OrderMobile from '@/components/cahoot/OrderMobile';
 import Layout from '@/components/common/Layout';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import wrapper from '@/store';
 import { ServerError } from '@/types/response';
 
@@ -38,12 +38,8 @@ export const getServerSideProps = wrapper.getServerSideProps<CahootsDetailProps>
     if (typeof id !== 'string' || !parseInt(id)) return { notFound: true };
     const queryClient = new QueryClient();
     const promises: Promise<unknown>[] = [
-      queryClient.fetchQuery(['cahoot/detail', id], () =>
-        api.get(`cahoots/${id}?info=detail`).json()
-      ),
-      queryClient.fetchQuery(['cahoot/history', id], () =>
-        api.get(`cahoots/${id}?info=history`).json()
-      ),
+      queryClient.fetchQuery(queries.cahoots.detail(id)),
+      queryClient.fetchQuery(queries.cahoots.history(id)),
     ];
 
     try {

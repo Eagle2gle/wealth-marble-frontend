@@ -1,9 +1,8 @@
 import Link from 'next/link';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
+import { queries } from '@/queries';
 import { useTypeSelector } from '@/store';
-import { Interests, Response } from '@/types/response';
 
 import { InterestsProps } from './types';
 
@@ -17,17 +16,9 @@ const TypeUrlPathMap = {
 } as const;
 
 const InterestsCarousel: React.FC<InterestsProps> = ({ scrollRef, type }) => {
-  const token = useTypeSelector((state) => state.user.token);
-  const { data } = useSuspendedQuery<Response<Interests>>(
-    [`${type}/interests`],
-    () =>
-      api
-        .get(`auth/interests/me?page=0&size=10&type=${type}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        })
-        .json<Response<Interests>>(),
-    { enabled: !!token }
-  );
+  const token = useTypeSelector((state) => state.user.token) ?? '';
+  const { queryFn, queryKey } = queries.interests.all(type, token);
+  const { data } = useSuspendedQuery(queryKey, queryFn, { enabled: !!token });
 
   const onAddClick = () => {
     if (!scrollRef.current) return;
