@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 
-import { InferGetServerSidePropsType, NextPage } from 'next';
 import Error from 'next/error';
 
 import DeadlineBanner from '@/components/cahoot/DeadlineBanner';
@@ -10,28 +9,34 @@ import Interests from '@/components/common/Interests';
 import Layout from '@/components/common/Layout';
 import SearchList from '@/components/common/SearchList';
 import { queries } from '@/queries';
+
+import type { NextPageWithLayout } from '../_app';
+import type { InferGetServerSidePropsType } from 'next';
+
 import wrapper from '@/store';
-import { ServerError } from '@/types/response';
+import type { ServerError } from '@/types/response';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 
-const Cahoots: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ error }) => {
+const Cahoots: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
+  error,
+}) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   if (error) return <Error statusCode={error.statusCode} title={error.title} />;
 
   return (
-    <Layout>
-      <div className="space-y-4">
-        <DeadlineBanner />
-        <Interests type="cahoot" scrollRef={scrollRef} />
-        <DeadlineCarousel />
-        <Recap />
-        <div ref={scrollRef}></div>
-        <SearchList scrollRef={scrollRef} type="cahoot" />
-      </div>
-    </Layout>
+    <div className="space-y-4">
+      <DeadlineBanner />
+      <Interests type="cahoot" scrollRef={scrollRef} />
+      <DeadlineCarousel />
+      <Recap />
+      <div ref={scrollRef}></div>
+      <SearchList scrollRef={scrollRef} type="cahoot" />
+    </div>
   );
 };
+
+Cahoots.getLayout = (page) => <Layout>{page}</Layout>;
 
 export default Cahoots;
 

@@ -10,38 +10,41 @@ import PriceInfo from '@/components/market/PriceInfo';
 import RecentTrade from '@/components/market/RecentTrade';
 import { queries } from '@/queries';
 
-import type { InferGetServerSidePropsType, NextPage } from 'next';
+import type { NextPageWithLayout } from '../_app';
+import type { InferGetServerSidePropsType } from 'next';
 
 import wrapper from '@/store';
-import { ServerError } from '@/types/response';
+import type { ServerError } from '@/types/response';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
 
-const Markets: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({ error }) => {
+const Markets: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
+  error,
+}) => {
   const scrollRef = useRef<HTMLDivElement>(null);
 
   if (error) return <Error statusCode={error.statusCode} title={error.title} />;
 
   return (
-    <Layout>
-      <div className="space-y-4">
-        <DeadlineBanner />
-        <Interests type="market" scrollRef={scrollRef} />
-        <div className="flex flex-col-reverse md:flex-row md:justify-center">
-          <div className="md:w-1/2 md:pr-2">
-            <PriceInfo />
-          </div>
-          <div className="mb-4 md:mb-0 md:w-1/2 md:pl-2">
-            <Suspense fallback={<p>로딩...</p>}>
-              <RecentTrade />
-            </Suspense>
-          </div>
+    <div className="space-y-4">
+      <DeadlineBanner />
+      <Interests type="market" scrollRef={scrollRef} />
+      <div className="flex flex-col-reverse md:flex-row md:justify-center">
+        <div className="md:w-1/2 md:pr-2">
+          <PriceInfo />
         </div>
-        <div ref={scrollRef}></div>
-        <SearchList scrollRef={scrollRef} type="market" />
+        <div className="mb-4 md:mb-0 md:w-1/2 md:pl-2">
+          <Suspense fallback={<p>로딩...</p>}>
+            <RecentTrade />
+          </Suspense>
+        </div>
       </div>
-    </Layout>
+      <div ref={scrollRef}></div>
+      <SearchList scrollRef={scrollRef} type="market" />
+    </div>
   );
 };
+
+Markets.getLayout = (page) => <Layout>{page}</Layout>;
 
 export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerError }>(
   (state) => async () => {
