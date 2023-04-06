@@ -4,16 +4,16 @@ import { useRouter } from 'next/router';
 
 import ButtonGroup from '@/components/common/ButtonGroup';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import type { MarketTransactionHistory } from '@/types/market';
-import type { Response } from '@/types/response';
+import { queries } from '@/queries';
 import { getPrevDate, formatDateWithDash } from '@/utils/date';
 
 // 시세 탭
 const CriteriaList = ['3개월', '6개월', '1년', '3년', '전체'] as const;
 
 const DetailStatus = () => {
-  const router = useRouter();
+  const {
+    query: { id },
+  } = useRouter();
   const [criteria, setCriteria] = useState('3개월');
   const [startDate, setStartDate] = useState(formatDateWithDash(getPrevDate(criteria)));
   const [endDate, setEndDate] = useState(formatDateWithDash(new Date()));
@@ -23,17 +23,14 @@ const DetailStatus = () => {
     setCriteria(criteria);
   };
 
+  const { queryFn, queryKey } = queries.markets
+    .transaction(String(id))
+    ._ctx.history(startDate, endDate);
   const {
     data: {
       data: { result },
     },
-  } = useSuspendedQuery<Response<MarketTransactionHistory>>(
-    ['market/history', router.query.id, criteria],
-    () =>
-      api
-        .get(`transactions/${router.query.id}?page=0&startDate=${startDate}&endDate=${endDate}`)
-        .json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
 
   return (
     <>

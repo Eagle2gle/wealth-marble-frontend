@@ -3,6 +3,7 @@ import { api } from '@/libs/client/api';
 import { CountriesType } from '@/types/cahoot';
 import type {
   MarketDetailType,
+  MarketInfoType,
   MarketListType,
   MarketOrderList,
   MarketPriceInfo,
@@ -64,6 +65,10 @@ export const markets = createQueryKeys('markets', {
     queryKey: [criteria],
     queryFn: () =>
       api.get(`markets/top?property=${propertyMap[criteria]}`).json<Response<Top5ListType>>(),
+  }),
+  info: (id: string) => ({
+    queryKey: [id],
+    queryFn: () => api.get(`markets/info/${id}`).json<Response<MarketInfoType>>(),
   }),
 });
 
