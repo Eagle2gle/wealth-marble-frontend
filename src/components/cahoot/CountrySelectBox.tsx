@@ -2,9 +2,7 @@ import { UseFormSetValue, UseFormTrigger } from 'react-hook-form';
 
 import SelectBox from '@/components/common/SelectBox';
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
-import { api } from '@/libs/client/api';
-import { CountriesType } from '@/types/cahoot';
-import { Response } from '@/types/response';
+import { queries } from '@/queries';
 
 interface PropsType {
   currentItem: string;
@@ -15,13 +13,12 @@ interface PropsType {
 
 // data fetching을 위한 wrapper
 const CountrySelectBox = ({ currentItem, selectItem, setValue, trigger }: PropsType) => {
+  const { queryFn, queryKey } = queries.markets.countries;
   const {
     data: {
       data: { result: countries },
     },
-  } = useSuspendedQuery<Response<CountriesType>>(['MarketCountries'], () =>
-    api.get(`markets/countries`).json()
-  );
+  } = useSuspendedQuery(queryKey, queryFn);
 
   const changeCountry = (country: string) => {
     selectItem(country); // setSelectedCountry (set state)
