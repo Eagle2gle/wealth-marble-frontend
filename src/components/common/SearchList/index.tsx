@@ -1,5 +1,7 @@
 import { Suspense, useState } from 'react';
 
+import { useTypeDispatch } from '@/store';
+import { setSearchKeyword } from '@/store/modules/cahoot/search';
 import { ErrorBoundary } from '@sentry/nextjs';
 
 import CahootItems from './CahootItems';
@@ -21,6 +23,7 @@ const typeMap = {
 
 const List = ({ scrollRef, type }: ListProps) => {
   const [keyword, setKeyword] = useState('');
+  const dispatch = useTypeDispatch();
 
   const onSubmit: React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault();
@@ -28,6 +31,9 @@ const List = ({ scrollRef, type }: ListProps) => {
       search: { value: string };
     };
     setKeyword(target.search.value);
+    if (type === 'cahoot') {
+      dispatch(setSearchKeyword(target.search.value));
+    }
     if (!scrollRef.current) return;
     const top = window.scrollY + scrollRef.current.getBoundingClientRect().top - 70;
     window.scrollTo({ top });
@@ -35,7 +41,7 @@ const List = ({ scrollRef, type }: ListProps) => {
 
   const itemsMap = {
     market: <MarketItems keyword={keyword} />,
-    cahoot: <CahootItems keyword={keyword} />,
+    cahoot: <CahootItems />,
   };
 
   return (

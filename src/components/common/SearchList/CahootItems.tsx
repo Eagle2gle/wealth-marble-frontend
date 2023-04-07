@@ -8,12 +8,11 @@ import { useTypeSelector } from '@/store';
 import { formatDate } from '@/utils/date';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
-import type { ListItemsProps } from './type';
-
 import InterestButton from '../InterestButton';
 
-const CahootItems: React.FC<ListItemsProps> = ({ keyword }) => {
+const CahootItems: React.FC = () => {
   const userId = useTypeSelector((state) => state.user.id) ?? '';
+  const keyword = useTypeSelector((state) => state.cahootSearch.keyword);
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
     ...queries.cahoots.list(keyword, userId),
     getNextPageParam: (lastPage, allPages) =>
