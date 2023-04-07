@@ -9,13 +9,7 @@ import Layout from '@/components/common/Layout';
 import RouteGuard from '@/components/common/RouteGuard';
 import ParticipatedContest from '@/components/mypage/ParticipatedContest';
 import Stocks from '@/components/mypage/Stocks';
-
-import type { NextPageWithLayout } from '../_app';
-
 import Transactions from '@/components/mypage/Transactions';
-
-import type { InferGetServerSidePropsType } from 'next';
-
 import UserInfo from '@/components/mypage/UserInfo';
 import { queries } from '@/queries';
 import wrapper, { useTypeDispatch } from '@/store';
@@ -23,6 +17,9 @@ import { logout } from '@/store/modules/user';
 import type { ServerError } from '@/types/response';
 import { ErrorBoundary } from '@sentry/nextjs';
 import { QueryClient, dehydrate } from '@tanstack/react-query';
+
+import type { NextPageWithLayout } from '../_app';
+import type { InferGetServerSidePropsType } from 'next';
 
 const Mypage: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   error,

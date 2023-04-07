@@ -9,13 +9,12 @@ import Interests from '@/components/common/Interests';
 import Layout from '@/components/common/Layout';
 import SearchList from '@/components/common/SearchList';
 import { queries } from '@/queries';
-
-import type { NextPageWithLayout } from '../_app';
-import type { InferGetServerSidePropsType } from 'next';
-
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
+
+import type { NextPageWithLayout } from '../_app';
+import type { InferGetServerSidePropsType } from 'next';
 
 const Cahoots: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   error,

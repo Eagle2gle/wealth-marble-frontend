@@ -9,10 +9,10 @@ import { queries } from '@/queries';
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
 import { ErrorBoundary } from '@sentry/nextjs';
+import { QueryClient, dehydrate } from '@tanstack/react-query';
 
 import type { InferGetServerSidePropsType, NextPage } from 'next';
 
-import { QueryClient, dehydrate } from '@tanstack/react-query';
 
 const Transactions: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   error,
