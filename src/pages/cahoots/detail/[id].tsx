@@ -8,10 +8,9 @@ import type { NextPageWithLayout } from '@/pages/_app';
 import { queries } from '@/queries';
 import wrapper from '@/store';
 import { ServerError } from '@/types/response';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 import type { InferGetServerSidePropsType } from 'next';
-
-import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 const CahootsDetail: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   error,
@@ -34,12 +33,13 @@ type CahootsDetailProps = {
 };
 
 export const getServerSideProps = wrapper.getServerSideProps<CahootsDetailProps>(
-  () => async (context) => {
+  (state) => async (context) => {
     const { id } = context.query;
     if (typeof id !== 'string' || !parseInt(id)) return { notFound: true };
+    const userId = state.getState().user.id ?? '';
     const queryClient = new QueryClient();
     const promises: Promise<unknown>[] = [
-      queryClient.fetchQuery(queries.cahoots.detail(id)),
+      queryClient.fetchQuery(queries.cahoots.detail(id, userId)),
       queryClient.fetchQuery(queries.cahoots.history(id)),
     ];
 

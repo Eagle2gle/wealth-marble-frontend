@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { queries } from '@/queries';
+import { useTypeSelector } from '@/store';
 import { formatDate } from '@/utils/date';
 import { useInfiniteQuery } from '@tanstack/react-query';
 
@@ -12,8 +13,9 @@ import type { ListItemsProps } from './type';
 import InterestButton from '../InterestButton';
 
 const CahootItems: React.FC<ListItemsProps> = ({ keyword }) => {
+  const userId = useTypeSelector((state) => state.user.id) ?? '';
   const { data, fetchNextPage, hasNextPage } = useInfiniteQuery({
-    ...queries.cahoots.list(keyword),
+    ...queries.cahoots.list(keyword, userId),
     getNextPageParam: (lastPage, allPages) =>
       lastPage.data.result.length ? allPages.length : false,
   });

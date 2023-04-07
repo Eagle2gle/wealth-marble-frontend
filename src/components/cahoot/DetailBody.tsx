@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { queries } from '@/queries';
+import { useTypeSelector } from '@/store';
 import classNames from '@/utils/classnames';
 import { ErrorBoundary } from '@sentry/nextjs';
 
@@ -32,8 +33,9 @@ const DetailBody = () => {
   const {
     query: { id },
   } = useRouter();
+  const userId = useTypeSelector((state) => state.user.id) ?? '';
   const [tab, setTab] = useState<TabElements>(TABS[0]);
-  const { queryFn, queryKey } = queries.cahoots.detail(String(id));
+  const { queryFn, queryKey } = queries.cahoots.detail(String(id), userId);
   const {
     data: {
       data: { isInterest },

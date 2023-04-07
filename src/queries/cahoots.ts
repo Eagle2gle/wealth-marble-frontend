@@ -11,9 +11,10 @@ import type { Response } from '@/types/response';
 import { createQueryKeys, createMutationKeys } from '@lukemorales/query-key-factory';
 
 export const cahoots = createQueryKeys('cahoots', {
-  detail: (id: string) => ({
-    queryKey: [id],
-    queryFn: () => api.get(`cahoots/${id}?info=detail`).json<Response<CahootDetailType>>(),
+  detail: (id: string, userId: number | '') => ({
+    queryKey: [id, userId],
+    queryFn: () =>
+      api.get(`cahoots/${id}?info=detail&userId=${userId}`).json<Response<CahootDetailType>>(),
   }),
   deadline: {
     queryKey: null,
@@ -34,11 +35,15 @@ export const cahoots = createQueryKeys('cahoots', {
     queryKey: null,
     queryFn: () => api.get(`cahoots?status=ended`).json<Response<CahootListType>>(),
   },
-  list: (keyword: string) => ({
-    queryKey: [keyword],
+  list: (keyword: string, userId: number | '') => ({
+    queryKey: [keyword, userId],
     queryFn: ({ pageParam = 0 }) =>
       api
-        .get(`cahoots?status=ongoing&page=${pageParam ?? 0}&keyword=${encodeURIComponent(keyword)}`)
+        .get(
+          `cahoots?status=ongoing&page=${pageParam ?? 0}&keyword=${encodeURIComponent(
+            keyword
+          )}&userId=${userId ?? ''}`
+        )
         .json<Response<CahootListType>>(),
   }),
   recent: {

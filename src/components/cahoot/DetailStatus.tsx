@@ -2,12 +2,17 @@ import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { queries } from '@/queries';
+import { useTypeSelector } from '@/store';
 
 const DetailStatus = () => {
   const {
     query: { id },
   } = useRouter();
-  const { queryFn: detailQueryFn, queryKey: detailQueryKey } = queries.cahoots.detail(String(id));
+  const userId = useTypeSelector((state) => state.user.id) ?? '';
+  const { queryFn: detailQueryFn, queryKey: detailQueryKey } = queries.cahoots.detail(
+    String(id),
+    userId
+  );
   const { queryFn: historyQueryFn, queryKey: historyQueryKey } = queries.cahoots.history(
     String(id)
   );
