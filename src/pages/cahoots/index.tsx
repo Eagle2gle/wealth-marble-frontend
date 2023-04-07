@@ -41,12 +41,13 @@ export default Cahoots;
 
 export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerError }>(
   (state) => async () => {
+    const userId = state.getState().user.id ?? '';
     const queryClient = new QueryClient();
     const promises: Promise<unknown>[] = [
       queryClient.fetchQuery(queries.cahoots.deadline._ctx.mini),
       queryClient.fetchQuery(queries.cahoots.deadline),
       queryClient.fetchQuery(queries.cahoots.recap),
-      queryClient.fetchInfiniteQuery(queries.cahoots.list('')),
+      queryClient.fetchInfiniteQuery(queries.cahoots.list('', userId)),
     ];
     const { token } = state.getState().user;
     if (token) {
