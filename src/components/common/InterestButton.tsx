@@ -13,6 +13,7 @@ interface InterestButtonProps {
   size: 'small' | 'large';
   hideOnMobile?: boolean;
   type: 'cahoot' | 'market';
+  country?: string;
 }
 
 type MutationBody = {
@@ -26,6 +27,7 @@ const InterestButton = ({
   size,
   hideOnMobile = false,
   type,
+  country,
 }: InterestButtonProps) => {
   const token = useTypeSelector((state) => state.user.token) ?? '';
   const userId = useTypeSelector((state) => state.user.id);
