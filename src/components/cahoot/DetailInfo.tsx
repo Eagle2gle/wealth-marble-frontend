@@ -3,6 +3,7 @@ import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { queries } from '@/queries';
+import { useTypeSelector } from '@/store';
 import { formatDate } from '@/utils/date';
 
 import Carousel from '../common/Carousel';
@@ -11,7 +12,8 @@ const DetailInfo = () => {
   const {
     query: { id },
   } = useRouter();
-  const { queryFn, queryKey } = queries.cahoots.detail(String(id));
+  const userId = useTypeSelector((state) => state.user.id) ?? '';
+  const { queryFn, queryKey } = queries.cahoots.detail(String(id), userId);
   const {
     data: {
       data: {

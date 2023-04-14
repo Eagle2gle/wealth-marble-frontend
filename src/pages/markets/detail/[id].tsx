@@ -10,10 +10,10 @@ import type { NextPageWithLayout } from '@/pages/_app';
 import { queries } from '@/queries';
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 import type { InferGetServerSidePropsType } from 'next';
 
-import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 const MarketDetail: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   error,

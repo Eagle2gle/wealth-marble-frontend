@@ -10,15 +10,16 @@ import type { Response } from '@/types/response';
 import classNames from '@/utils/classnames';
 import { useMutation } from '@tanstack/react-query';
 
-import type { HTTPError } from 'ky-universal';
-
 import Modal from '../common/Modal';
+
+import type { HTTPError } from 'ky-universal';
 
 const BuyButton = () => {
   const {
     query: { id },
   } = useRouter();
-  const { queryFn, queryKey } = queries.cahoots.detail(String(id));
+  const userId = useTypeSelector((state) => state.user.id) ?? '';
+  const { queryFn, queryKey } = queries.cahoots.detail(String(id), userId);
   const {
     data: {
       data: { images, title, stockPrice },

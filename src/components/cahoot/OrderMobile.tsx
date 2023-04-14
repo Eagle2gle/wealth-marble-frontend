@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 
 import { useSuspendedQuery } from '@/hooks/useSuspendedQuery';
 import { queries } from '@/queries';
+import { useTypeSelector } from '@/store';
 import { ErrorBoundary } from '@sentry/nextjs';
 
 import BuyButton from './BuyButton';
@@ -28,7 +29,8 @@ const OrderMobile = () => {
   const {
     query: { id },
   } = useRouter();
-  const { queryKey, queryFn } = queries.cahoots.detail(String(id));
+  const userId = useTypeSelector((state) => state.user.id) ?? '';
+  const { queryFn, queryKey } = queries.cahoots.detail(String(id), userId);
   const {
     data: {
       data: { stockPrice, status },
