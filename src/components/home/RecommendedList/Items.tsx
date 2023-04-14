@@ -40,10 +40,16 @@ const RecommendedListItems: React.FC<RecommendedListItemsProps> = ({ selectedCou
               )}
             </div>
             <div className="absolute right-2 top-2">
-              <InterestButton id={id} size="small" isInterest={isInterest} type="market" />
+              <InterestButton
+                id={id}
+                size="small"
+                isInterest={isInterest}
+                type="market"
+                country={selectedCountry}
+              />
             </div>
           </div>
-          <div className="relative flex w-full flex-col justify-center overflow-hidden py-1 px-2 text-[8px]">
+          <div className="relative flex w-full flex-col justify-center overflow-hidden px-2 py-1 text-[8px]">
             <div className="flex gap-2 font-bold">
               <span className="rounded bg-main px-1 text-white">Hot</span>
               <span className="overflow-hidden overflow-ellipsis whitespace-nowrap">{title}</span>

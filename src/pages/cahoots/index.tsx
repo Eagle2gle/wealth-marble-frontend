@@ -9,13 +9,12 @@ import Interests from '@/components/common/Interests';
 import Layout from '@/components/common/Layout';
 import SearchList from '@/components/common/SearchList';
 import { queries } from '@/queries';
-
-import type { NextPageWithLayout } from '../_app';
-import type { InferGetServerSidePropsType } from 'next';
-
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
 import { dehydrate, QueryClient } from '@tanstack/react-query';
+
+import type { NextPageWithLayout } from '../_app';
+import type { InferGetServerSidePropsType } from 'next';
 
 const Cahoots: NextPageWithLayout<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   error,
@@ -42,12 +41,13 @@ export default Cahoots;
 
 export const getServerSideProps = wrapper.getServerSideProps<{ error: ServerError }>(
   (state) => async () => {
+    const userId = state.getState().user.id ?? '';
     const queryClient = new QueryClient();
     const promises: Promise<unknown>[] = [
       queryClient.fetchQuery(queries.cahoots.deadline._ctx.mini),
       queryClient.fetchQuery(queries.cahoots.deadline),
       queryClient.fetchQuery(queries.cahoots.recap),
-      queryClient.fetchInfiniteQuery(queries.cahoots.list('')),
+      queryClient.fetchInfiniteQuery(queries.cahoots.list('', userId)),
     ];
     const { token } = state.getState().user;
     if (token) {

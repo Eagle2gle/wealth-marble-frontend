@@ -8,10 +8,10 @@ import { logout } from '@/store/modules/user';
 import { Hydrate, QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 
+import wrapper from '../store';
+
 import type { NextPage } from 'next';
 import type { AppProps } from 'next/app';
-
-import wrapper from '../store';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 export type NextPageWithLayout<P = {}, IP = P> = NextPage<P, IP> & {

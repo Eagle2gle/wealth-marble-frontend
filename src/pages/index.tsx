@@ -7,10 +7,10 @@ import Thumbnail from '@/components/Thumbnail';
 import { queries } from '@/queries';
 import wrapper from '@/store';
 import type { ServerError } from '@/types/response';
+import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 import type { NextPageWithLayout } from './_app';
 
-import { dehydrate, QueryClient } from '@tanstack/react-query';
 
 const Home: NextPageWithLayout = () => {
   return (
