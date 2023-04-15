@@ -95,8 +95,6 @@ const BuyButton = () => {
                   className="rounded object-contain"
                   alt=""
                   src={images[0]}
-                  placeholder="blur"
-                  blurDataURL={images[0]}
                   fill
                   sizes="80px"
                 />

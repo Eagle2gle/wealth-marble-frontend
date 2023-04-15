@@ -45,8 +45,6 @@ const DetailHeader = () => {
               src={images[0]}
               className="object-contain"
               fill
-              placeholder="blur"
-              blurDataURL={images[0]}
               sizes="(max-width: 768px) 100vw,
               (max-width: 1200px) 50vw,
               33vw"

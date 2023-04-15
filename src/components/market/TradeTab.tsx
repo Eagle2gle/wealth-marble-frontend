@@ -208,8 +208,6 @@ const TradeTab = () => {
                   className="rounded object-contain"
                   alt=""
                   src={pictures[0]}
-                  placeholder="blur"
-                  blurDataURL={pictures[0]}
                   fill
                   sizes="80px"
                 />
