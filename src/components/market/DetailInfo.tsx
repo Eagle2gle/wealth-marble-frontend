@@ -28,8 +28,6 @@ const DetailInfo = () => {
                 src={imageUrl}
                 className="object-contain"
                 fill
-                placeholder="blur"
-                blurDataURL={imageUrl}
                 sizes="768px"
               />
             </div>
